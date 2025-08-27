@@ -33,5 +33,36 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### Frontend ###
 ### VS Code ###
-.vscode/
+classlink-frontend/.vscode/
+classlink-frontend/dist
+classlink-frontend/tmp
+classlink-frontend/out-tsc
+classlink-frontend/bazel-out
+classlink-frontend/node_modules
+classlink-frontend/npm-debug.log
+classlink-frontend/yarn-error.log
+classlink-frontend/.idea/
+classlink-frontend/.project
+classlink-frontend/.classpath
+classlink-frontend/.c9/
+classlink-frontend/*.launch
+classlink-frontend/.settings/
+classlink-frontend/*.sublime-workspace
+classlink-frontend/.vscode/*
+classlink-frontend/!.vscode/settings.json
+classlink-frontend/!.vscode/tasks.json
+classlink-frontend/!.vscode/launch.json
+classlink-frontend/!.vscode/extensions.json
+classlink-frontend/.history/*
+classlink-frontend/.angular/cache
+classlink-frontend/.sass-cache/
+classlink-frontend/connect.lock
+classlink-frontend/coverage
+classlink-frontend/libpeerconnection.log
+classlink-frontend/testem.log
+classlink-frontend/typings
+classlink-frontend/.DS_Store
+classlink-frontend/Thumbs.db
+classlink-frontend/.yarn
