@@ -10,6 +10,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@angular/cli": "20",
+    "@angular/core": "20",
     "eslint": "^9.34.0",
     "prettier": "^3.6.2"
   }
