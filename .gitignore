@@ -65,4 +65,4 @@ classlink-frontend/testem.log
 classlink-frontend/typings
 classlink-frontend/.DS_Store
 classlink-frontend/Thumbs.db
-classlink-frontend/.yarn
+classlink-frontend/.yarn!/classlink-frontend/node_modules/
