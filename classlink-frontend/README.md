@@ -1,3 +1,5 @@
+[![CodeQL Advanced](https://github.com/fes-wiesbaden/23be13-p4-classlink-gruppe-5-dice-cup/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/fes-wiesbaden/23be13-p4-classlink-gruppe-5-dice-cup/actions/workflows/codeql.yml)
+
 # 📘 Frontend
 
 Frontend for the **Classlink** school project built with Angular.  
