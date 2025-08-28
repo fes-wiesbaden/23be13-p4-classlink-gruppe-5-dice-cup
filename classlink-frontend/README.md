@@ -17,7 +17,7 @@ Provides different views for **Students, Teachers, and Admins** with role-based 
 ## ⚙️ Setup & ▶️ Development
 
 git clone <repo-url>  
-cd frontend  
+cd classlink-frontend  
 npm install  
 ng serve  
 
