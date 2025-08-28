@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -7,7 +8,7 @@ body {
   font-family: 'Inter', 'Roboto', sans-serif;
   background: linear-gradient(135deg, #9193f1 0%, #a280f1 50%, #62d1c4 100%);
   background-attachment: fixed;
-  color: #1E293B;
+  color: #1e293b;
 }
 
 app-root {

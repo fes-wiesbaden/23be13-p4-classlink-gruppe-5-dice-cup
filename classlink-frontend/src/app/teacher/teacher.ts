@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   selector: 'app-teacher',
   imports: [],
   templateUrl: './teacher.html',
-  styleUrl: './teacher.scss'
+  styleUrl: './teacher.scss',
 })
-export class TeacherComponent {
-
-}
+export class TeacherComponent {}

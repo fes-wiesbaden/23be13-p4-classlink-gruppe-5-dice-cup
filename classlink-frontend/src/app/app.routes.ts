@@ -6,7 +6,7 @@ import { AdminComponent } from './admin/admin';
 export const routes: Routes = [
   { path: 'student', component: StudentComponent },
   { path: 'teacher', component: TeacherComponent },
-  { path: 'admin',   component: AdminComponent },
+  { path: 'admin', component: AdminComponent },
   { path: '', redirectTo: '/student', pathMatch: 'full' },
-  { path: '**', redirectTo: '/student' }
+  { path: '**', redirectTo: '/student' },
 ];
