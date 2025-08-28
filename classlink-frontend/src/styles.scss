@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #9193f1 0%, #a280f1 50%, #62d1c4 100%);
+  background-attachment: fixed;
+  color: #1e293b;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

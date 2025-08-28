@@ -6,10 +6,16 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
+    "format:write": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run build -- --configuration development",
+    "lint": "ng lint"
   },
   "prettier": {
     "printWidth": 100,
+    "semi": true,
     "singleQuote": true,
     "overrides": [
       {
@@ -28,8 +34,11 @@
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "check": "^1.0.0",
+    "npm-check": "^3.2.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "typecheck": "^0.1.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -37,12 +46,16 @@
     "@angular/cli": "^20.2.0",
     "@angular/compiler-cli": "^20.2.0",
     "@types/jasmine": "~5.1.0",
+    "angular-eslint": "20.2.0",
+    "eslint": "^9.33.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.2"
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.40.0"
   }
 }
