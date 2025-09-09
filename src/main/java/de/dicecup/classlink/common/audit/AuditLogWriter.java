@@ -16,9 +16,8 @@ public class AuditLogWriter {
     public void onAudit(AuditPublisher.ContextAuditEvent event) {
         if (event.actorId() == null) return;
         AuditLog log = new AuditLog();
-        log.setUser(event.actorId());
+        log.setActorId(event.actorId());
         log.setAction(event.action());
         log.setDetails(event.detailsJson());
-
     }
 }

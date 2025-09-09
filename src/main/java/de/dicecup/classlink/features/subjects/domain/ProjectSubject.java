@@ -23,7 +23,7 @@ public class ProjectSubject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
