@@ -44,7 +44,7 @@ public class RegistrationService {
     @Transactional
     public UserDto create(RegristrationRequesDto request, UserMapper userMapper) {
         RegistrationInvite invite = inviteRepository
-                .findByIdAndUsedAtIsNullAndExpiresAtAfter(request.inviteId(), Instant.now())
+                .findByIdAndUsedAtIsNullAndExpiresAtAfter(request.inviteId(), OffsetDateTime.now())
                 .orElseThrow(() -> new IllegalArgumentException("Invite invalid or expired"));
         if (!generateSHA256Hash(request.token()).equals(invite.getTokenHash())) {
             throw new IllegalArgumentException("Invite token mismatch");
@@ -88,7 +88,7 @@ public class RegistrationService {
                 .getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             throw new AccessDeniedException("Only ADMIN can invite ADMIN");
         }
-        if (inviteRepository.existsByEmailAndUsedAtIsNullAndExpiresAtAfter(request.email(), Instant.now())) {
+        if (inviteRepository.existsByEmailAndUsedAtIsNullAndExpiresAtAfter(request.email(), OffsetDateTime.now())) {
             throw new IllegalStateException("Invite already active for this mail");
         }
         UUID id = UUID.randomUUID();

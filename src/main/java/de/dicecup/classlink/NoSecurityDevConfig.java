@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-@Configuration
 @Profile("dev")
 public class NoSecurityDevConfig {
 
