@@ -26,7 +26,7 @@ public class AuditLog {
     //TODO: explain the read-only nav
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "actor_id", insertable = false, updatable = false)
-    private User actor;
+    private User user;
 
     @Column(nullable = false)
     private String action;
