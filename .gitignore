@@ -67,3 +67,6 @@ classlink-frontend/.DS_Store
 classlink-frontend/Thumbs.db
 classlink-frontend/.yarn!/classlink-frontend/node_modules/
 !/.runBackend/
+
+*storybook.log
+storybook-static
