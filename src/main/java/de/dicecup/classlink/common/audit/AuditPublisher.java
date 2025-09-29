@@ -16,13 +16,18 @@ public class AuditPublisher {
     private final ApplicationEventPublisher springEvents;
     private final AuditorAware<UUID> auditorAware;
 
-    public void publish(String action, Object details) {
+    public void publish(UUID actorId, String action, Object details, String resource) {
         String json = toJson(details);
         springEvents.publishEvent(new ContextAuditEvent(
-                auditorAware.getCurrentAuditor().orElse(null),
+                actorId,
                 action,
+                resource,
                 json
         ));
+    }
+    //TODO: explain this
+    public void publish(String action, Object details, String resource) {
+        publish(auditorAware.getCurrentAuditor().orElse(null), action, details, resource);
     }
 
     private String toJson(Object object) {
@@ -30,5 +35,5 @@ public class AuditPublisher {
         catch (Exception e) { return "{\"_error\":\"json-serialize\"}"; }
     }
 
-    public record ContextAuditEvent(UUID actorId, String action, String detailsJson) {}
+    public record ContextAuditEvent(UUID actorId, String action, String resource, String detailsJson) {}
 }
