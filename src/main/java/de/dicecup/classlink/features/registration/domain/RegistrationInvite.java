@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -24,12 +24,12 @@ public class RegistrationInvite {
     @Column(nullable = false, name = "token_hash")
     private String tokenHash;
     @Column(nullable = false, name = "expires_at")
-    private OffsetDateTime expiresAt;
+    private Instant expiresAt;
     @Column(nullable = false, name = "created_at")
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    private Instant createdAt = Instant.now();
     @Column(name = "created_by")
     private UUID createdBy;
     @Column(name = "used_at")
-    private OffsetDateTime usedAt;
+    private Instant usedAt;
 
 }

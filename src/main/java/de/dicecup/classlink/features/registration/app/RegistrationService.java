@@ -26,8 +26,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -44,7 +42,7 @@ public class RegistrationService {
     @Transactional
     public UserDto create(RegristrationRequesDto request, UserMapper userMapper) {
         RegistrationInvite invite = inviteRepository
-                .findByIdAndUsedAtIsNullAndExpiresAtAfter(request.inviteId(), OffsetDateTime.now())
+                .findByIdAndUsedAtIsNullAndExpiresAtAfter(request.inviteId(), Instant.now())
                 .orElseThrow(() -> new IllegalArgumentException("Invite invalid or expired"));
         if (!generateSHA256Hash(request.token()).equals(invite.getTokenHash())) {
             throw new IllegalArgumentException("Invite token mismatch");
@@ -65,19 +63,14 @@ public class RegistrationService {
                 user,
                 requestInfo.firstName(),
                 requestInfo.lastName(),
-                requestInfo.dateOfBirth(),
                 invite.getEmail()
         );
         user.setUserInfo(info);
 
         User saved = userRepository.save(user);
-        invite.setUsedAt(OffsetDateTime.now());
+        invite.setUsedAt(Instant.now());
         inviteRepository.save(invite);
 
-        auditPublisher.publish("USER_REGISTERED", Map.of(
-                "userId", saved.getId(), "email", invite.getEmail(),
-                "role", invite.getRole(), "inviteId", invite.getId()
-        ));
         return userMapper.toDto(saved);
     }
 
@@ -88,7 +81,7 @@ public class RegistrationService {
                 .getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             throw new AccessDeniedException("Only ADMIN can invite ADMIN");
         }
-        if (inviteRepository.existsByEmailAndUsedAtIsNullAndExpiresAtAfter(request.email(), OffsetDateTime.now())) {
+        if (inviteRepository.existsByEmailAndUsedAtIsNullAndExpiresAtAfter(request.email(), Instant.now())) {
             throw new IllegalStateException("Invite already active for this mail");
         }
         UUID id = UUID.randomUUID();
@@ -100,7 +93,7 @@ public class RegistrationService {
         invite.setEmail(request.email());
         invite.setRole(request.role());
         invite.setTokenHash(hash);
-        invite.setExpiresAt(OffsetDateTime.from(Instant.now().plus(Duration.ofMinutes(60))));
+        invite.setExpiresAt(Instant.now().plus(Duration.ofMinutes(60)));
         invite.setCreatedBy(auditor.getCurrentAuditor().orElse(null));
         inviteRepository.save(invite);
 

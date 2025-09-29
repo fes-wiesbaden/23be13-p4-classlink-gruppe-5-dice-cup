@@ -1,10 +1,10 @@
 package de.dicecup.classlink.features.registration.domain;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public record InviteResponseDto (
   UUID inviteId,
-  OffsetDateTime expiresAt,
+  Instant expiresAt,
   String link
 ) {}

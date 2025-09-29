@@ -11,7 +11,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 
@@ -39,8 +39,8 @@ public class User {
     @Column(nullable = false)
     private boolean enabled;
 
-    @Column(nullable = true, name = "disabled_at")
-    private OffsetDateTime disabledAt;
+    @Column(name = "disabled_at")
+    private Instant disabledAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserInfo userInfo;
@@ -55,14 +55,14 @@ public class User {
     private Teacher teacher;
 
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt = OffsetDateTime.now();
+    private Instant createdAt = Instant.now();
 
     @Column(name = "created_by", nullable = false)
     private UUID createdBy;
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    private Instant updatedAt;
 
     @LastModifiedBy
     @Column(name = "updated_by")

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -39,8 +39,8 @@ public class ClassProject {
     @Column(nullable = false)
     private boolean active;
 
-    private OffsetDateTime validFrom;
-    private OffsetDateTime validTo;
+    private Instant validFrom;
+    private Instant validTo;
 
     @Override public boolean equals(Object o) {
         if (this == o) return true;
