@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
-import { StudentComponent } from './student/student';
-import { TeacherComponent } from './teacher/teacher';
-import { AdminComponent } from './admin/admin';
+import { StudentComponent } from './routes/student/student';
+import { TeacherComponent } from './routes/teacher/teacher';
+import { AdminComponent } from './routes/admin/admin';
+import { LoginComponent } from './routes/login/login';
 
 export const routes: Routes = [
-  { path: 'student', component: StudentComponent },
-  { path: 'teacher', component: TeacherComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: '', redirectTo: '/student', pathMatch: 'full' },
-  { path: '**', redirectTo: '/student' },
+    { path: 'student', component: StudentComponent },
+    { path: 'teacher', component: TeacherComponent },
+    { path: 'admin', component: AdminComponent },
+    { path: 'login', component: LoginComponent },
+    { path: '', redirectTo: 'login', pathMatch: 'full'}
 ];
