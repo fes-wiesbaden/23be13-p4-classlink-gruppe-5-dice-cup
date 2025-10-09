@@ -1,0 +1,92 @@
+<!-- Hintergrund für login-card -->
+<div class="login-page" [class.login-page--active]="decorActive">
+  <div class="login-page__decor" aria-hidden="true">
+    <span class="login-page__orb login-page__orb--alpha"></span>
+    <span class="login-page__orb login-page__orb--beta"></span>
+    <span class="login-page__orb login-page__orb--gamma"></span>
+    <span class="login-page__orb login-page__orb--delta"></span>
+  </div>
+
+  <!-- login-card -->
+  <div
+    class="login-page__container"
+    (mouseenter)="activateDecor()"
+    (mouseleave)="deactivateDecor()"
+  >
+    <!-- Logo und überschrift -->
+    <header class="login-page__header">
+      <div class="login-page__logo login-page__logo--wordmark" aria-hidden="true">
+        <img class="login-page__logo-icon" src="assets/dicecuplogo.svg" alt="DiceCup" />
+      </div>
+      <h1 class="login-page__title">DiceCup</h1>
+      <h2 class="login-page__subtitle">Willkommen zurück</h2>
+      <p class="login-page__hint">Melden Sie sich bei Ihrem Konto an.</p>
+    </header>
+    <!-- Username und Passwort Felder -->
+    <p-card styleClass="login-card">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate [attr.aria-busy]="isSubmitting">
+        <div class="login-form__field">
+          <label for="username" class="login-form__label">Benutzername oder E-Mail</label>
+          <input
+            pInputText
+            id="username"
+            type="text"
+            formControlName="username"
+            class="login-input"
+            placeholder="max.muster@dicecup.de"
+            autocomplete="username"
+            [disabled]="isSubmitting"
+            [ngClass]="{ 'is-invalid': submitted && usernameControl?.invalid }"
+          />
+          <!-- simple required check -->
+          <small class="login-form__error" *ngIf="submitted && usernameControl?.hasError('required')">
+            Dieses Feld darf nicht leer sein.
+          </small>
+        </div>
+        <div class="login-form__field">
+          <label for="password" class="login-form__label">Passwort</label>
+          <p-password
+            inputId="password"
+            formControlName="password"
+            placeholder="******"
+            [feedback]="false"
+            [toggleMask]="true"
+            autocomplete="current-password"
+            [disabled]="isSubmitting"
+            [inputStyleClass]="submitted && passwordControl?.invalid ? 'login-input is-invalid' : 'login-input'"
+          ></p-password>
+          <!-- simple required + minlength check-->
+          <small class="login-form__error" *ngIf="submitted && passwordControl?.hasError('required')">
+            Bitte geben Sie Ihr Passwort ein.
+          </small>
+          <small class="login-form__error" *ngIf="submitted && passwordControl?.hasError('minlength')">
+            Das Passwort muss mindestens 6 Zeichen enthalten.
+          </small>
+        </div>
+        <!-- "Angemeldet bleiben" checkbox -->
+        <div class="login-form__options">
+          <div class="login-form__remember">
+            <p-checkbox formControlName="rememberMe" inputId="rememberMe" [binary]="true" [disabled]="isSubmitting"></p-checkbox>
+            <label for="rememberMe">Angemeldet bleiben</label>
+          </div>
+        </div>
+
+        <p-button
+          type="submit"
+          label="Anmelden"
+          severity="primary"
+          [fluid]="true"
+          styleClass="login-form__submit"
+          [loading]="isSubmitting"
+          [disabled]="(loginForm.invalid && submitted) || isSubmitting"
+        ></p-button>
+      </form>
+    </p-card>
+    <!-- login-card footer -->
+    <footer class="login-page__footer">Entwickelt für die DiceCup Schulplattform.</footer>
+  </div>
+</div>
+
+
+
+

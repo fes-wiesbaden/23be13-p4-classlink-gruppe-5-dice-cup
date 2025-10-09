@@ -1,18 +1,17 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
+  padding: 0;
 }
 
 body {
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #9193f1 0%, #a280f1 50%, #62d1c4 100%);
-  background-attachment: fixed;
-  color: #1e293b;
-}
-
-app-root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  min-height: 100%;
+  overflow-x: hidden;
 }

@@ -1,0 +1,486 @@
+:host {
+  /* Grundlayout + hintergrund */
+  display: block;
+  min-height: 100dvh;
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.07), transparent 60%),
+    #f5f7fb;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.login-page {
+  /* Gundlayout von login-page */
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1.5rem;
+  overflow: hidden;
+  color: #0f172a;
+}
+
+.login-page__decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.login-page__orb {
+  /* Animation für Hintergrund orb */
+  position: absolute;
+  width: clamp(18rem, 38vw, 32rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 35%, rgba(137, 94, 225, 0.85), rgba(137, 94, 225, 0.28) 58%, rgba(137, 94, 225, 0));
+  filter: blur(60px);
+  opacity: 0.82;
+  mix-blend-mode: normal;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform, opacity;
+  box-shadow: 0 0 180px 60px rgba(137, 94, 225, 0.32);
+  transition: top 1.2s cubic-bezier(0.4, 0, 0.2, 1), bottom 1.2s cubic-bezier(0.4, 0, 0.2, 1), left 1.2s cubic-bezier(0.4, 0, 0.2, 1), right 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), width 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease, filter 1.2s ease, box-shadow 1.2s ease;
+  transform: translateZ(0);
+}
+
+/* Vier Kugeln für den hintergrund, bewegund + farbe */
+.login-page__orb--alpha {
+  top: -22%;
+  left: -12%;
+  animation-name: orbDriftAlpha;
+  animation-duration: 32s;
+}
+
+.login-page__orb--beta {
+  bottom: -26%;
+  left: 2%;
+  width: clamp(16rem, 32vw, 26rem);
+  background: radial-gradient(circle at 42% 40%, rgba(157, 110, 233, 0.82), rgba(157, 110, 233, 0.25) 55%, rgba(157, 110, 233, 0));
+  animation-name: orbDriftBeta;
+  animation-duration: 36s;
+  animation-delay: -6s;
+}
+
+.login-page__orb--gamma {
+  top: -18%;
+  right: -8%;
+  width: clamp(18rem, 35vw, 30rem);
+  background: radial-gradient(circle at 52% 30%, rgba(124, 78, 215, 0.88), rgba(124, 78, 215, 0.22) 60%, rgba(124, 78, 215, 0));
+  animation-name: orbDriftGamma;
+  animation-duration: 40s;
+  animation-delay: -12s;
+}
+
+.login-page__orb--delta {
+  bottom: -18%;
+  right: 16%;
+  width: clamp(14rem, 28vw, 24rem);
+  background: radial-gradient(circle at 48% 38%, rgba(182, 138, 244, 0.78), rgba(182, 138, 244, 0.2) 50%, rgba(182, 138, 244, 0));
+  animation-name: orbDriftDelta;
+  animation-duration: 44s;
+  animation-delay: -18s;
+}
+
+
+
+.login-page--active .login-page__orb {
+  /* Standart Kugel verhalten */
+  animation: none;
+}
+
+/* Vier Kugeln mit leichten waritionen */
+.login-page--active .login-page__orb--alpha {
+  top: 34%;
+  left: 32%;
+  opacity: 0.35;
+  filter: blur(70px);
+  box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28);
+}
+
+.login-page--active .login-page__orb--beta {
+  bottom: 32%;
+  left: 36%;
+  opacity: 0.35;
+  filter: blur(70px);
+  box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28);
+}
+
+.login-page--active .login-page__orb--gamma {
+  top: 34%;
+  right: 32%;
+  opacity: 0.35;
+  filter: blur(70px);
+  box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28);
+}
+
+.login-page--active .login-page__orb--delta {
+  bottom: 30%;
+  right: 36%;
+  opacity: 0.35;
+  filter: blur(70px);
+  box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28);
+}
+
+.login-page__container {
+  /* Grundlayout login-page */
+  position: relative;
+  z-index: 1;
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.login-page__logo--wordmark {
+  /* Grundlayout logo */
+  width: auto;
+  height: auto;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: .5rem;
+}
+
+.login-page__logo--wordmark .login-page__logo-icon {
+  /* Logo Größe anpassen */
+  width: clamp(160px, 42vw, 240px);
+  height: auto;
+}
+
+.login-page__title {
+  /* Titel Größe anpassen */
+  font-size: clamp(1.8rem, 2.6vw, 2.25rem);
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-page__subtitle {
+  /* Untertitel Größe anpassen */
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+  color: #1f2937;
+}
+
+.login-page__hint {
+  /* Untertitel Größe anpassen */
+  margin: 0.75rem 0 0;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+:host ::ng-deep .login-card.p-card {
+  /* Login-card box erstellen */
+  width: 100%;
+  border: none;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  transition: box-shadow 0.6s ease, transform 0.6s ease;
+  padding: 0;
+}
+
+:host ::ng-deep .login-page--active .login-card.p-card {
+  /* Lila schatten für hover effect */
+  box-shadow: 0 28px 90px rgba(137, 94, 225, 0.45);
+  transform: translateY(-4px);
+}
+
+
+:host ::ng-deep .login-card .p-card-body {
+  padding: 2.5rem;
+}
+
+.login-form {
+  /* Login-card Größe */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.login-form__field {
+  /* Text zu input-feld gap */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-form__options {
+  /* "Angemeldet bleiben" styling */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.login-form__remember {
+  /* "Angemeldet bleiben" styling */
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.login-form__remember label {
+  /* "Angemeldet bleiben" curor ändern wenn hover */
+  cursor: pointer;
+  user-select: none;
+}
+
+:host ::ng-deep .login-form__remember .p-checkbox {
+  /* "Angemeldet bleiben" styling */
+  margin-inline-end: 0.4rem;
+}
+
+:host ::ng-deep .login-form__remember .p-checkbox .p-checkbox-box {
+  /* "Angemeldet bleiben" styling */
+  border-radius: 0.4rem;
+  transition: transform .18s ease, box-shadow .18s ease,
+  border-color .18s ease, background-color .18s ease;
+}
+
+:host ::ng-deep .login-form__remember .p-checkbox:not(.p-disabled) .p-checkbox-box:active {
+/* press animation */
+  transform: scale(.94);
+}
+
+:host ::ng-deep .login-form__remember .p-checkbox.p-highlight .p-checkbox-box {
+/* pop animation bei toggled */
+  animation: checkboxPop .18s ease-out;
+  border-color: #2563eb;
+}
+
+:host ::ng-deep .login-form__remember .p-checkbox.p-highlight .p-checkbox-icon {
+  /* tick animation */
+  animation: checkboxTick .2s ease-out;
+}
+
+@keyframes checkboxPop {
+  0%   { transform: scale(.9); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@keyframes checkboxTick {
+  0%   { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.login-form__label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.login-input {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  background-color: #f8fafc;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.login-input::placeholder {
+  /* Placeholder styling */
+  color: rgba(71, 85, 105, 0.65);
+}
+
+.login-input:focus {
+  /* input-field inspect effect */
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: #fff;
+  outline: none;
+}
+
+.is-invalid {
+  /* invalid config */
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.35) !important;
+  background-color: #fff5f5 !important;
+}
+
+.login-form__error {
+  /* error config */
+  color: #dc2626;
+  font-size: 0.78rem;
+}
+
+.login-form__status {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: -.4rem 0 1rem;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+:host ::ng-deep .p-password {
+  width: 100%;
+  display: block;
+}
+
+:host ::ng-deep .p-password.p-inputwrapper,
+:host ::ng-deep .p-inputwrapper.p-password {
+  /* Passwort input */
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+:host ::ng-deep .p-password .p-inputtext.login-input,
+:host ::ng-deep .login-input.p-inputtext {
+  /* Passwort input */
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  background-color: #f8fafc;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+:host ::ng-deep .p-password .p-inputtext.login-input { padding-right: 2.75rem !important; }
+:host ::ng-deep .p-password { position: relative; }
+:host ::ng-deep .p-password .p-password-toggle-mask,
+:host ::ng-deep .p-password .p-password-toggle-mask-icon {
+  /* Passwort Auge styling */
+  position: absolute !important;
+  right: 0.75rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: 1.2rem;
+  width: 1.2rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #64748b;
+}
+:host ::ng-deep .p-password .p-password-toggle-mask .p-password-toggler-icon,
+:host ::ng-deep .p-password .p-password-toggle-mask-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+:host ::ng-deep .p-password-input.login-input { padding-right: 2.75rem !important; }
+
+:host ::ng-deep .p-password .p-inputtext.login-input:focus,
+:host ::ng-deep .login-input.p-inputtext:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: #fff;
+  outline: none;
+}
+
+:host ::ng-deep .login-form__submit.p-button {
+  /* Anmelde Button styling */
+  border-radius: 0.9rem;
+  padding: 0.95rem 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  font-size: 0.98rem;
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .login-form__submit.p-button .p-button-loading-icon {
+  /* Anmeldungs feedback (loading spinner) */
+  position: static !important;
+  top: auto; left: auto;
+  margin-right: .5rem;
+}
+:host ::ng-deep .login-form__submit.p-button .p-button-icon,
+:host ::ng-deep .login-form__submit.p-button .p-button-label { display: inline-flex; align-items: center; }
+
+:host ::ng-deep .login-form__submit.p-button:disabled {
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.login-page__footer {
+  /* fotter styling */
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* backround orb animation 4 stück */
+@keyframes orbDriftAlpha {
+  0% {
+    transform: translate3d(-12%, -6%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8%, 12%, 0) scale(1.08);
+  }
+  100% {
+    transform: translate3d(-8%, 18%, 0) scale(0.94);
+  }
+}
+
+@keyframes orbDriftBeta {
+  0% {
+    transform: translate3d(-6%, 14%, 0) scale(0.9);
+  }
+  50% {
+    transform: translate3d(10%, -6%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(-10%, 10%, 0) scale(0.92);
+  }
+}
+
+@keyframes orbDriftGamma {
+  0% {
+    transform: translate3d(6%, -4%, 0) scale(0.96);
+  }
+  50% {
+    transform: translate3d(-6%, 12%, 0) scale(1.07);
+  }
+  100% {
+    transform: translate3d(8%, -8%, 0) scale(0.97);
+  }
+}
+
+@keyframes orbDriftDelta {
+  0% {
+    transform: translate3d(4%, 10%, 0) scale(0.88);
+  }
+  50% {
+    transform: translate3d(-8%, -12%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(12%, 10%, 0) scale(0.9);
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 2.5rem 1.25rem;
+  }
+
+  :host ::ng-deep .login-card .p-card-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-form {
+    gap: 1.25rem;
+  }
+}
+
+
+
+
+
+
+

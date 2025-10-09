@@ -9,5 +9,4 @@ export const routes: Routes = [
     { path: 'teacher', component: TeacherComponent },
     { path: 'admin', component: AdminComponent },
     { path: 'login', component: LoginComponent },
-    { path: '', redirectTo: 'login', pathMatch: 'full'}
 ];

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { Dock } from "primeng/dock";
 
 @Component({
   standalone: true,
   selector: 'app-admin',
-  imports: [],
+  imports: [Dock],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
