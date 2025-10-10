@@ -14,7 +14,7 @@ import java.time.Instant;
 public class AuditLogWriter {
     private final AuditLogRepository logRepository;
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void onAudit(AuditPublisher.ContextAuditEvent event) {
         AuditLog log = new AuditLog();
         log.setActorId(event.actorId());
