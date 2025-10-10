@@ -3,6 +3,8 @@ package de.dicecup.classlink.features.users.app;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.common.audit.AuditPublisher;
 import de.dicecup.classlink.features.users.domain.UserInfo;
+import de.dicecup.classlink.features.users.dto.CreateUserInfoDto;
+import de.dicecup.classlink.features.users.dto.UpdateUserDto;
 import de.dicecup.classlink.features.users.dto.UserDto;
 import de.dicecup.classlink.features.users.dto.UserInfoDto;
 import de.dicecup.classlink.features.users.mapper.UserMapper;
@@ -115,6 +117,129 @@ class UserServiceTest {
 
         // act + assert
         assertThatThrownBy(() -> service.get(id))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining(id.toString());
+
+        verify(userRepository).findById(id);
+        verifyNoMoreInteractions(userRepository, userMapper, auditPublisher);
+    }
+
+    @Test
+    void update_creates_user_info_when_missing() {
+        // arrange
+        UUID id = UUID.randomUUID();
+        User user = new User();
+        user.setId(id);
+        user.setEnabled(true);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        CreateUserInfoDto infoDto = new CreateUserInfoDto("Jane", "Doe", "jane.doe@classlink.local");
+        UpdateUserDto updateDto = new UpdateUserDto("jane.doe", true, infoDto);
+
+        UserInfo mappedInfo = new UserInfo(null, null, infoDto.firstName(), infoDto.lastName(), infoDto.email());
+        when(userMapper.toEntity(infoDto)).thenReturn(mappedInfo);
+
+        UserInfoDto expectedInfoDto = new UserInfoDto(infoDto.firstName(), infoDto.lastName(), infoDto.email());
+        UserDto expectedDto = new UserDto(id, "jane.doe", true, expectedInfoDto);
+        when(userMapper.toDto(user)).thenReturn(expectedDto);
+
+        // act
+        UserDto result = service.update(id, updateDto);
+
+        // assert
+        assertThat(result).isEqualTo(expectedDto);
+        assertThat(user.getUserInfo()).isSameAs(mappedInfo);
+        assertThat(user.getUserInfo().getUser()).isEqualTo(user);
+
+        verify(userRepository).findById(id);
+        verify(userMapper).toEntity(infoDto);
+        verify(userMapper).toDto(user);
+        verifyNoMoreInteractions(userRepository, auditPublisher);
+        verifyNoMoreInteractions(userMapper);
+    }
+
+    @Test
+    void update_updates_existing_user_info() {
+        // arrange
+        UUID id = UUID.randomUUID();
+        User user = new User();
+        user.setId(id);
+        user.setEnabled(true);
+
+        UserInfo existingInfo = new UserInfo(id, user, "Old", "Name", "old@classlink.local");
+        user.setUserInfo(existingInfo);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        CreateUserInfoDto infoDto = new CreateUserInfoDto("New", "Name", "new@classlink.local");
+        UpdateUserDto updateDto = new UpdateUserDto("new.name", false, infoDto);
+
+        UserInfoDto mappedInfoDto = new UserInfoDto("New", "Name", "new@classlink.local");
+        UserDto expectedDto = new UserDto(id, "new.name", false, mappedInfoDto);
+        when(userMapper.toDto(user)).thenReturn(expectedDto);
+
+        // act
+        UserDto result = service.update(id, updateDto);
+
+        // assert
+        assertThat(result).isEqualTo(expectedDto);
+        assertThat(existingInfo.getFirstName()).isEqualTo("New");
+        assertThat(existingInfo.getLastName()).isEqualTo("Name");
+        assertThat(existingInfo.getEmail()).isEqualTo("new@classlink.local");
+
+        verify(userRepository).findById(id);
+        verify(userMapper, never()).toEntity(any(CreateUserInfoDto.class));
+        verify(userMapper).toDto(user);
+        verifyNoMoreInteractions(userRepository, auditPublisher);
+        verifyNoMoreInteractions(userMapper);
+    }
+
+    @Test
+    void update_throws_when_user_not_found() {
+        // arrange
+        UUID id = UUID.randomUUID();
+        CreateUserInfoDto infoDto = new CreateUserInfoDto("Jane", "Doe", "jane@classlink.local");
+        UpdateUserDto updateDto = new UpdateUserDto("jane", true, infoDto);
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // act + assert
+        assertThatThrownBy(() -> service.update(id, updateDto))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining(id.toString());
+
+        verify(userRepository).findById(id);
+        verifyNoMoreInteractions(userRepository, userMapper, auditPublisher);
+    }
+
+    @Test
+    void delete_disables_user_and_sets_timestamp() {
+        // arrange
+        UUID id = UUID.randomUUID();
+        User user = new User();
+        user.setId(id);
+        user.setEnabled(true);
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        // act
+        service.delete(id);
+
+        // assert
+        assertThat(user.isEnabled()).isFalse();
+        assertThat(user.getDisabledAt()).isNotNull();
+
+        verify(userRepository).findById(id);
+        verifyNoMoreInteractions(userRepository, auditPublisher);
+    }
+
+    @Test
+    void delete_throws_when_user_not_found() {
+        // arrange
+        UUID id = UUID.randomUUID();
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // act + assert
+        assertThatThrownBy(() -> service.delete(id))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining(id.toString());
 
