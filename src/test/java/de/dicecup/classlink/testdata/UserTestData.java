@@ -25,7 +25,6 @@ public class UserTestData {
         user.setEnabled(true);
         user.setCreatedAt(Instant.now());
         user.setCreatedBy(UUID.randomUUID());
-        user.setVersion(0);
 
         UserInfo userInfo = new UserInfo();
         userInfo.setFirstName(faker.name().firstName());

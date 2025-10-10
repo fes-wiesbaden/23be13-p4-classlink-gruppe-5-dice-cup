@@ -133,16 +133,15 @@ CREATE TABLE user_info
 
 CREATE TABLE users
 (
-    id            UUID                        NOT NULL,
-    username      VARCHAR(100)                NOT NULL,
-    password_hash VARCHAR(255)                NOT NULL,
-    enabled       BOOLEAN                     NOT NULL,
-    disabled_at   TIMESTAMP WITHOUT TIME ZONE,
-    created_at    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    created_by    UUID                        NOT NULL,
+    id            UUID         NOT NULL,
+    created_at    TIMESTAMP WITHOUT TIME ZONE,
     updated_at    TIMESTAMP WITHOUT TIME ZONE,
+    created_by    UUID,
     updated_by    UUID,
-    version       BIGINT                      NOT NULL,
+    username      VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    enabled       BOOLEAN      NOT NULL,
+    disabled_at   TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
 
