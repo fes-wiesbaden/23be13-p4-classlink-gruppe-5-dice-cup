@@ -1,25 +1,24 @@
 package de.dicecup.classlink.persistence;
 
-import org.junit.ClassRule;
+import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 @SpringBootTest
-@Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class IntegrationTestBase {
-    @ClassRule
-    @Container
-    @ServiceConnection
-    static final PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:17-alpine")
-                    .withDatabaseName("classlink")
-                    .withUsername("postgres")
-                    .withPassword("postgres");
+    @Autowired
+    Flyway flyway;
+
+    @BeforeEach
+    void resetDb() {
+        flyway.clean();
+        flyway.migrate();
+    }
 }

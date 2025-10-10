@@ -32,14 +32,14 @@ class FlywayMigrationIT extends IntegrationTestBase {
         var id2 = UUID.randomUUID();
 
         jdbc.update("""
-                    INSERT INTO users(id, username, password_hash, enabled, created_at, created_by, version)
-                    VALUES (?,'alice','$2a$10$hash',true, now(), ?, 0)
-                """, id1, id1);
+                    INSERT INTO users(id, username, password_hash, enabled)
+                    VALUES (?,'alice','$2a$10$hash',true)
+                """, id1);
 
         assertThatThrownBy(() -> jdbc.update("""
-                    INSERT INTO users(id, username, password_hash, enabled, created_at, created_by, version)
-                    VALUES (?,'alice','$2a$10$hash',true, now(), ?, 0)
-                """, id2, id2)).isInstanceOf(DataIntegrityViolationException.class);
+                    INSERT INTO users(id, username, password_hash, enabled)
+                    VALUES (?,'alice','$2a$10$hash',true)
+                """, id2)).isInstanceOf(DataIntegrityViolationException.class);
     }
 
     @Test
