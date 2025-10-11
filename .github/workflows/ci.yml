@@ -1,7 +1,6 @@
 name: CI
 
 on:
-  push:
   pull_request:
     branches: [ master ]
 
@@ -52,7 +51,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Run tests
+      - name: Run tests (with Testcontainers)
+        env:
+          TZ: UTC
+          SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_TIME_ZONE: UTC
         run: ./gradlew test --no-daemon
 
       - name: Publish test report (always)

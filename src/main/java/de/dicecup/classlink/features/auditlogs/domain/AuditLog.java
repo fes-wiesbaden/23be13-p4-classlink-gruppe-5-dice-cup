@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class AuditLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "actor_id")
+    @Column(nullable = true, name = "actor_id")
     private UUID actorId;
 
     //TODO: explain the read-only nav
@@ -32,8 +32,11 @@ public class AuditLog {
     private String action;
 
     @Column(nullable = false)
-    private OffsetDateTime timestamp = OffsetDateTime.now();
+    private Instant timestamp;
+
+    @Column(nullable = true)
+    private String details;
 
     @Column(nullable = false)
-    private String details;
+    private String resource;
 }

@@ -7,17 +7,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.time.Instant;
+
 @Component
 @RequiredArgsConstructor
 public class AuditLogWriter {
     private final AuditLogRepository logRepository;
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void onAudit(AuditPublisher.ContextAuditEvent event) {
-        if (event.actorId() == null) return;
         AuditLog log = new AuditLog();
         log.setActorId(event.actorId());
         log.setAction(event.action());
         log.setDetails(event.detailsJson());
+        log.setTimestamp(Instant.now());
+        log.setResource(event.resource());
+        logRepository.save(log);
     }
 }

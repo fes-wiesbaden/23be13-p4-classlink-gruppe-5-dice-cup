@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -23,7 +22,6 @@ public class UserInfo {
 
     @Size(max = 100) private String firstName;
     @Size(max = 100) private String lastName;
-    private LocalDate dateOfBirth;
     @Column(unique = true)
     @Email @Size(max = 255) private String email;
 }
