@@ -54,13 +54,11 @@ class UserServiceTest {
 
         when(userRepository.findAll()).thenReturn(List.of(u1, u2));
 
-        // manually build nested dtos
         UserInfoDto infoDto1 = new UserInfoDto(uf1.getFirstName(), uf1.getLastName(), uf1.getEmail());
         UserInfoDto infoDto2 = new UserInfoDto(uf2.getFirstName(), uf2.getLastName(), uf2.getEmail());
 
         UserDto dto1 = new UserDto(u1.getId(), "l.moore", true, infoDto1);
         UserDto dto2 = new UserDto(u2.getId(), "m.bartius", true, infoDto2);
-        // only stub service using mapper call
         when(userMapper.toDto(u1)).thenReturn(dto1);
         when(userMapper.toDto(u2)).thenReturn(dto2);
 

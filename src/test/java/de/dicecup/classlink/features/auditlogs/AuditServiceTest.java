@@ -1,15 +1,11 @@
 package de.dicecup.classlink.features.auditlogs;
 
 import de.dicecup.classlink.common.audit.AuditPublisher;
-import de.dicecup.classlink.features.auditlogs.app.AuditLogRepository;
-import de.dicecup.classlink.features.auditlogs.domain.AuditLog;
 import de.dicecup.classlink.features.auditlogs.domain.Audited;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -71,7 +67,6 @@ public class AuditServiceTest {
                 eq("created")
         );
         verifyNoMoreInteractions(auditPublisher);
-        // Persistence is handled by the event listener; verify it in a dedicated listener/repository test, not here.
     }
 
     @Test
