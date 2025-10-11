@@ -62,7 +62,7 @@ class AuditLogIntegrationTest extends IntegrationTestBase {
         var logs = auditLogRepository.findAll();
         assertThat(logs).hasSize(1);
 
-        var log = logs.get(0);
+        var log = logs.getFirst();
         assertThat(log.getActorId()).isEqualTo(actor.getId());
         assertThat(log.getAction()).isEqualTo("USER_GET");
         assertThat(log.getResource()).isEqualTo("USER");
