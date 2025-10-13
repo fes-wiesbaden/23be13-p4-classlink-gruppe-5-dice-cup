@@ -9,7 +9,7 @@ SET role = upper(role);
 
 ALTER TABLE registration_invites
     ALTER COLUMN role TYPE text,
-    ADD CONSTRAINT ck_registration_invites_role CHECK (role IN ('ADMIN', 'LEHRER', 'SCHUELER'));
+    ADD CONSTRAINT ck_registration_invites_role CHECK (role IN ('ADMIN', 'TEACHER', 'STUDENT'));
 
 ALTER TABLE registration_invites
     ALTER COLUMN expires_at TYPE timestamptz USING expires_at AT TIME ZONE 'UTC';

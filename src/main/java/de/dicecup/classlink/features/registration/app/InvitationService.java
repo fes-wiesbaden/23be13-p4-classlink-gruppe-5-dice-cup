@@ -117,8 +117,8 @@ public class InvitationService {
 
         switch (invite.getRole()) {
             case ADMIN -> assignAdminRole(user);
-            case LEHRER -> assignTeacherRole(user);
-            case SCHUELER -> assignStudentRole(user, invite.getClassId());
+            case TEACHER -> assignTeacherRole(user);
+            case STUDENT -> assignStudentRole(user, invite.getClassId());
             default -> throw new IllegalStateException("Unsupported role " + invite.getRole());
         }
 
@@ -151,8 +151,8 @@ public class InvitationService {
             return;
         }
         if (hasRole("ROLE_TEACHER")) {
-            if (role != RegistrationInviteRole.SCHUELER) {
-                throw new AccessDeniedException("Teacher can only invite SCHUELER");
+            if (role != RegistrationInviteRole.STUDENT) {
+                throw new AccessDeniedException("Teacher can only invite STUDENT");
             }
             return;
         }

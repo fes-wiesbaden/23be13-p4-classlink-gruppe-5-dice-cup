@@ -38,7 +38,7 @@ class AuthFlowIntegrationTest extends IntegrationTestBase {
 
         String createPayload = "{" +
                 "\"email\":\"learner@classlink.test\"," +
-                "\"role\":\"SCHUELER\"}";
+                "\"role\":\"STUDENT\"}";
 
         String response = mockMvc.perform(post("/admin/invites")
                         .contentType(MediaType.APPLICATION_JSON)

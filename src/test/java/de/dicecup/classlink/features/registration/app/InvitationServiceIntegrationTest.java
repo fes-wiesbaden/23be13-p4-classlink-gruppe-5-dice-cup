@@ -36,7 +36,7 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
         User admin = persistAdminUser("admin@example.com");
         authenticate(admin);
 
-        CreateInviteRequestDto request = new CreateInviteRequestDto("new.user@example.com", RegistrationInviteRole.SCHUELER, null, 1, null);
+        CreateInviteRequestDto request = new CreateInviteRequestDto("new.user@example.com", RegistrationInviteRole.STUDENT, null, 1, null);
         InviteCreatedResponseDto created = invitationService.createInvite(request);
 
         SecurityContextHolder.clearContext();
@@ -69,7 +69,7 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
         clazz.setName("10A");
         clazz = classRepository.save(clazz);
 
-        CreateInviteRequestDto request = new CreateInviteRequestDto("student@example.com", RegistrationInviteRole.SCHUELER, clazz.getId(), 1, "note");
+        CreateInviteRequestDto request = new CreateInviteRequestDto("student@example.com", RegistrationInviteRole.STUDENT, clazz.getId(), 1, "note");
         InviteCreatedResponseDto created = invitationService.createInvite(request);
         SecurityContextHolder.clearContext();
 
