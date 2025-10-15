@@ -288,17 +288,29 @@
   transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
-.login-input::placeholder {
-  /* Placeholder styling */
-  color: rgba(71, 85, 105, 0.65);
-}
+/* Beispiel text ist immer grau (in allen browsern) */
+.login-input::placeholder { color: #94a3b8 !important; opacity: 1; }
+.login-input:focus::placeholder { color: #94a3b8 !important; opacity: 1; }
+.login-input::-webkit-input-placeholder { color: #94a3b8 !important; opacity: 1; }
+.login-input::-moz-placeholder { color: #94a3b8 !important; opacity: 1; }
+.login-input:-ms-input-placeholder { color: #94a3b8 !important; }
+.login-input::-ms-input-placeholder { color: #94a3b8 !important; }
+
+:host ::ng-deep .p-inputtext.login-input::placeholder { color: #94a3b8 !important; opacity: 1; }
+:host ::ng-deep .p-inputtext.login-input:focus::placeholder { color: #94a3b8 !important; opacity: 1; }
 
 .login-input:focus {
   /* input-field inspect effect */
   border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 4px #e2e8f0;
   background-color: #fff;
   outline: none;
+}
+
+/* border never break */
+.login-input:not(:focus):not(.is-invalid) {
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
 }
 
 .is-invalid {
