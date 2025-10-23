@@ -1,0 +1,12 @@
+<nav class="side-toolbar" aria-label="Hauptnavigation">
+  <button
+    *ngFor="let i of items()"
+    class="tool-btn"
+    [class.is-active]="i.active"
+    [attr.aria-label]="i.tooltip"
+    (click)="go(i.route)"
+  >
+    <i class="pi" [ngClass]="i.icon"></i>
+  </button>
+</nav>
+

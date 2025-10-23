@@ -1,0 +1,56 @@
+﻿/* Von Lukas bearbeitet */
+/* Dark baseline to match mock */
+/* base moved to global styles via variables */
+
+.header__left { display: flex; flex-direction: column; gap: 8px; }
+.header__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+
+
+
+.student-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #1e1e1e;
+  border-radius: 999px;
+  width: fit-content;
+  border: 1px solid #2a2a2a;
+}
+.student-chip .avatar.lg { width: 36px; height: 36px; border-radius: 50%; font-weight: 700; }
+.student-chip div.avatar.lg { background: #2b2b2f; display: grid; place-items: center; color: #ffffff; }
+.student-chip .info { display: flex; flex-direction: column; line-height: 1.1; }
+.student-chip .info .name { color: #e8eaed; font-size: 14px; font-weight: 600; }
+.student-chip .info .class { color: #9aa0a6; font-size: 12px; }
+
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+.note__textarea { width: 100%; min-height: 240px; background: var(--surface-subtle); color: var(--text-primary); border-radius: 8px; border: 1px solid var(--border); padding: 12px; }
+.note__textarea::placeholder { color: var(--placeholder); }
+
+.assign__project { color: #9aa0a6; margin-bottom: 8px; }
+.assign__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.assign__list li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--surface-subtle); border: 1px solid var(--border); height: 48px; }
+.assign__list .left { display: flex; align-items: center; gap: 8px; }
+.assign__list .right { display: flex; align-items: center; gap: 8px; }
+.assign__list .name { color: #e8eaed; }
+/* Status styles moved to shared components/status */
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: 1fr; }
+  .header__actions p-select, .header__actions .select-control, .header__actions .btn-accent { width: 100%; }
+  .userbox { display: none; }
+}
+
+@media (max-width: 640px) {
+  .student-chip { display: none; }
+  .sidebar { gap: 12px; }
+  .sidebar__list li { padding: 8px 10px; }
+}
+
+.section-title { color: var(--text-primary); font-size: 14px; font-weight: 600; }
+
+
+
+
+
+/* PrimeNG overrides moved to shared _primeng-overrides.scss */

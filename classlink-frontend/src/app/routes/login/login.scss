@@ -176,7 +176,7 @@
 }
 
 :host ::ng-deep .login-card.p-card {
-  /* Login-card box erstellen */
+  /* Login-card box erstellen (neutraler Default) */
   width: 100%;
   border: none;
   border-radius: 1.25rem;
@@ -186,8 +186,34 @@
   padding: 0;
 }
 
+/* Sofort aktiver Look beim ersten Paint, ohne Transition/Animation */
+.login-page.no-anim {
+  /* Karte aktiv + keine Transition */
+}
+.login-page.no-anim :where(.login-card.p-card) {
+  box-shadow: 0 28px 90px rgba(137, 94, 225, 0.45) !important;
+  transform: translateY(-4px) !important;
+  transition: none !important;
+}
+.login-page.no-anim :where(.login-page__orb) {
+  animation: none !important;
+  transition: none !important;
+}
+.login-page.no-anim :where(.login-page__orb--alpha) {
+  top: 34% !important; left: 32% !important; opacity: 0.35 !important; filter: blur(70px) !important; box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28) !important;
+}
+.login-page.no-anim :where(.login-page__orb--beta) {
+  bottom: 32% !important; left: 36% !important; opacity: 0.35 !important; filter: blur(70px) !important; box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28) !important;
+}
+.login-page.no-anim :where(.login-page__orb--gamma) {
+  top: 34% !important; right: 32% !important; opacity: 0.35 !important; filter: blur(70px) !important; box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28) !important;
+}
+.login-page.no-anim :where(.login-page__orb--delta) {
+  bottom: 30% !important; right: 36% !important; opacity: 0.35 !important; filter: blur(70px) !important; box-shadow: 0 0 150px 80px rgba(137, 94, 225, 0.28) !important;
+}
+
+/* Optional: aktiver Zustand entspricht jetzt dem Default; Regel bleibt für Lesbarkeit */
 :host ::ng-deep .login-page--active .login-card.p-card {
-  /* Lila schatten für hover effect */
   box-shadow: 0 28px 90px rgba(137, 94, 225, 0.45);
   transform: translateY(-4px);
 }
@@ -495,4 +521,8 @@
 
 
 
+
+
+/* Rolle-Auswahl im Login ausblenden (UI entfernt) */
+#role, label[for='role'] { display: none !important; }
 

@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { Checkbox } from 'primeng/checkbox';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -17,15 +19,26 @@ import { Checkbox } from 'primeng/checkbox';
 export class LoginComponent {
   readonly loginForm: FormGroup;
   submitted = false;
-  decorActive = false;
+  // Start im aktiven Look, damit die Karte/Orbs sofort "an" sind
+  decorActive = true;
   isSubmitting = false;
+  // Deaktiviert Transitions/Animationen für den allerersten Paint
+  noAnim = true;
 
-  constructor(private readonly fb: FormBuilder) {
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly auth: AuthService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rememberMe: [false],
     });
+
+    // Nach dem ersten Tick Transitions wieder erlauben
+    setTimeout(() => { this.noAnim = false; }, 0);
   }
 
   activateDecor(): void {
@@ -44,12 +57,21 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-    const credentials = this.loginForm.value;
-    console.info('Login submitted', credentials);
+    const { username } = this.loginForm.value as { username: string };
 
+    // Demo-/Stub-Login: erzeugt ein Fake-Token und setzt Default-Rolle 'teacher'
+    const fakeToken = `dc.${btoa(username || 'user')}.${Date.now()}`;
+    this.auth.login(fakeToken, ['teacher'], username);
+
+    // Redirect auf gewünschte Zielseite (QueryParam) oder rollenbasiertes Standardziel
+    const redirect = this.route.snapshot.queryParamMap.get('redirectUrl');
+    const fallback = '/teacher';
+
+    // kleine Verzögerung für visuelles Feedback
     setTimeout(() => {
       this.isSubmitting = false;
-    }, 1200);
+      this.router.navigateByUrl(redirect || fallback);
+    }, 300);
   }
 
   get usernameControl() {
@@ -59,6 +81,8 @@ export class LoginComponent {
   get passwordControl() {
     return this.loginForm.get('password');
   }
+
+  // role selection removed; roles managed via DevDock for demo
 }
 
 

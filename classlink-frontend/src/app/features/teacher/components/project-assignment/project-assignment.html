@@ -1,0 +1,60 @@
+<!-- Von Lukas bearbeitet -->
+<p-card class="panel assign modern">
+  <div class="panel__head">
+    <h3 class="panel__title">Projektzuweisung</h3>
+  </div>
+
+  <div class="assign__project">
+    <div class="field-label">Projekt</div>
+    <div class="select-wrap">
+      <p-select
+        class="select-control"
+        [options]="projectOptions"
+        [ngModel]="projectId"
+        (ngModelChange)="projectChange.emit($any($event))"
+        optionLabel="label"
+        placeholder="Bitte auswählen"
+        [filter]="true"
+        [showClear]="false"
+        inputId="projectSelect">
+      </p-select>
+    </div>
+    <div class="current" *ngIf="projectName">
+      Aktuelles Projekt: <span class="chip">{{ projectName }}</span>
+    </div>
+  </div>
+
+  <div class="subhead">Im Projekt</div>
+  <ul class="assign__list">
+    <li *ngFor="let s of students; trackBy: trackById" [hidden]="!isAssigned(s.id)">
+      <div class="left">
+        <img *ngIf="s.avatarUrl && !isFailed(s.id); else letter1" class="avatar sm" [src]="s.avatarUrl" [alt]="s.name" (error)="markFailed(s.id)" />
+        <ng-template #letter1>
+          <div class="avatar sm">{{ s.name.charAt(0) }}</div>
+        </ng-template>
+        <span class="name">{{ s.name }}</span>
+      </div>
+      <div class="right">
+        <span class="status-dot ok" aria-hidden="true"></span>
+        <button type="button" class="square-btn danger" aria-label="Aus Projekt entfernen" (click)="toggle.emit(s.id)"></button>
+      </div>
+    </li>
+  </ul>
+
+  <div class="subhead">Verfügbar</div>
+  <ul class="assign__list">
+    <li *ngFor="let s of students; trackBy: trackById" [hidden]="isAssigned(s.id)">
+      <div class="left">
+        <img *ngIf="s.avatarUrl && !isFailed(s.id); else letter2" class="avatar sm" [src]="s.avatarUrl" [alt]="s.name" (error)="markFailed(s.id)" />
+        <ng-template #letter2>
+          <div class="avatar sm">{{ s.name.charAt(0) }}</div>
+        </ng-template>
+        <span class="name">{{ s.name }}</span>
+      </div>
+      <div class="right">
+        <span class="status-dot muted" aria-hidden="true"></span>
+        <button type="button" class="square-btn success" aria-label="Zum Projekt hinzufügen" (click)="toggle.emit(s.id)"></button>
+      </div>
+    </li>
+  </ul>
+</p-card>

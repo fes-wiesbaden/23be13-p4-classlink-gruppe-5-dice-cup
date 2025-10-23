@@ -1,0 +1,66 @@
+/* Shared button styles */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--input-h);
+  padding: 0 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* Square icon-only button variant */
+.btn-icon {
+  width: var(--input-h);
+  min-width: var(--input-h);
+  height: var(--input-h);
+  padding: 0;
+  border-radius: 12px;
+}
+.btn-icon:hover { background: var(--surface); }
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--input-h);
+  padding: 0 16px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.btn-accent:hover { background: var(--accent-hover); }
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--input-h);
+  padding: 0 12px;
+  border-radius: var(--radius);
+  border: 1px solid #ef5350;
+  background: transparent;
+  color: #ef5350;
+  cursor: pointer;
+}
+
+.link-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.link-btn:hover { background: rgba(136, 88, 224, .1); }

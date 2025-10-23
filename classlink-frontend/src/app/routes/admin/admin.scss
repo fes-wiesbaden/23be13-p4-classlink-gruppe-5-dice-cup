@@ -1,3 +1,10 @@
-body {
-  background-color: black;
-}
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+/* User table specifics */
+.role-chip { margin-right: 6px; }
+.actions { display: flex; gap: 8px; }
+/* Admin wants a ghost variant for accent buttons on this page */
+.btn-accent { background: var(--accent-ghost); color: var(--text-primary); border: 1px solid var(--accent); }
+
+.roles-editor { display: flex; gap: 12px; align-items: center; }
+.roles-editor label { display: inline-flex; gap: 6px; align-items: center; color: var(--text-primary); }

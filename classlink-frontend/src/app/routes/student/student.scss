@@ -1,0 +1,57 @@
+/* Layout analog zur Teacher-Seite */
+.student-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding-left: clamp(16px, 4vw, 48px);
+  padding-right: clamp(16px, 4vw, 48px);
+  padding-top: 24px;
+  padding-bottom: 24px;
+  width: 100%;
+}
+
+.content { display: flex; flex-direction: column; gap: 20px; }
+.content__header { display: flex; justify-content: space-between; align-items: center; }
+.header__left { display: flex; flex-direction: column; gap: 8px; }
+.title { margin: 0; color: var(--text-primary); font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.01em; }
+.subtitle { color: var(--text-muted); font-size: 14px; line-height: 20px; }
+.header__actions { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+
+/* KPI styles come from layout-shared */
+
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+/* Panel styles come from layout-shared */
+
+.select-control { width: 100%; background: var(--surface-subtle); color: var(--text-primary); border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; }
+
+.chart-wrapper { height: 260px; }
+
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { color: var(--text-primary); font-size: 13px; font-weight: 600; }
+.control { width: 100%; background: var(--surface-subtle); color: var(--text-primary); border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; }
+
+.panel__content { display: flex; flex-direction: column; gap: 12px; }
+
+.assign__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.assign__list li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: var(--surface-subtle); border: 1px solid var(--border); min-height: 48px; }
+.assign__list .left { display: flex; align-items: center; gap: 8px; }
+.assign__list .right { display: flex; align-items: center; gap: 8px; }
+.assign__list .name { color: #e8eaed; }
+/* Status styles from shared components/status */
+
+/* Accent button styling (local copy) */
+/* Use shared .btn-accent base; optional local variant could be added if needed */
+
+@media (max-width: 960px) {
+  .grid { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .header__actions .select-control { width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .kpis { grid-template-columns: 1fr; }
+}
+
+.section-title { color: var(--text-primary); font-size: 14px; font-weight: 600; }

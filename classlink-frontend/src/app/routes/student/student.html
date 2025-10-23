@@ -1,1 +1,65 @@
-<h1>Student Panel</h1>
+<p-toast></p-toast>
+<div class="student-page">
+  <section class="content">
+    <div class="content__header">
+      <div class="header__left">
+        <h1 class="title">Hallo, {{ currentStudent?.name }}</h1>
+        <div class="subtitle">Projekt: {{ currentProjectName }}</div>
+      </div>
+      <div class="header__actions">
+        <label class="section-title">Projekt</label>
+        <select class="select-control" [(ngModel)]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
+          <option *ngFor="let o of projectOptions" [value]="o.value">{{ o.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <teacher-kpi-cards [scores]="scoreSummary"></teacher-kpi-cards>
+
+    <p-card class="panel p-card">
+      <div class="panel__title">Notenentwicklung</div>
+      <div class="chart-wrapper">
+        <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+      </div>
+    </p-card>
+
+    <div class="grid">
+      <p-card class="panel p-card">
+        <div class="panel__title">Fremdbewertung abgeben</div>
+        <div class="panel__content">
+          <div class="form-grid">
+            <div class="field">
+              <label>Wen bewertest du?</label>
+              <select class="control" [(ngModel)]="peerTargetId" [disabled]="busy" aria-label="Peer auswählen">
+                <option [ngValue]="null" disabled>Person wählen</option>
+                <option *ngFor="let s of peers; trackBy: trackById" [value]="s.id">{{ s.name }} ({{ s.class }})</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Note (1.0 – 6.0)</label>
+              <input class="control" type="number" step="0.1" min="1" max="6" [(ngModel)]="peerGrade" [disabled]="busy" aria-label="Note" />
+            </div>
+          </div>
+          <div class="panel__actions">
+            <button class="btn-accent" type="button" (click)="submitPeerEvaluation()" [disabled]="busy || !canSubmitPeer()" aria-label="Fremdbewertung abschicken">Abschicken</button>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="panel p-card">
+        <div class="panel__title">Notizen von Lehrkräften</div>
+        <ul class="assign__list">
+          <li *ngFor="let n of notes; trackBy: trackByIndex">
+            <div class="left">
+              <span class="name">{{ n.text }}</span>
+            </div>
+            <div class="right">
+              <span class="status">{{ n.createdAt | date:'short' }}</span>
+            </div>
+          </li>
+          <li *ngIf="!notes.length"><span class="status">Keine Notizen vorhanden.</span></li>
+        </ul>
+      </p-card>
+    </div>
+  </section>
+</div>

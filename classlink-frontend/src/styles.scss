@@ -1,3 +1,50 @@
+@use './app/styles/layout-shared';
+@use './app/styles/components/buttons';
+@use './app/styles/components/tables';
+@use './app/styles/components/avatars';
+@use './app/styles/components/status';
+@use './app/styles/components/icon-buttons';
+@use './app/styles/utilities';
+@use './app/styles/components/chips';
+@use './app/styles/components/badges';
+@use './app/styles/primeng-overrides';
+
+/* (Login panel styles are handled within the login route stylesheet) */
+
+:root {
+  /* Colors */
+  --bg: #121212;
+  --surface: #1E1E1E;
+  --surface-subtle: #181820;
+  --border: #2A2A2E;
+  --text-primary: #F5F6F7;
+  --text-secondary: #D5D8DD;
+  --text-muted: #9AA1A9;
+  --placeholder: #808791;
+  --accent: #8858E0;
+  --accent-hover: #9B6EF2;
+  --accent-ghost: #282040;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --hover: #242424;
+  --active-bg: #202020;
+  --focus: #8858E0;
+
+  /* Spacing & sizes */
+  --gap: 16px;
+  --container-max: 1160px;
+  --sidebar-w: 256px;
+  --line-h: 56px;
+  --input-h: 40px;
+  --radius: 8px;
+  --radius-pill: 9999px;
+  --shadow: 0 8px 24px rgba(0,0,0,0.25);
+
+  /* Typography */
+  --font: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+}
+
 *,
 *::before,
 *::after {
@@ -14,4 +61,16 @@ body {
 body {
   min-height: 100%;
   overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font);
 }
+
+/* Focus ring (2px, outside) */
+*:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Placeholder color baseline */
+::placeholder { color: var(--placeholder); opacity: 1; }
+::-ms-input-placeholder { color: var(--placeholder); }
+
+/* removed side toolbar padding */

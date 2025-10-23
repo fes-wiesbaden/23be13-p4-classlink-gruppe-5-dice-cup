@@ -1,0 +1,27 @@
+﻿<!-- Von Lukas bearbeitet -->
+<header class="content__header">
+  <div class="header__left">
+    <h1 class="title">Admin Panel</h1>
+    <div class="subtitle">Benutzerverwaltung</div>
+  </div>
+  <div class="header__actions">
+    <button type="button" class="btn-accent" (click)="toggleCreate()" [disabled]="busy">
+      <i class="pi pi-user-plus"></i>&nbsp;Nutzer anlegen
+    </button>
+  </div>
+</header>
+
+<section class="panel" *ngIf="showCreate" style="padding:16px;">
+  <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+    <input type="text" placeholder="Name" [(ngModel)]="name" class="p-inputtext p-component" [disabled]="busy" aria-label="Name" />
+    <input type="email" placeholder="E-Mail" [(ngModel)]="email" class="p-inputtext p-component" [disabled]="busy" aria-label="E-Mail" />
+    <div class="roles-editor">
+      <label><input type="checkbox" [checked]="roleChecked('student')" (change)="toggleRole('student')" [disabled]="busy" /> Student</label>
+      <label><input type="checkbox" [checked]="roleChecked('teacher')" (change)="toggleRole('teacher')" [disabled]="busy" /> Teacher</label>
+      <label><input type="checkbox" [checked]="roleChecked('admin')" (change)="toggleRole('admin')" [disabled]="busy" /> Admin</label>
+    </div>
+    <span style="flex:1 1 auto"></span>
+    <button class="btn" (click)="toggleCreate()" [disabled]="busy">Abbrechen</button>
+    <button class="btn-accent" (click)="add()" [disabled]="busy || !name || !email"><i class="pi pi-check"></i>&nbsp;Hinzuf&uuml;gen</button>
+  </div>
+</section>

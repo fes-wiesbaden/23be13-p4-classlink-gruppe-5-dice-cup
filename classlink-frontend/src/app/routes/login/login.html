@@ -1,5 +1,5 @@
 <!-- Hintergrund für login-card -->
-<div class="login-page" [class.login-page--active]="decorActive">
+<div class="login-page" [class.login-page--active]="decorActive" [class.no-anim]="noAnim">
   <div class="login-page__decor" aria-hidden="true">
     <span class="login-page__orb login-page__orb--alpha"></span>
     <span class="login-page__orb login-page__orb--beta"></span>
@@ -61,6 +61,20 @@
           <small class="login-form__error" *ngIf="submitted && passwordControl?.hasError('minlength')">
             Das Passwort muss mindestens 6 Zeichen enthalten.
           </small>
+        </div>
+        <!-- Rollenwahl (für Demo) -->
+        <div class="login-form__field">
+          <label for="role" class="login-form__label">Rolle</label>
+          <select
+            id="role"
+            formControlName="role"
+            class="login-input"
+            [disabled]="isSubmitting"
+          >
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
         <!-- "Angemeldet bleiben" checkbox -->
         <div class="login-form__options">

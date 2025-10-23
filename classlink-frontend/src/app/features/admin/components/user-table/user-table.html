@@ -1,0 +1,54 @@
+<!-- Von Lukas bearbeitet -->
+<section class="p-card panel">
+  <div class="p-card-body">
+    <table class="table user-table" role="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>E-Mail</th>
+          <th>Rollen</th>
+          <th>Status</th>
+          <th>Erstellt</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users; trackBy: trackById">
+          <td>{{ u.id }}</td>
+          <td>{{ u.name }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <ng-container *ngIf="editingId !== u.id; else editRolesTpl">
+              <span class="chip role-chip" *ngFor="let r of u.roles">{{ r | roleLabel }}</span>
+            </ng-container>
+            <ng-template #editRolesTpl>
+              <div class="roles-editor">
+                <label><input type="checkbox" [checked]="roleChecked('student')" (change)="toggleRole('student')" [disabled]="busy" /> Student</label>
+                <label><input type="checkbox" [checked]="roleChecked('teacher')" (change)="toggleRole('teacher')" [disabled]="busy" /> Teacher</label>
+                <label><input type="checkbox" [checked]="roleChecked('admin')" (change)="toggleRole('admin')" [disabled]="busy" /> Admin</label>
+                <button class="btn" (click)="cancelEdit()" [disabled]="busy">Abbrechen</button>
+                <button class="btn-accent" (click)="saveEdit(u.id)" [disabled]="busy"><i class="pi pi-check"></i>&nbsp;Speichern</button>
+              </div>
+            </ng-template>
+          </td>
+          <td>
+            <span class="status" [ngClass]="u.status === 'active' ? 'ok' : 'no'">{{ u.status === 'active' ? 'aktiv' : 'deaktiviert' }}</span>
+          </td>
+          <td>{{ u.createdAt | date:'shortDate' }}</td>
+          <td>
+            <div class="actions">
+              <button class="btn" *ngIf="editingId !== u.id" (click)="beginEdit(u)" [disabled]="busy" aria-label="Rollen bearbeiten"><i class="pi pi-pencil"></i>&nbsp;Rollen</button>
+              <button class="btn" (click)="resetPassword.emit(u.id)" [disabled]="busy" aria-label="Passwort zurücksetzen"><i class="pi pi-key"></i>&nbsp;Passwort</button>
+              <button class="btn-danger" (click)="deleteUser.emit(u.id)" [disabled]="busy" aria-label="Benutzer löschen"><i class="pi pi-trash"></i>&nbsp;L&ouml;schen</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="p-card panel u-mt-8" *ngIf="users.length === 0">
+      <div class="p-card-body u-text-muted">Noch keine Nutzer vorhanden. Lege den ersten Nutzer an.</div>
+    </div>
+  </div>
+</section>

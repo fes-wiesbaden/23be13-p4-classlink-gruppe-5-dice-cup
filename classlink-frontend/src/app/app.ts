@@ -9,4 +9,7 @@ import { DevDockComponent } from './components/dev-dock/dev-dock';
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
-export class AppComponent {}
+export class AppComponent {
+  // Dev auto-login handled centrally in AuthService (to avoid duplication)
+  constructor() {}
+}

@@ -6,6 +6,7 @@ import { RippleModule } from 'primeng/ripple';
 import { Router, NavigationEnd } from '@angular/router';
 import { MenuItem, SharedModule } from 'primeng/api';
 import { filter, Subscription } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 type DockItem = MenuItem & { iconUrl: string };
 
@@ -20,7 +21,7 @@ export class DevDockComponent implements OnDestroy {
   private sub?: Subscription;
   currentUrl = signal<string>('/admin');
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private auth: AuthService) {
     this.currentUrl.set(this.router.url);
     this.sub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -30,21 +31,25 @@ export class DevDockComponent implements OnDestroy {
 
   // icons
   private base = [
-    { label: 'Student', iconUrl: '/assets/icons/student.svg', route: '/student' },
-    { label: 'Teacher', iconUrl: '/assets/icons/teacher.svg', route: '/teacher' },
-    { label: 'Admin',   iconUrl: '/assets/icons/admin.svg',   route: '/admin'   },
-    { label: 'Login',   iconUrl: '/assets/icons/login.svg',   route: '/login'   },
+    { label: 'Student', iconUrl: '/assets/icons/student.svg', route: '/student', roles: ['student'] as string[] },
+    { label: 'Teacher', iconUrl: '/assets/icons/teacher.svg', route: '/teacher', roles: ['teacher'] as string[] },
+    { label: 'Admin',   iconUrl: '/assets/icons/admin.svg',   route: '/admin',   roles: ['admin']   as string[] },
+    { label: 'Login',   iconUrl: '/assets/icons/login.svg',   route: '/login',   roles: []                   },
   ];
 
   items = computed<DockItem[]>(() => {
     const url = this.currentUrl();
-    return this.base.map(i => ({
+
+    // Always show all dock items, including Login
+    const visible = this.base;
+
+    return visible.map(i => ({
       label: i.label,
       iconUrl: i.iconUrl,
-      // outline highlite
+      // outline highlight
       styleClass: url.startsWith(i.route) ? 'is-active' : undefined,
       tooltip: i.label,
-      command: () => this.router.navigateByUrl(i.route)
+      command: () => { if ('roles' in i) this.auth.setRoles((i as any).roles); this.router.navigateByUrl(i.route); }
     }));
   });
 }
