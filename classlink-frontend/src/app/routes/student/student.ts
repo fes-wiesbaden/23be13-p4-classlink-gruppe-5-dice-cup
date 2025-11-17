@@ -193,7 +193,7 @@ export class StudentComponent {
         stacked: false,
         title: {
           display: true,
-          text: 'Leistung (↑ besser)',
+          text: 'Leistung (höher = besser)',
           color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary') || '#9aa0a6',
         },
         ticks: {
