@@ -1,7 +1,7 @@
 package de.dicecup.classlink.common.audit;
 
-import de.dicecup.classlink.features.auditlogs.app.AuditLogRepository;
-import de.dicecup.classlink.features.auditlogs.domain.AuditLog;
+import de.dicecup.classlink.features.auditlogs.AuditLogRepository;
+import de.dicecup.classlink.features.auditlogs.AuditLog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;

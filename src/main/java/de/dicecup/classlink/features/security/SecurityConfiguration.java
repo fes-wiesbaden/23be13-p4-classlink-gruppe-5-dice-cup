@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.security;
 
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/scalar/**", "/v3/api-docs/**", "/actuator/health").permitAll()
-                        .requestMatchers("/auth/invites/validate", "/auth/invites/redeem", "/auth/password-reset/validate", "/auth/password-reset/commit").permitAll()
+                        .requestMatchers("/auth/login", "/auth/refresh", "/invites/validate", "/invites/redeem", "/auth/password-reset/validate", "/auth/password-reset/commit").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
