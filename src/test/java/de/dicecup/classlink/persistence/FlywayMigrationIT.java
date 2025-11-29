@@ -1,6 +1,6 @@
 package de.dicecup.classlink.persistence;
 
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.testdata.TestDataConfig;
 import de.dicecup.classlink.testdata.UserTestData;

@@ -2,9 +2,9 @@ package de.dicecup.classlink.features.registration.web;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.dicecup.classlink.features.security.passwordreset.web.PasswordResetCommitRequestDto;
-import de.dicecup.classlink.features.security.passwordreset.web.PasswordResetCreateRequestDto;
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.security.passwordreset.PasswordResetCommitRequestDto;
+import de.dicecup.classlink.features.security.passwordreset.PasswordResetCreateRequestDto;
+import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.features.users.domain.roles.Admin;
@@ -49,13 +49,13 @@ class AuthFlowIntegrationTest extends IntegrationTestBase {
         JsonNode body = objectMapper.readTree(response);
         String token = body.get("token").asText();
 
-        mockMvc.perform(post("/auth/invites/validate")
+        mockMvc.perform(post("/invites/validate")
                         .with(anonymous())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"token\":\"" + token + "\"}"))
                 .andExpect(status().isOk());
 
-        String redeemResponse = mockMvc.perform(post("/auth/invites/redeem")
+        String redeemResponse = mockMvc.perform(post("/invites/redeem")
                         .with(anonymous())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"token\":\"" + token + "\",\"username\":\"learner\",\"password\":\"Secret123!\"}"))

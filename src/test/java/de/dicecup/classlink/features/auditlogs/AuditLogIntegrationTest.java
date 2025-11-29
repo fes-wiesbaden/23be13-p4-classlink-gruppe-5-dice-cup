@@ -2,9 +2,8 @@ package de.dicecup.classlink.features.auditlogs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.dicecup.classlink.features.auditlogs.app.AuditLogRepository;
-import de.dicecup.classlink.features.users.app.UserRepository;
-import de.dicecup.classlink.features.users.app.UserService;
+import de.dicecup.classlink.features.users.UserRepository;
+import de.dicecup.classlink.features.users.UserService;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.persistence.IntegrationTestBase;
 import de.dicecup.classlink.testdata.TestDataConfig;

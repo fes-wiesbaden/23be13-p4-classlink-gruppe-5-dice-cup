@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.registration.web;
 
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;

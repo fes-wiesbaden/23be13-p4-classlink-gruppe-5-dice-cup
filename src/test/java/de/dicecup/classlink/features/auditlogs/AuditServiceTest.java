@@ -1,7 +1,6 @@
 package de.dicecup.classlink.features.auditlogs;
 
 import de.dicecup.classlink.common.audit.AuditPublisher;
-import de.dicecup.classlink.features.auditlogs.domain.Audited;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;

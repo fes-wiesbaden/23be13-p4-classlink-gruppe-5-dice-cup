@@ -1,10 +1,6 @@
 package de.dicecup.classlink.features.security.passwordreset;
 
-import de.dicecup.classlink.features.security.passwordreset.app.PasswordResetService;
-import de.dicecup.classlink.features.security.passwordreset.web.PasswordResetCommitRequestDto;
-import de.dicecup.classlink.features.security.passwordreset.web.PasswordResetCreateRequestDto;
-import de.dicecup.classlink.features.security.passwordreset.web.PasswordResetValidateRequestDto;
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.persistence.IntegrationTestBase;

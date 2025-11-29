@@ -2,8 +2,9 @@ package de.dicecup.classlink.features.registration.app;
 
 import de.dicecup.classlink.features.classes.Class;
 import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.registration.InvitationService;
 import de.dicecup.classlink.features.registration.domain.*;
-import de.dicecup.classlink.features.users.app.UserRepository;
+import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.features.users.domain.roles.Admin;

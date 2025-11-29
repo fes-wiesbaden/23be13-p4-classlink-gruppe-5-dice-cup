@@ -1,13 +1,15 @@
 package de.dicecup.classlink.features.users.app;
 
+import de.dicecup.classlink.features.users.UserRepository;
+import de.dicecup.classlink.features.users.UserService;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.common.audit.AuditPublisher;
 import de.dicecup.classlink.features.users.domain.UserInfo;
-import de.dicecup.classlink.features.users.dto.CreateUserInfoDto;
-import de.dicecup.classlink.features.users.dto.UpdateUserDto;
-import de.dicecup.classlink.features.users.dto.UserDto;
-import de.dicecup.classlink.features.users.dto.UserInfoDto;
-import de.dicecup.classlink.features.users.mapper.UserMapper;
+import de.dicecup.classlink.features.users.domain.CreateUserInfoDto;
+import de.dicecup.classlink.features.users.domain.UpdateUserDto;
+import de.dicecup.classlink.features.users.domain.UserDto;
+import de.dicecup.classlink.features.users.domain.UserInfoDto;
+import de.dicecup.classlink.features.users.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
