@@ -1,0 +1,39 @@
+﻿<!-- Von Lukas bearbeitet -->
+<p-toast></p-toast>
+<div class="teacher-page">
+  <teacher-student-sidebar
+    [students]="filteredStudents"
+    [selectedStudentId]="selectedStudentId"
+    [search]="search"
+    [classes]="classes"
+    [selectedClass]="selectedClass"
+    [assignClassName]="assignClassName"
+    (selectStudent)="onSelectStudent($event)"
+    (searchChange)="onSearchChange($event)"
+    (classChange)="onClassChange($event)"
+    (createClass)="onCreateClass()"
+    (assignClassChange)="assignClassName = $event"
+    (assignSelected)="onAssignSelectedToClass()"
+  />
+
+  <main class="content" *ngIf="selectedStudent as st">
+    <teacher-header-bar [student]="st" (createProject)="onCreateProject()" />
+
+    <teacher-kpi-cards *ngIf="scoreSummary as sc" [scores]="sc" [allowTeacherEdit]="true" />
+
+    <section class="grid">
+      <teacher-note-form [studentName]="st.name" [(text)]="noteText" (send)="onSendNote()" />
+
+      <teacher-project-assignment
+        class="panel assign"
+        [projectName]="currentProjectName || ''"
+        [students]="students"
+        [assignedIds]="assignedIds"
+        [projectOptions]="projectOptions"
+        [projectId]="selectedProjectId"
+        (projectChange)="onProjectChange($any($event))"
+        (studentToggle)="onToggleAssignment($event)"
+      />
+    </section>
+  </main>
+</div>

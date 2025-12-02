@@ -1,0 +1,90 @@
+﻿<!-- Von Lukas bearbeitet -->
+<aside class="sidebar">
+  <div class="sidebar__header">
+    <h2 class="brand">DiceCup</h2>
+  </div>
+  <div class="sidebar__search">
+    <span class="search-icon pi pi-search"></span>
+    <input
+      pInputText
+      type="text"
+      placeholder="Schüler suchen..."
+      [ngModel]="search"
+      (ngModelChange)="searchChange.emit($event)"
+    />
+  </div>
+  <div
+    class="sidebar__filters"
+    style="display: flex; gap: 8px; align-items: center; padding: 0 12px 8px"
+  >
+    <p-select
+      [ngModel]="selectedClass"
+      (onChange)="classChange.emit($event.value || null)"
+      [options]="classOptions"
+      placeholder="Klasse filtern"
+      styleClass="w-full"
+      ariaLabel="Klasse filtern"
+    ></p-select>
+    <p-button
+      icon="pi pi-plus"
+      class="p-button-rounded p-button-text"
+      type="button"
+      (click)="createClass.emit()"
+      aria-label="Neue Klasse anlegen"
+      pTooltip="Neue Klasse anlegen"
+      tooltipPosition="bottom"
+    ></p-button>
+  </div>
+
+  <div
+    class="sidebar__assign"
+    style="display: flex; gap: 8px; align-items: center; padding: 0 12px 12px"
+  >
+    <label class="muted" for="assignClassSel" style="white-space: nowrap"
+      >Schülerklasse ändern:</label
+    >
+    <p-select
+      inputId="assignClassSel"
+      [ngModel]="assignClassName"
+      (onChange)="assignClassChange.emit($event.value || null)"
+      [options]="assignOptions"
+      [disabled]="!selectedStudentId"
+      placeholder="Klasse wählen"
+      styleClass="w-full"
+    ></p-select>
+    <p-button
+      icon="pi pi-user-edit"
+      class="p-button-rounded p-button-text"
+      type="button"
+      (click)="assignSelected.emit()"
+      [disabled]="!selectedStudentId || !assignClassName"
+      aria-label="Schüler Klasse zuweisen"
+      pTooltip="Ausgewählten Schüler zu Klasse zuweisen"
+      tooltipPosition="bottom"
+    ></p-button>
+  </div>
+  <ul class="sidebar__list">
+    <li
+      *ngFor="let s of students; trackBy: trackById"
+      [class.is-active]="s.id === selectedStudentId"
+      (click)="selectStudent.emit(s.id)"
+      [hidden]="search && !s.name.toLowerCase().includes(search.toLowerCase())"
+    >
+      <span class="active-indicator" *ngIf="s.id === selectedStudentId"></span>
+      <img
+        *ngIf="s.avatarUrl && !isFailed(s.id); else letter"
+        class="avatar"
+        [src]="s.avatarUrl"
+        [alt]="s.name"
+        (error)="markFailed(s.id)"
+      />
+      <ng-template #letter>
+        <div class="avatar">{{ s.name.charAt(0) }}</div>
+      </ng-template>
+      <div class="meta">
+        <div class="name">{{ s.name }}</div>
+        <div class="class">Klasse {{ s.class }}</div>
+      </div>
+    </li>
+  </ul>
+</aside>

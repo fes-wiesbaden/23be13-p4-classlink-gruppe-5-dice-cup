@@ -1,18 +1,84 @@
+@use './app/styles/layout-shared';
+@use './app/styles/components/buttons';
+@use './app/styles/components/tables';
+@use './app/styles/components/avatars';
+@use './app/styles/components/status';
+@use './app/styles/components/icon-buttons';
+@use './app/styles/utilities';
+@use './app/styles/components/chips';
+@use './app/styles/components/badges';
+@use './app/styles/primeng-overrides';
+
+/* (Login panel styles are handled within the login route stylesheet) */
+
+:root {
+  /* Colors */
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --border: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --placeholder: #94a3b8;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-ghost: #e0e7ff;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --hover: #eef2ff;
+  --active-bg: #e2e8f0;
+  --focus: #2563eb;
+
+  /* Spacing & sizes */
+  --gap: 16px;
+  --container-max: 1160px;
+  --sidebar-w: 256px;
+  --line-h: 56px;
+  --input-h: 40px;
+  --radius: 8px;
+  --radius-pill: 9999px;
+  --shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
+
+  /* Typography */
+  --font: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
+  padding: 0;
 }
 
 body {
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #9193f1 0%, #a280f1 50%, #62d1c4 100%);
-  background-attachment: fixed;
-  color: #1e293b;
+  min-height: 100%;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font);
 }
 
-app-root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Focus ring (2px, outside) */
+*:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
+
+/* Placeholder color baseline */
+::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+::-ms-input-placeholder {
+  color: var(--placeholder);
+}
+
+/* removed side toolbar padding */

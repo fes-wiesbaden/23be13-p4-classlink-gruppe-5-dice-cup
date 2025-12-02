@@ -1,0 +1,24 @@
+/* Von Lukas bearbeitet */
+.panel__actions {
+  justify-content: flex-start;
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+/* Remove any remaining space below the button inside the card */
+.panel.note.p-card {
+  margin-bottom: 0 !important;
+}
+.panel.note.p-card .p-card-body {
+  padding-bottom: 0 !important;
+}
+.panel.note.p-card .p-card-footer {
+  display: none;
+}
+.note__textarea {
+  margin-bottom: 8px;
+}
+:host {
+  display: block;
+  margin: 0;
+}

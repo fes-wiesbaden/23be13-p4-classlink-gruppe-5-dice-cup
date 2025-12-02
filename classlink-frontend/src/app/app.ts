@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { DevDockComponent } from './components/dev-dock/dev-dock';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  standalone: true,
+  imports: [RouterOutlet, DevDockComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })
-export class AppComponent {}
+export class AppComponent {
+  // Dev auto-login handled centrally in AuthService (to avoid duplication)
+}

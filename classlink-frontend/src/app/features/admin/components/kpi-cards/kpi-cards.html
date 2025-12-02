@@ -1,0 +1,15 @@
+<!-- Von Lukas bearbeitet -->
+<section class="kpis" *ngIf="kpis as k">
+  <p-card class="kpi p-card">
+    <div class="kpi__title">Nutzer gesamt</div>
+    <div class="kpi__value">{{ k.total }}</div>
+  </p-card>
+  <p-card class="kpi p-card">
+    <div class="kpi__title">Aktiv</div>
+    <div class="kpi__value">{{ k.active }}</div>
+  </p-card>
+  <p-card class="kpi p-card">
+    <div class="kpi__title">Admins</div>
+    <div class="kpi__value">{{ k.admins }}</div>
+  </p-card>
+</section>

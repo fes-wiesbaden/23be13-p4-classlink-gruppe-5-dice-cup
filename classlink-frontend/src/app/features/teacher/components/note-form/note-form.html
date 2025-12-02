@@ -1,0 +1,16 @@
+﻿<!-- Von Lukas bearbeitet -->
+<p-card class="panel note">
+  <div class="panel__title">Notiz an Sch&uuml;ler</div>
+  <textarea
+    class="note__textarea"
+    rows="12"
+    [ngModel]="text"
+    (ngModelChange)="textChange.emit($event)"
+    [placeholder]="'Schreibe eine Notiz an ' + studentName + '...'"
+  ></textarea>
+  <div class="panel__actions">
+    <button type="button" class="btn-accent" (click)="send.emit()">
+      <i class="pi pi-send"></i>&nbsp;Senden
+    </button>
+  </div>
+</p-card>

@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\classlink-frontend",
+    "\\classlink-frontend\\src",
+    "\\classlink-frontend\\src\\app",
+    "\\classlink-frontend\\src\\forbidden",
+    "\\classlink-frontend\\src\\guards",
+    "\\classlink-frontend\\src\\not_found",
+    "\\classlink-frontend\\src\\services",
+    "\\src\\test",
+    "\\src\\test\\resources"
+  ],
+  "SelectedNode": "\\classlink-frontend",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,115 @@
+<!-- Von Lukas bearbeitet -->
+<section class="p-card panel">
+  <div class="p-card-body">
+    <table class="table user-table" role="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>E-Mail</th>
+          <th>Rollen</th>
+          <th>Status</th>
+          <th>Erstellt</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users; trackBy: trackById">
+          <td>{{ u.id }}</td>
+          <td>{{ u.name }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <ng-container *ngIf="editingId !== u.id; else editRolesTpl">
+              <span class="chip role-chip" *ngFor="let r of u.roles">{{ r | roleLabel }}</span>
+            </ng-container>
+            <ng-template #editRolesTpl>
+              <div class="roles-editor">
+                <p-checkbox
+                  inputId="rowStudent{{ u.id }}"
+                  [binary]="true"
+                  [ngModel]="roleChecked('student')"
+                  (onChange)="toggleRole('student')"
+                  [disabled]="busy"
+                  ariaLabel="Student"
+                ></p-checkbox>
+                <label [for]="'rowStudent' + u.id">Student</label>
+                <p-checkbox
+                  inputId="rowTeacher{{ u.id }}"
+                  [binary]="true"
+                  [ngModel]="roleChecked('teacher')"
+                  (onChange)="toggleRole('teacher')"
+                  [disabled]="busy"
+                  ariaLabel="Teacher"
+                ></p-checkbox>
+                <label [for]="'rowTeacher' + u.id">Teacher</label>
+                <p-checkbox
+                  inputId="rowAdmin{{ u.id }}"
+                  [binary]="true"
+                  [ngModel]="roleChecked('admin')"
+                  (onChange)="toggleRole('admin')"
+                  [disabled]="busy"
+                  ariaLabel="Admin"
+                ></p-checkbox>
+                <label [for]="'rowAdmin' + u.id">Admin</label>
+                <p-button
+                  label="Abbrechen"
+                  (click)="cancelEdit()"
+                  [disabled]="busy"
+                  styleClass="p-button-text"
+                ></p-button>
+                <p-button
+                  label="Speichern"
+                  icon="pi pi-check"
+                  (click)="saveEdit(u.id)"
+                  [disabled]="busy"
+                ></p-button>
+              </div>
+            </ng-template>
+          </td>
+          <td>
+            <span class="status" [ngClass]="u.status === 'active' ? 'ok' : 'no'">{{
+              u.status === 'active' ? 'aktiv' : 'deaktiviert'
+            }}</span>
+          </td>
+          <td>{{ u.createdAt | date: 'shortDate' }}</td>
+          <td>
+            <div class="actions">
+              <p-button
+                *ngIf="editingId !== u.id"
+                label="Rollen"
+                icon="pi pi-pencil"
+                (click)="beginEdit(u)"
+                [disabled]="busy"
+                aria-label="Rollen bearbeiten"
+                styleClass="p-button-text"
+              ></p-button>
+              <p-button
+                label="Passwort"
+                icon="pi pi-key"
+                (click)="resetPassword.emit(u.id)"
+                [disabled]="busy"
+                aria-label="Passwort zurücksetzen"
+                styleClass="p-button-text"
+              ></p-button>
+              <p-button
+                label="Löschen"
+                icon="pi pi-trash"
+                severity="danger"
+                (click)="deleteUser.emit(u.id)"
+                [disabled]="busy"
+                aria-label="Benutzer löschen"
+                styleClass="p-button-text"
+              ></p-button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="p-card panel u-mt-8" *ngIf="users.length === 0">
+      <div class="p-card-body u-text-muted">
+        Noch keine Nutzer vorhanden. Lege den ersten Nutzer an.
+      </div>
+    </div>
+  </div>
+</section>

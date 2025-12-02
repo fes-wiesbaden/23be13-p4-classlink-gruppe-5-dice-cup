@@ -1,0 +1,56 @@
+﻿<!-- Von Lukas bearbeitet -->
+<header class="content__header">
+  <div class="header__left">
+    <h1 class="title">Leistungs&uuml;bersicht</h1>
+    <div class="student-chip">
+      <img
+        *ngIf="student.avatarUrl && !imgFailed; else headerInitial"
+        class="avatar lg"
+        [src]="student.avatarUrl"
+        [alt]="student.name"
+        (error)="markImgFailed()"
+      />
+      <ng-template #headerInitial>
+        <div class="avatar lg">{{ student.name.charAt(0) }}</div>
+      </ng-template>
+      <div class="info">
+        <div class="name">{{ student.name }}</div>
+        <div class="class">Klasse {{ student.class }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="header__actions">
+    <div class="userbox">
+      <button
+        type="button"
+        class="bell-link"
+        aria-label="Benachrichtigungen"
+        (click)="togglePanel()"
+      >
+        <i class="pi pi-bell bell-icon"></i>
+        <span class="badge-dot" *ngIf="unreadCount$ | async as uc" [hidden]="uc === 0"></span>
+      </button>
+      <span class="muted">Eingeloggt als&nbsp;<b>Herr Wagner</b></span>
+      <img class="avatar lg" src="assets/frog.png" alt="Herr Wagner" />
+    </div>
+    <button type="button" class="btn-accent" (click)="createProject.emit()">
+      <i class="pi pi-plus"></i>&nbsp;Neues Projekt erstellen
+    </button>
+    <div class="notif-panel" *ngIf="showPanel" (mouseleave)="closePanel()">
+      <div class="notif-head">
+        <span class="notif-title"
+          ><i class="pi pi-bell bell-icon"></i>&nbsp;Benachrichtigungen</span
+        >
+        <button type="button" class="link-btn" (click)="markAllRead()">
+          Alle als gelesen markieren
+        </button>
+      </div>
+      <ul class="notif-list">
+        <li *ngFor="let n of items$ | async; trackBy: trackById">
+          <div class="n-title">{{ n.title }}</div>
+          <div class="n-time">{{ n.createdAt | date: 'shortTime' }}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

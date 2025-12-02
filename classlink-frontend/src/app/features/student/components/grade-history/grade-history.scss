@@ -1,0 +1,61 @@
+/* Von Lukas bearbeitet */
+.history {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+.row {
+  display: grid;
+  grid-template-columns: auto repeat(var(--cols, 6), 1fr);
+  gap: 8px;
+  align-items: center;
+}
+.row--header {
+  opacity: 0.9;
+}
+.cell {
+  border-radius: 10px;
+}
+.cell.label {
+  color: var(--text-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cell.date {
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 12px;
+}
+.cell.grade {
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: #0b0f15;
+  font-weight: 700;
+  background: var(--surface-subtle);
+  border: 1px solid color-mix(in srgb, #000 12%, transparent);
+}
+.cell.grade span {
+  mix-blend-mode: multiply;
+}
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+@container style(inline-size < 640px) {
+  .cell.grade span {
+    font-size: 12px;
+  }
+  .cell.date {
+    font-size: 11px;
+  }
+}

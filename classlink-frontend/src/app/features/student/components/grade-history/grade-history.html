@@ -1,0 +1,49 @@
+<!-- Von Lukas bearbeitet -->
+<div class="history" [style.--cols]="labels.length">
+  <div class="row row--header">
+    <div class="cell label"></div>
+    <div class="cell date" *ngFor="let d of labels; index as i; trackBy: trackIndex">{{ d }}</div>
+  </div>
+
+  <div class="row">
+    <div class="cell label">
+      Lehrer <span class="badge">{{ teacher[teacher.length - 1] | number: '1.1-1' }}</span>
+    </div>
+    <div
+      class="cell grade"
+      *ngFor="let g of teacher; index as i; trackBy: trackIndex"
+      [style.backgroundColor]="gradeColor(g)"
+      [attr.aria-label]="'Lehrer ' + (labels[i] || '') + ': ' + (g | number: '1.1-1')"
+    >
+      <span>{{ g | number: '1.1-1' }}</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cell label">
+      Fremd <span class="badge">{{ peer[peer.length - 1] | number: '1.1-1' }}</span>
+    </div>
+    <div
+      class="cell grade"
+      *ngFor="let g of peer; index as i; trackBy: trackIndex"
+      [style.backgroundColor]="gradeColor(g)"
+      [attr.aria-label]="'Fremd ' + (labels[i] || '') + ': ' + (g | number: '1.1-1')"
+    >
+      <span>{{ g | number: '1.1-1' }}</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="cell label">
+      Selbst <span class="badge">{{ self[self.length - 1] | number: '1.1-1' }}</span>
+    </div>
+    <div
+      class="cell grade"
+      *ngFor="let g of self; index as i; trackBy: trackIndex"
+      [style.backgroundColor]="gradeColor(g)"
+      [attr.aria-label]="'Selbst ' + (labels[i] || '') + ': ' + (g | number: '1.1-1')"
+    >
+      <span>{{ g | number: '1.1-1' }}</span>
+    </div>
+  </div>
+</div>

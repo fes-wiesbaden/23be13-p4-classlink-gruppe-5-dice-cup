@@ -1,0 +1,47 @@
+/* Shared utilities (prefixed with u- to avoid clashes) */
+
+.u-flex {
+  display: flex;
+}
+.u-grid {
+  display: grid;
+}
+.u-items-center {
+  align-items: center;
+}
+.u-justify-between {
+  justify-content: space-between;
+}
+
+.u-gap-8 {
+  gap: 8px;
+}
+.u-gap-12 {
+  gap: 12px;
+}
+.u-gap-16 {
+  gap: 16px;
+}
+
+.u-mt-8 {
+  margin-top: 8px;
+}
+.u-mb-8 {
+  margin-bottom: 8px;
+}
+.u-ml-auto {
+  margin-left: auto;
+}
+
+.u-text-muted {
+  color: var(--text-muted);
+}
+.u-text-secondary {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .u-hidden-sm {
+    display: none !important;
+  }
+}

@@ -1,0 +1,22 @@
+﻿<!-- Von Lukas bearbeitet -->
+<aside class="sidebar">
+  <div class="sidebar__header">
+    <h2 class="brand">DiceCup</h2>
+    <span class="muted">Admin</span>
+  </div>
+  <div class="sidebar__search">
+    <input
+      pInputText
+      type="text"
+      placeholder="Nutzer suchen..."
+      [ngModel]="search"
+      (ngModelChange)="searchChange.emit($event)"
+    />
+  </div>
+  <ul class="nav">
+    <li class="is-active">
+      <span><i class="pi pi-users"></i>&nbsp;Benutzer</span>
+      <span class="badge">aktiv</span>
+    </li>
+  </ul>
+</aside>

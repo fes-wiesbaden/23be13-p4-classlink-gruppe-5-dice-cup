@@ -1,0 +1,24 @@
+﻿<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="admin-page">
+  <admin-sidebar [search]="search" (searchChange)="onSearchChange($event)" />
+
+  <main class="content">
+    <admin-header-bar (createUser)="onCreateUser($event)" [busy]="busy" />
+
+    <admin-kpi-cards [kpis]="kpis" />
+
+    <section class="grid">
+      <admin-user-table
+        class="panel"
+        [users]="filteredUsers"
+        [busy]="busy"
+        (createUser)="onCreateUser($event)"
+        (deleteUser)="onDeleteUser($event)"
+        (resetPassword)="onResetPassword($event)"
+        (updateRoles)="onUpdateRoles($event.id, $event.roles)"
+      />
+    </section>
+  </main>
+</div>
