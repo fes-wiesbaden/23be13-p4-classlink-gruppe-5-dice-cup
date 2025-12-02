@@ -2,6 +2,7 @@ package de.dicecup.classlink.features.security;
 
 import de.dicecup.classlink.features.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,11 +25,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfiguration {
     private final UserRepository userRepository;
 
@@ -39,8 +42,18 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUserInfoEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return identifier -> {
+            log.info("AUTH-DEBUG: loadUserByUsername identifier={}", identifier);
+
+            Optional<de.dicecup.classlink.features.users.domain.User> byEmail = userRepository.findByUserInfoEmail(identifier);
+            if (byEmail.isPresent()) {
+                return byEmail.get();
+            }
+
+            log.warn("AUTH-DEBUG: no user found by email={}, falling back to username lookup", identifier);
+            return userRepository.findByUsername(identifier)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + identifier));
+        };
     }
 
     @Bean

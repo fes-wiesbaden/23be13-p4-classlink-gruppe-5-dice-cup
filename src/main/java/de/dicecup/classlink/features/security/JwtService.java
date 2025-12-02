@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ import javax.crypto.SecretKey;
 
 @Service
 public class JwtService {
+    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
+    private static final String DEFAULT_TOKEN_TYPE = "ACCESS";
+
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
@@ -35,11 +40,23 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        return generateToken(new HashMap<>(), userDetails, jwtExpiration);
+    }
+
+    public String generateToken(UserDetails userDetails, long customExpirationMillis) {
+        return generateToken(new HashMap<>(), userDetails, customExpirationMillis);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return generateToken(extraClaims, userDetails, jwtExpiration);
+    }
+
+    public String generateToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails,
+            long customExpirationMillis
+    ) {
+        return buildToken(extraClaims, userDetails, customExpirationMillis);
     }
 
     public long getExpirationTime() {
@@ -52,16 +69,30 @@ public class JwtService {
             long expiration
     ) {
         Map<String, Object> claims = new HashMap<>(extraClaims);
-        claims.putIfAbsent("jti", UUID.randomUUID().toString());
+        String jti = (String) claims.computeIfAbsent("jti", key -> UUID.randomUUID().toString());
+        long now = System.currentTimeMillis();
+        Date issuedAt = new Date(now);
+        Date expirationDate = new Date(now + expiration);
 
-        return Jwts
+        String token = Jwts
                 .builder()
                 .claims(claims)
                 .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .issuedAt(issuedAt)
+                .expiration(expirationDate)
                 .signWith(getSignInKey(), Jwts.SIG.HS256)
                 .compact();
+
+        log.info(
+                "JWT-DEBUG: type={} subject={} jti={} issuedAt={} expiresAt={}",
+                resolveTokenType(claims),
+                userDetails.getUsername(),
+                jti,
+                issuedAt.toInstant(),
+                expirationDate.toInstant()
+        );
+
+        return token;
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -89,5 +120,13 @@ public class JwtService {
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String resolveTokenType(Map<String, Object> claims) {
+        Object type = claims.get("tokenType");
+        if (type == null) {
+            return DEFAULT_TOKEN_TYPE;
+        }
+        return String.valueOf(type).toUpperCase();
     }
 }

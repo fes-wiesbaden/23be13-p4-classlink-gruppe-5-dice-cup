@@ -106,12 +106,6 @@ public class RefreshTokenService {
         return id + "." + tokenService.encode(token);
     }
 
-    public record RefreshTokenResult(String token, Instant expiresAt) {
-    }
-
-    public record RefreshRotationResult(User user, String refreshToken, Instant refreshExpiresAt) {
-    }
-
     private record ParsedToken(UUID id, byte[] value) {
     }
 }
