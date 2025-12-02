@@ -1,8 +1,28 @@
+import java.lang.System.getenv
+
 plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.github.node-gradle.node") version "7.1.0"
+}
+
+val gitSha = "git rev-parse --short HEAD".runCommand(project.rootDir) ?: "dev"
+val refName = getenv("GITHUB_REF_NAME") ?: ""            // z.B. "v1.2.3" bei Tag-Builds
+val isTag = getenv("GITHUB_REF")?.startsWith("refs/tags/") == true
+
+version = if (isTag) {
+    refName.removePrefix("v")
+} else {
+    "0.0.0-SNAPSHOT+$gitSha"
+}
+
+fun String.runCommand(workingDir: File): String? = try {
+    val proc = ProcessBuilder(*split(" ").toTypedArray()).directory(workingDir)
+        .redirectErrorStream(true).start()
+    proc.inputStream.bufferedReader().readText().trim().takeIf { proc.waitFor() == 0 }
+} catch (_: Exception) {
+    null
 }
 
 group = "de.dicecup"
@@ -11,7 +31,6 @@ description = "Classlink"
 
 java {
     toolchain {
-        // Use LTS to maximize dev environment compatibility
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
@@ -39,26 +58,37 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.11")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("com.scalar.maven:scalar:0.1.0")
-    implementation(platform("io.jsonwebtoken:jjwt-bom:0.11.5"))
-    implementation("io.jsonwebtoken:jjwt-api")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("org.mapstruct:mapstruct:1.6.2")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("net.datafaker:datafaker:2.4.4")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("org.postgresql:postgresql")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
     annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("org.testcontainers:postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.register("printVersion") {
+    doLast { println("project.version=${project.version}") }
 }
