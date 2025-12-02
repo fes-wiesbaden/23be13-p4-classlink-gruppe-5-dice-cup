@@ -1,9 +1,6 @@
 package de.dicecup.classlink.features.registration;
 
-import de.dicecup.classlink.features.registration.domain.InviteRedeemRequestDto;
-import de.dicecup.classlink.features.registration.domain.InviteRedeemResponseDto;
-import de.dicecup.classlink.features.registration.domain.InviteValidationRequestDto;
-import de.dicecup.classlink.features.registration.domain.InviteValidationResponseDto;
+import de.dicecup.classlink.features.registration.domain.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,11 @@ public class InvitationController {
 
     private final InvitationService invitationService;
 
+
+    @PostMapping("/create")
+    public InviteCreatedResponseDto create(@Valid @RequestBody CreateInviteRequestDto request) {
+        return invitationService.createInvite(request);
+    }
 
     @PostMapping("/validate")
     public ResponseEntity<InviteValidationResponseDto> validate(@Valid @RequestBody InviteValidationRequestDto request) {
