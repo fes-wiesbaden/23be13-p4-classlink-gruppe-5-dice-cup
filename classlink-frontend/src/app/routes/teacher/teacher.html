@@ -22,32 +22,6 @@
       (createProject)="onCreateProject()"
     />
 
-    <p-dialog
-      header="Neue Klasse anlegen"
-      [(visible)]="showCreateClass"
-      [modal]="true"
-      [style]="{ width: '400px' }"
-    >
-      <div style="display:flex; flex-direction: column; gap: 12px;">
-        <label for="newClassInput" class="section-title">Klassenname</label>
-        <input
-          id="newClassInput"
-          pInputText
-          type="text"
-          placeholder="z. B. 10D"
-          [(ngModel)]="newClassName"
-        />
-        <small class="muted" *ngIf="!newClassName.trim()">Pflichtfeld</small>
-        <small class="muted" *ngIf="newClassName.trim() && classes.includes(newClassName.trim())">Klasse existiert bereits</small>
-        <div style="display:flex; justify-content:flex-end; gap: 8px; margin-top: 8px;">
-          <button type="button" class="btn" (click)="cancelCreateClass()">Abbrechen</button>
-          <button type="button" class="btn-accent" [disabled]="!isNewClassValid" (click)="confirmCreateClass()">
-            <i class="pi pi-check"></i>&nbsp;Erstellen
-          </button>
-        </div>
-      </div>
-    </p-dialog>
-
     <teacher-kpi-cards *ngIf="scoreSummary as sc" [scores]="sc" [allowTeacherEdit]="true" />
 
     <section class="grid">

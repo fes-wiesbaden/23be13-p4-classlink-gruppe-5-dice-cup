@@ -1,65 +1,134 @@
 <p-toast></p-toast>
+
 <div class="student-page">
-  <section class="content">
-    <div class="content__header">
-      <div class="header__left">
-        <h1 class="title">Hallo, {{ currentStudent?.name }}</h1>
-        <div class="subtitle">Projekt: {{ currentProjectName }}</div>
+  <div class="page-decor" aria-hidden="true">
+    <span class="orb orb--a"></span>
+    <span class="orb orb--b"></span>
+    <span class="orb orb--c"></span>
+  </div>
+
+  <section class="panel hero">
+    <div class="hero__left">
+      <div class="avatar">{{ studentName | slice:0:1 }}</div>
+      <div>
+        <p class="eyebrow">Dashboard</p>
+        <h1>{{ studentName }}</h1>
       </div>
-      <div class="header__actions">
-        <label class="section-title">Projekt</label>
-        <select class="select-control" [(ngModel)]="selectedProjectId" (ngModelChange)="onProjectChange($event)">
-          <option *ngFor="let o of projectOptions" [value]="o.value">{{ o.label }}</option>
-        </select>
+    </div>
+    <div class="hero__stats">
+      <div class="stat-pill">
+        <span>Ø Gesamt</span>
+        <strong>{{ averageGrade | number:'1.1-1' }}</strong>
+      </div>
+      <div class="stat-pill">
+        <span>Offene Projekte</span>
+        <strong>{{ projects.length }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel grades">
+    <div class="panel__header">
+      <div>
+        <h2>Notenuebersicht</h2>
       </div>
     </div>
 
-    <teacher-kpi-cards [scores]="scoreSummary"></teacher-kpi-cards>
+    <div class="lf-scroll">
+      <button
+        class="lf-tile"
+        type="button"
+        *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
+        (click)="selectLernfeld(lf)"
+        [class.lf-tile--active]="isSelected(lf.id)"
+      >
+        <span class="lf-chip">LF {{ lf.id }}</span>
+        <div class="lf-title">{{ lf.focus }}</div>
 
-    <p-card class="panel p-card">
-      <div class="panel__title">Notenentwicklung</div>
-      <div class="chart-wrapper">
-        <p-chart type="bar" [data]="chartData" [options]="chartOptions"></p-chart>
+        <div class="lf-meta">
+          <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)">Ø {{ lf.average | number:'1.1-1' }}</span>
+          <span class="lf-trend">{{ lf.trend }}</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="lf-detail" *ngIf="selectedLernfeld as sel">
+      <div class="lf-detail__head">
+        <div>
+          <p class="eyebrow">Details</p>
+          <h3>{{ sel.title }}</h3>
+          <p class="muted">{{ sel.focus }}</p>
+        </div>
+        <div class="lf-detail__avg" [style.backgroundColor]="gradeColor(sel.average)">
+          <span>Ø</span>
+          <strong>{{ sel.average | number:'1.1-1' }}</strong>
+          <small>{{ sel.trend }}</small>
+        </div>
       </div>
-    </p-card>
-
-    <div class="grid">
-      <p-card class="panel p-card">
-        <div class="panel__title">Fremdbewertung abgeben</div>
-        <div class="panel__content">
-          <div class="form-grid">
-            <div class="field">
-              <label>Wen bewertest du?</label>
-              <select class="control" [(ngModel)]="peerTargetId" [disabled]="busy" aria-label="Peer auswählen">
-                <option [ngValue]="null" disabled>Person wählen</option>
-                <option *ngFor="let s of peers; trackBy: trackById" [value]="s.id">{{ s.name }} ({{ s.class }})</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Note (1.0 – 6.0)</label>
-              <input class="control" type="number" step="0.1" min="1" max="6" [(ngModel)]="peerGrade" [disabled]="busy" aria-label="Note" />
-            </div>
+      <div class="lf-detail__assessments">
+        <div class="assessment" *ngFor="let g of sel.assessments">
+          <div>
+            <div class="assessment__label">{{ g.label }}</div>
+            <div class="assessment__meta">{{ g.type }} · {{ g.weight * 100 | number:'1.0-0' }}%</div>
           </div>
-          <div class="panel__actions">
-            <button class="btn-accent" type="button" (click)="submitPeerEvaluation()" [disabled]="busy || !canSubmitPeer()" aria-label="Fremdbewertung abschicken">Abschicken</button>
+          <div class="assessment__grade" [style.backgroundColor]="gradeColor(g.grade)">
+            {{ g.grade | number:'1.1-1' }}
           </div>
         </div>
-      </p-card>
+      </div>
+    </div>
+  </section>
 
-      <p-card class="panel p-card">
-        <div class="panel__title">Notizen von Lehrkräften</div>
-        <ul class="assign__list">
-          <li *ngFor="let n of notes; trackBy: trackByIndex">
-            <div class="left">
-              <span class="name">{{ n.text }}</span>
+  <section class="panel projects">
+    <div class="panel__header">
+      <div>
+        <p class="eyebrow">Projekte</p>
+        <h2>Teamarbeiten & Abgaben</h2>
+      </div>
+    </div>
+    <div class="project-grid">
+      <article class="project-card" *ngFor="let project of projects; trackBy: trackByProject">
+        <div class="project-card__head">
+          <div>
+            <div class="chip">Projekt</div>
+            <h3>{{ project.name }}</h3>
+            <p class="muted">{{ project.role }} · Fällig {{ project.nextDue }}</p>
+          </div>
+          <div class="project-card__score">
+            <div>
+              <span>Lehrer</span>
+              <strong>{{ project.scores.teacher }}</strong>
             </div>
-            <div class="right">
-              <span class="status">{{ n.createdAt | date:'short' }}</span>
+            <div>
+              <span>Peer</span>
+              <strong>{{ project.scores.peer }}</strong>
             </div>
-          </li>
-          <li *ngIf="!notes.length"><span class="status">Keine Notizen vorhanden.</span></li>
-        </ul>
-      </p-card>
+          </div>
+        </div>
+        <div class="project-card__meter">
+          <div class="meter__track">
+            <div class="meter__fill" [style.width]="project.progress + '%'" [style.background]="project.color"></div>
+          </div>
+          <span>{{ project.progress }}% Fortschritt</span>
+        </div>
+        <div class="project-card__actions">
+          <p-button
+            type="button"
+            label="Selbst-Evaluation"
+            icon="pi pi-user"
+            [severity]="project.selfDone ? 'success' : 'secondary'"
+            styleClass="ghost"
+            (onClick)="startSelfEvaluation(project)"
+          ></p-button>
+          <p-button
+            type="button"
+            label="Peer-Evaluation"
+            icon="pi pi-users"
+            [severity]="project.peerDone ? 'success' : 'primary'"
+            (onClick)="startPeerEvaluation(project)"
+          ></p-button>
+        </div>
+      </article>
     </div>
   </section>
 </div>

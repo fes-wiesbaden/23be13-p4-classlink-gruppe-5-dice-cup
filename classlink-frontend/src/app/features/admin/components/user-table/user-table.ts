@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminUser, Role } from '../../models';
 import { RoleLabelPipe } from '../../pipes/role-label.pipe';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'admin-user-table',
-  imports: [CommonModule, FormsModule, RoleLabelPipe],
+  imports: [CommonModule, FormsModule, RoleLabelPipe, CheckboxModule, ButtonModule],
   templateUrl: './user-table.html',
   styleUrl: './user-table.scss',
 })

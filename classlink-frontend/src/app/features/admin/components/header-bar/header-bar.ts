@@ -2,11 +2,14 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'admin-header-bar',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, InputTextModule, CheckboxModule, ButtonModule],
   templateUrl: './header-bar.html',
   styleUrl: './header-bar.scss',
 })

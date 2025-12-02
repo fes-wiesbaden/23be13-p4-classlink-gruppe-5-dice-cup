@@ -4,13 +4,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
+import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
 
 export type TeacherStudent = { id: number; name: string; class: string; avatarUrl?: string };
 
 @Component({
   standalone: true,
   selector: 'teacher-student-sidebar',
-  imports: [CommonModule, FormsModule, InputText, Tooltip],
+  imports: [CommonModule, FormsModule, InputText, Tooltip, SelectModule, ButtonModule],
   templateUrl: './student-sidebar.html',
   styleUrl: './student-sidebar.scss',
 })
@@ -31,6 +33,14 @@ export class TeacherStudentSidebarComponent {
 
   // Das brauche ich für ngFor, damit Angular effizienter rendert
   trackById(_: number, item: TeacherStudent) { return item.id; }
+
+  get classOptions() {
+    return [{ label: 'Alle Klassen', value: null }, ...this.classes.map(c => ({ label: c, value: c }))];
+  }
+
+  get assignOptions() {
+    return this.classes.map(c => ({ label: c, value: c }));
+  }
 
   // Fallback when an avatar image fails to load
   private failed = new Set<number>();

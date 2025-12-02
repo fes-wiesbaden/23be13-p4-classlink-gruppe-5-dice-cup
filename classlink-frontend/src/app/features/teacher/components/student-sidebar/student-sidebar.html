@@ -8,31 +8,35 @@
     <input
       pInputText
       type="text"
-      placeholder="Sch&uuml;ler suchen..."
+      placeholder="Schüler suchen..."
       [ngModel]="search"
       (ngModelChange)="searchChange.emit($event)"
     />
   </div>
   <div class="sidebar__filters" style="display:flex; gap:8px; align-items:center; padding: 0 12px 8px;">
-    <select class="p-inputtext p-component" [ngModel]="selectedClass" (ngModelChange)="classChange.emit($event || null)"
-            aria-label="Klasse filtern" style="flex:1 1 auto;">
-      <option [ngValue]="null">Alle Klassen</option>
-      <option *ngFor="let c of classes" [ngValue]="c">{{ c }}</option>
-    </select>
-    <button class="btn btn-icon" type="button" (click)="createClass.emit()" aria-label="Neue Klasse anlegen" pTooltip="Neue Klasse anlegen" tooltipPosition="bottom">
-      <i class="pi pi-plus"></i>
-    </button>
+    <p-select
+      [ngModel]="selectedClass"
+      (onChange)="classChange.emit($event.value || null)"
+      [options]="classOptions"
+      placeholder="Klasse filtern"
+      styleClass="w-full"
+      ariaLabel="Klasse filtern"
+    ></p-select>
+    <p-button icon="pi pi-plus" class="p-button-rounded p-button-text" type="button" (click)="createClass.emit()" aria-label="Neue Klasse anlegen" pTooltip="Neue Klasse anlegen" tooltipPosition="bottom"></p-button>
   </div>
 
   <div class="sidebar__assign" style="display:flex; gap:8px; align-items:center; padding: 0 12px 12px;">
     <label class="muted" for="assignClassSel" style="white-space:nowrap;">Schülerklasse ändern:</label>
-    <select id="assignClassSel" class="p-inputtext p-component" [ngModel]="assignClassName" (ngModelChange)="assignClassChange.emit($event || null)"
-            [disabled]="!selectedStudentId" style="flex:1 1 auto;">
-      <option *ngFor="let c of classes" [ngValue]="c">{{ c }}</option>
-    </select>
-    <button class="btn btn-icon" type="button" (click)="assignSelected.emit()" [disabled]="!selectedStudentId || !assignClassName" aria-label="Schüler Klasse zuweisen" pTooltip="Ausgewählten Schüler zu Klasse zuweisen" tooltipPosition="bottom">
-      <i class="pi pi-user-edit"></i>
-    </button>
+    <p-select
+      inputId="assignClassSel"
+      [ngModel]="assignClassName"
+      (onChange)="assignClassChange.emit($event.value || null)"
+      [options]="assignOptions"
+      [disabled]="!selectedStudentId"
+      placeholder="Klasse wählen"
+      styleClass="w-full"
+    ></p-select>
+    <p-button icon="pi pi-user-edit" class="p-button-rounded p-button-text" type="button" (click)="assignSelected.emit()" [disabled]="!selectedStudentId || !assignClassName" aria-label="Schüler Klasse zuweisen" pTooltip="Ausgewählten Schüler zu Klasse zuweisen" tooltipPosition="bottom"></p-button>
   </div>
   <ul class="sidebar__list">
     <li
