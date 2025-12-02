@@ -1,57 +1,214 @@
 /*Datei von Lukas bearbeitet*/
 
-import { Injectable } from '@angular/core';
+import {Injectable, inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthControllerService, LoginRequest, RefreshRequest, TokenResponse} from '../app/api';
+import {Observable, catchError, finalize, from, map, of, shareReplay, switchMap, tap, throwError} from 'rxjs';
+
+interface DecodedJwt {
+    sub?: string;
+    roles?: string[] | string;
+    authorities?: string[] | string;
+    scope?: string;
+
+    [key: string]: unknown;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private TK = 'app_token';
-  private RK = 'app_roles';
-  private UK = 'app_user';
+    private readonly TOKEN_KEY = 'app_token';
+    private readonly REFRESH_KEY = 'app_refresh_token';
+    private readonly ROLES_KEY = 'app_roles';
+    private readonly USERNAME_KEY = 'app_user';
+    private refreshInProgress$: Observable<void> | null = null;
 
-  constructor() {
-    // Beim Start prüfe ich kurz, ob schon ein Token da ist.
-    // Wenn nicht, logge ich für die Demo automatisch als Lehrer ein.
-    if (!localStorage.getItem(this.TK)) {
-      this.login('dev-token', ['teacher'], 'dev-teacher');
+    private readonly authApi = inject(AuthControllerService);
+    private readonly router = inject(Router);
+
+    login(email: string, password: string): Observable<void> {
+        const body: LoginRequest = {email, password};
+        return this.authApi.login(body).pipe(
+            switchMap((response) => this.normalizeTokenResponse(response)),
+            tap((response) => this.persistAuth(response, email)),
+            map(() => void 0)
+        );
+  }
+
+    private performRefresh(): Observable<void> {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) {
+            throw new Error('Missing refresh token');
+        }
+        const body: RefreshRequest = {refreshToken};
+        return this.authApi
+            .refresh(body)
+            .pipe(
+                switchMap((response) => this.normalizeTokenResponse(response)),
+                tap((response) => this.persistAuth(response)),
+                map(() => void 0)
+            );
+  }
+
+    refreshTokens(): Observable<void> {
+        if (!this.getRefreshToken()) {
+            return throwError(() => new Error('No refresh token available'));
+        }
+
+        if (!this.refreshInProgress$) {
+            this.refreshInProgress$ = this.performRefresh().pipe(
+                finalize(() => {
+                    this.refreshInProgress$ = null;
+                }),
+                catchError((error) => {
+                    this.logout();
+                    return throwError(() => error);
+                }),
+                shareReplay(1)
+            );
     }
-  }
 
-  isLoggedIn(): boolean {
-    // Hier schaue ich einfach, ob wir ein Token im Storage haben
-    return !!localStorage.getItem(this.TK);
-  }
-
-  hasRole(r: string | string[]): boolean {
-    // Prüft grob, ob mindestens eine der benötigten Rollen gesetzt ist
-    const roles: string[] = JSON.parse(localStorage.getItem(this.RK) || '[]');
-    const req = Array.isArray(r) ? r : [r];
-    return req.some((x) => roles.includes(x));
-  }
-
-  login(token: string, roles: string[] = [], username?: string): void {
-    // Speichere Token, Rollen und optional den Nutzernamen
-    localStorage.setItem(this.TK, token);
-    localStorage.setItem(this.RK, JSON.stringify(roles));
-    if (username) {
-      localStorage.setItem(this.UK, username);
-    }
+        return this.refreshInProgress$;
   }
 
   logout(): void {
-    // Logout heißt: alles aus dem Storage wieder raus
-    localStorage.removeItem(this.TK);
-    localStorage.removeItem(this.RK);
-    localStorage.removeItem(this.UK);
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.REFRESH_KEY);
+      localStorage.removeItem(this.ROLES_KEY);
+      localStorage.removeItem(this.USERNAME_KEY);
+      this.router.navigate(['/login']).catch(console.error);
+  }
+
+    isLoggedIn(): boolean {
+        return !!this.getAccessToken();
+    }
+
+    hasRole(required: string | string[]): boolean {
+        const roles = this.getRoles();
+        const list = Array.isArray(required) ? required : [required];
+        return list.some((role) => roles.includes(role));
+    }
+
+    getRoles(): string[] {
+        try {
+            const stored = localStorage.getItem(this.ROLES_KEY);
+            return stored ? (JSON.parse(stored) as string[]) : [];
+        } catch {
+            return [];
+        }
+    }
+
+    getAccessToken(): string | null {
+        return localStorage.getItem(this.TOKEN_KEY);
+    }
+
+    getRefreshToken(): string | null {
+        return localStorage.getItem(this.REFRESH_KEY);
+    }
+
+    isAccessTokenExpired(): boolean {
+        const token = this.getAccessToken();
+        if (!token) {
+            return true;
+        }
+        try {
+            const [, payload] = token.split('.');
+            if (!payload) {
+                return true;
+            }
+            const decoded = JSON.parse(this.base64UrlDecode(payload)) as { exp?: number };
+            if (!decoded.exp) {
+                return false; // treat tokens without exp as non-expiring
+            }
+            const expiryMs = decoded.exp * 1000;
+            return Date.now() >= expiryMs;
+        } catch (error) {
+            console.warn('Failed to evaluate token expiry', error);
+            return true;
+        }
   }
 
   getUsername(): string | null {
-    // Einfacher Getter, falls der Name angezeigt werden soll
-    return localStorage.getItem(this.UK);
+      return localStorage.getItem(this.USERNAME_KEY);
   }
 
-  // For demo: update roles without changing token/username
   setRoles(roles: string[]): void {
-    // Praktisch für die Demo, um schnell zwischen Rollen zu springen
-    localStorage.setItem(this.RK, JSON.stringify(roles));
+      localStorage.setItem(this.ROLES_KEY, JSON.stringify(roles));
+  }
+
+    private normalizeTokenResponse(res: TokenResponse | Blob): Observable<TokenResponse> {
+        if (res instanceof Blob) {
+            return from(res.text()).pipe(map((text) => JSON.parse(text) as TokenResponse));
+        }
+        return of(res);
+    }
+
+    private persistAuth(res: TokenResponse, usernameHint?: string): void {
+        console.log('LOGIN RESPONSE RAW', res);
+        const payload = res as TokenResponse & {
+            token?: string;
+            access_token?: string;
+            refresh_token?: string;
+        };
+        const accessToken = payload.accessToken ?? payload.access_token ?? payload.token;
+        const refreshToken = payload.refreshToken ?? payload.refresh_token ?? null;
+        if (!accessToken) {
+            throw new Error('Access token missing in response');
+        }
+        localStorage.setItem(this.TOKEN_KEY, accessToken);
+        if (refreshToken) {
+            localStorage.setItem(this.REFRESH_KEY, refreshToken);
+        }
+        if (usernameHint) {
+            localStorage.setItem(this.USERNAME_KEY, usernameHint);
+        }
+
+        const roles = this.extractRoles(accessToken);
+        localStorage.setItem(this.ROLES_KEY, JSON.stringify(roles));
+    }
+
+    private extractRoles(token: string): string[] {
+        try {
+            const [, payload] = token.split('.');
+            if (!payload) {
+                return [];
+            }
+            const json = this.base64UrlDecode(payload);
+            const decoded = JSON.parse(json) as DecodedJwt;
+            const rawRoles =
+                decoded.roles ??
+                decoded.authorities ??
+                (typeof decoded.scope === 'string' ? decoded.scope.split(' ') : []);
+            return this.normalizeRoles(rawRoles);
+        } catch (err) {
+            console.warn('Failed to decode roles from token', err);
+            return [];
+        }
+    }
+
+    private normalizeRoles(value: unknown): string[] {
+        if (!value) {
+            return [];
+        }
+        if (Array.isArray(value)) {
+            return value.map((role) => this.stripRolePrefix(String(role)));
+        }
+        if (typeof value === 'string') {
+            return value
+                .split(/[, ]+/)
+                .filter(Boolean)
+                .map((role) => this.stripRolePrefix(role));
+        }
+        return [];
+    }
+
+    private stripRolePrefix(role: string): string {
+        return role.replace(/^ROLE_/i, '').toLowerCase();
+    }
+
+    private base64UrlDecode(value: string): string {
+        const padded = value.replace(/-/g, '+').replace(/_/g, '/');
+        const pad = padded.length % 4;
+        const normalized = pad ? padded + '='.repeat(4 - pad) : padded;
+        return atob(normalized);
   }
 }

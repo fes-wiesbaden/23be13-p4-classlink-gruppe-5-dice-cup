@@ -12,6 +12,7 @@ import { AdminMockService } from '../../features/admin/mock.service';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import {UserControllerService, UserDto} from '../../api';
 
 @Component({
   standalone: true,
@@ -42,18 +43,29 @@ export class AdminComponent {
   private readonly admin = inject<AdminService>(ADMIN_SERVICE);
   private readonly messages = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+    private readonly userApi = inject(UserControllerService);
 
   constructor() {
     this.admin.getUsers().subscribe((users) => {
       this.users = users;
       this.updateFiltered();
     });
+
+      this.userApi.getUsers().subscribe({
+          next: (users) => (this.apiUsers = users),
+          error: (error) => {
+              console.error('Failed to load /users', error);
+              this.apiError = 'Konnte Benutzerliste nicht laden';
+          },
+      });
   }
 
   // State
   users: AdminUser[] = [];
   search = '';
   busy = false;
+    apiUsers: UserDto[] = [];
+    apiError: string | null = null;
 
   // Derived
   filteredUsers: AdminUser[] = [];
