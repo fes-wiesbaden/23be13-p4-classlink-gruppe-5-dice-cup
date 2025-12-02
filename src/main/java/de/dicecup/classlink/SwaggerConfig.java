@@ -13,12 +13,27 @@ public class SwaggerConfig {
     public OpenAPI caseOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Classlink Grade Management Service")
-                        .description("Foobar bla bla")
-                        .version("0.0.2^")
-                        .contact(new Contact().name("Dicecup").email("support@dicecup.com"))
-                        .license(new License().name("Proprietary"))
-                        .termsOfService("tos bla blie blub")
-                        );
+                        .title("Dicecup School Management API")
+                        .description("""
+                                Dicecup is a modern school management platform designed to streamline
+                                grading, user administration, and classroom workflows.
+                                
+                                This API provides secure, role-based access to all core functions, including:
+                                - Authentication & Authorization (JWT-based)
+                                - User & Role Management
+                                - Class, Grade, and Invitation Management
+                                - Reporting and Audit-Ready Data Operations
+                                
+                                All endpoints follow REST principles and require proper authentication
+                                unless explicitly stated otherwise.
+                                """)
+                        .version("1.0.0")
+                        .contact(new Contact()
+                                .name("Dicecup Support")
+                                .email("support@dicecup.com"))
+                        .license(new License()
+                                .name("Proprietary License — All Rights Reserved"))
+                        .termsOfService("https://dicecup.com/terms")
+                );
     }
 }
