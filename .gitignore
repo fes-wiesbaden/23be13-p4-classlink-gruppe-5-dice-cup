@@ -1,5 +1,7 @@
 HELP.md
 .gradle
+.gradle-cache
+.gradle_home
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
