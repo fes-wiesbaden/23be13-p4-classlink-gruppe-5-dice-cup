@@ -1,7 +1,9 @@
 package de.dicecup.classlink.features.security.auth;
 
 import de.dicecup.classlink.features.security.JwtService;
+import de.dicecup.classlink.features.security.refreshtoken.RefreshRotationResult;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenException;
+import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenResult;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenService;
 import de.dicecup.classlink.features.users.domain.User;
 import jakarta.validation.Valid;
@@ -14,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,7 +37,7 @@ public class AuthController {
             );
 
             User user = (User) authentication.getPrincipal();
-            RefreshTokenService.RefreshTokenResult refreshToken = refreshTokenService.issue(user);
+            RefreshTokenResult refreshToken = refreshTokenService.issue(user);
             String accessToken = jwtService.generateToken(user);
 
             return new TokenResponse(accessToken, refreshToken.token());
@@ -46,19 +47,13 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public TokenResponse refresh(@RequestHeader(value = "Authorization", required = false) String authorization) {
-        if (authorization == null || !authorization.startsWith("Refresh ")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing refresh token");
-        }
-
-        String tokenValue = authorization.substring("Refresh ".length()).trim();
-
+    public TokenResponse refresh(@Valid @RequestBody RefreshRequest request) {
         try {
-            RefreshTokenService.RefreshRotationResult rotation = refreshTokenService.rotate(tokenValue);
+            RefreshRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
             String accessToken = jwtService.generateToken(rotation.user());
             return new TokenResponse(accessToken, rotation.refreshToken());
         } catch (RefreshTokenException ex) {
-            throw ex;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage(), ex);
         }
     }
 
@@ -68,6 +63,9 @@ public class AuthController {
     ) {
     }
 
-    public record TokenResponse(String accessToken, String refreshToken) {
+    public record RefreshRequest(
+            @NotBlank String refreshToken
+    ) {
+
     }
 }

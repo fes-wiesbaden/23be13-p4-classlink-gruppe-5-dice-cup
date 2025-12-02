@@ -57,7 +57,8 @@ class AuthIntegrationTest extends IntegrationTestBase {
                 .andExpect(status().isOk());
 
         String refreshResponse = mockMvc.perform(post("/auth/refresh")
-                        .header("Authorization", "Refresh " + refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"" + refreshToken + "\"}"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -73,7 +74,8 @@ class AuthIntegrationTest extends IntegrationTestBase {
                 .andExpect(status().isOk());
 
         mockMvc.perform(post("/auth/refresh")
-                        .header("Authorization", "Refresh " + refreshToken))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"" + refreshToken + "\"}"))
                 .andExpect(status().isUnauthorized());
     }
 
