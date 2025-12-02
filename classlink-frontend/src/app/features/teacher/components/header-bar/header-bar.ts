@@ -1,13 +1,13 @@
 // Von Lukas bearbeitet
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../../../../core/notifications/notification.service';
 import { AppNotification } from '../../../../core/notifications/notification.model';
 import { FormsModule } from '@angular/forms';
 
-export type ProjectOption = { label: string; value: number };
-export type SimpleStudent = { name: string; class: string; avatarUrl?: string };
+export interface ProjectOption { label: string; value: number }
+export interface SimpleStudent { name: string; class: string; avatarUrl?: string }
 
 @Component({
   standalone: true,
@@ -17,6 +17,8 @@ export type SimpleStudent = { name: string; class: string; avatarUrl?: string };
   styleUrl: './header-bar.scss',
 })
 export class TeacherHeaderBarComponent {
+  private readonly notificationsSvc = inject(NotificationService);
+
   // Der Schüler, der oben in der Leiste angezeigt wird
   @Input() student!: SimpleStudent;
   // Klick auf den Button: neues Projekt anlegen (Event nach außen)
@@ -30,8 +32,6 @@ export class TeacherHeaderBarComponent {
 
   // Optional notification count (for bell badge)
   @Input() notifications = 0;
-
-  constructor(private readonly notificationsSvc: NotificationService) {}
 
   showPanel = false;
   get items$(): Observable<AppNotification[]> {

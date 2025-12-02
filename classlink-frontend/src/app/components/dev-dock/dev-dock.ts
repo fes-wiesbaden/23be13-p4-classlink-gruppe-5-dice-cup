@@ -1,4 +1,4 @@
-import { Component, OnDestroy, computed, signal } from '@angular/core';
+import { Component, OnDestroy, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dock } from 'primeng/dock';
 import { TooltipModule } from 'primeng/tooltip';
@@ -18,13 +18,13 @@ type DockItem = MenuItem & { iconUrl: string };
   styleUrls: ['./dev-dock.scss'],
 })
 export class DevDockComponent implements OnDestroy {
+  private router = inject(Router);
+  private auth = inject(AuthService);
+
   private sub?: Subscription;
   currentUrl = signal<string>('/admin');
 
-  constructor(
-    private router: Router,
-    private auth: AuthService,
-  ) {
+  constructor() {
     this.currentUrl.set(this.router.url);
     this.sub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))

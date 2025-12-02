@@ -7,7 +7,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 
-export type TeacherStudent = { id: number; name: string; class: string; avatarUrl?: string };
+export interface TeacherStudent { id: number; name: string; class: string; avatarUrl?: string }
 
 @Component({
   standalone: true,

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminUser, Role } from '../../features/admin/models';
@@ -7,7 +7,7 @@ import { AdminHeaderBarComponent } from '../../features/admin/components/header-
 import { AdminKpiCardsComponent } from '../../features/admin/components/kpi-cards/kpi-cards';
 import { AdminUserTableComponent } from '../../features/admin/components/user-table/user-table';
 import { ADMIN_SERVICE, AdminService } from '../../features/admin/admin.tokens';
-import { Inject } from '@angular/core';
+
 import { AdminMockService } from '../../features/admin/mock.service';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -39,11 +39,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   encapsulation: ViewEncapsulation.None,
 })
 export class AdminComponent {
-  constructor(
-    @Inject(ADMIN_SERVICE) private readonly admin: AdminService,
-    private readonly messages: MessageService,
-    private readonly confirm: ConfirmationService,
-  ) {
+  private readonly admin = inject<AdminService>(ADMIN_SERVICE);
+  private readonly messages = inject(MessageService);
+  private readonly confirm = inject(ConfirmationService);
+
+  constructor() {
     this.admin.getUsers().subscribe((users) => {
       this.users = users;
       this.updateFiltered();

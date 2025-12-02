@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Button } from 'primeng/button';
@@ -17,6 +17,11 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './login.scss',
 })
 export class LoginComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
   readonly loginForm: FormGroup;
   submitted = false;
   // Start im aktiven Look, damit die Karte/Orbs sofort "an" sind
@@ -25,12 +30,7 @@ export class LoginComponent {
   // Deaktiviert Transitions/Animationen für den allerersten Paint
   noAnim = true;
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly auth: AuthService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],

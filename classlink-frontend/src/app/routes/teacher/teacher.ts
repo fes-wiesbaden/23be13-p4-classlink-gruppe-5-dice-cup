@@ -1,5 +1,5 @@
 ﻿// Von Lukas bearbeitet
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
@@ -20,8 +20,6 @@ import { MessageService } from 'primeng/api';
   imports: [
     CommonModule,
     FormsModule,
-    Dialog,
-    InputText,
     TeacherStudentSidebarComponent,
     TeacherHeaderBarComponent,
     TeacherKpiCardsComponent,
@@ -36,10 +34,10 @@ import { MessageService } from 'primeng/api';
   encapsulation: ViewEncapsulation.None,
 })
 export class TeacherComponent {
-  constructor(
-    private readonly mock: TeacherMockService,
-    private readonly messages: MessageService,
-  ) {
+  private readonly mock = inject(TeacherMockService);
+  private readonly messages = inject(MessageService);
+
+  constructor() {
     // Daten aus dem Mock holen und Ansicht vorbereiten
     this.students = this.mock.getStudents();
     this.projects = this.mock.getProjects();

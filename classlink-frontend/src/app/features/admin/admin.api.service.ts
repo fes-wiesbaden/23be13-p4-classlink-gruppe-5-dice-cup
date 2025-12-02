@@ -1,5 +1,5 @@
 ﻿// Von Lukas bearbeitet
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { AdminService } from './admin.tokens';
@@ -8,10 +8,9 @@ import { API_BASE_URL } from '../../core/api.tokens';
 
 @Injectable({ providedIn: 'root' })
 export class AdminApiService implements AdminService {
-  constructor(
-    private http: HttpClient,
-    @Inject(API_BASE_URL) private base: string,
-  ) {}
+  private http = inject(HttpClient);
+  private base = inject(API_BASE_URL);
+
 
   // Holt alle Nutzer (vom echten API-Backend)
   getUsers(): Observable<AdminUser[]> {

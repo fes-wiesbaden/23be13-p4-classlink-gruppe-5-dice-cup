@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { Toast } from 'primeng/toast';
@@ -40,13 +40,17 @@ interface StudentProject {
 @Component({
   standalone: true,
   selector: 'app-student',
-  imports: [CommonModule, Button, Toast, GradeHistoryStripComponent],
+  imports: [CommonModule, Button, Toast],
   templateUrl: './student.html',
   styleUrl: './student.scss',
   providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentComponent {
+  private readonly auth = inject(AuthService);
+  private readonly mock = inject(TeacherMockService);
+  private readonly messages = inject(MessageService);
+
   readonly studentId = 1;
   studentName: string;
   studentClass = '10A';
@@ -57,11 +61,7 @@ export class StudentComponent {
   historyProjectName = '';
   selectedLernfeld: Lernfeld | null = null;
 
-  constructor(
-    private readonly auth: AuthService,
-    private readonly mock: TeacherMockService,
-    private readonly messages: MessageService,
-  ) {
+  constructor() {
     this.studentName = this.auth.getUsername() || 'Anna Schmidt';
     const cls = this.mock.getStudents().find((s) => s.id === this.studentId)?.class;
     if (cls) {

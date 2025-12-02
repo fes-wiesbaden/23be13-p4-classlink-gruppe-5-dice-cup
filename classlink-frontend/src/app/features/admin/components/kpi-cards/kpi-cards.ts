@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
 
-export type AdminKpis = { total: number; active: number; admins: number };
+export interface AdminKpis { total: number; active: number; admins: number }
 
 @Component({
   standalone: true,

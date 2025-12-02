@@ -5,7 +5,7 @@ import { Card } from 'primeng/card';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 
-export type TeacherStudent = { id: number; name: string; class: string; avatarUrl?: string };
+export interface TeacherStudent { id: number; name: string; class: string; avatarUrl?: string }
 
 @Component({
   standalone: true,

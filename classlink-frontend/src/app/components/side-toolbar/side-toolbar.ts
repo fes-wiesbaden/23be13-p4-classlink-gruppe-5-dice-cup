@@ -1,9 +1,9 @@
-import { Component, OnDestroy, signal, computed } from '@angular/core';
+import { Component, OnDestroy, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 
-type Item = { icon: string; route: string; tooltip: string };
+interface Item { icon: string; route: string; tooltip: string }
 
 @Component({
   standalone: true,
@@ -13,10 +13,12 @@ type Item = { icon: string; route: string; tooltip: string };
   styleUrl: './side-toolbar.scss',
 })
 export class SideToolbarComponent implements OnDestroy {
+  private router = inject(Router);
+
   private sub?: Subscription;
   currentUrl = signal<string>('/');
 
-  constructor(private router: Router) {
+  constructor() {
     this.currentUrl.set(this.router.url);
     this.sub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))

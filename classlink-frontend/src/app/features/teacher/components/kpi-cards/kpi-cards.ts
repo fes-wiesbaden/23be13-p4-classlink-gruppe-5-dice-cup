@@ -3,14 +3,14 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
 
-export type Scores = {
+export interface Scores {
   teacher: string;
   peer: string;
   self: string;
   trendTeacher: string;
   trendPeer: string;
   trendSelf: string;
-};
+}
 
 @Component({
   standalone: true,

@@ -11,5 +11,4 @@ import { DevDockComponent } from './components/dev-dock/dev-dock';
 })
 export class AppComponent {
   // Dev auto-login handled centrally in AuthService (to avoid duplication)
-  constructor() {}
 }
