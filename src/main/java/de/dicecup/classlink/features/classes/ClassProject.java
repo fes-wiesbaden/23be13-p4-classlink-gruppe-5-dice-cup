@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.classes;
 
-import de.dicecup.classlink.features.projects.domain.Project;
+import de.dicecup.classlink.features.projects.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

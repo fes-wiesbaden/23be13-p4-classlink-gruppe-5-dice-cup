@@ -1,6 +1,7 @@
 package de.dicecup.classlink.features.users.domain.roles;
 
 import de.dicecup.classlink.features.users.domain.User;
+import de.dicecup.classlink.features.classes.Class;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,4 +22,8 @@ public class Student {
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
+    private Class clazz;
 }

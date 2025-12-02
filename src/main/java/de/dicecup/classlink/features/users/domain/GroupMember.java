@@ -1,7 +1,6 @@
 package de.dicecup.classlink.features.users.domain;
 
-import de.dicecup.classlink.features.projects.domain.StudentGroup;
-import de.dicecup.classlink.features.users.domain.User;
+import de.dicecup.classlink.features.projects.StudentGroup;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

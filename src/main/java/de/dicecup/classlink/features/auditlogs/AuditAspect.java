@@ -1,7 +1,6 @@
 package de.dicecup.classlink.features.auditlogs;
 
 import de.dicecup.classlink.common.audit.AuditPublisher;
-import de.dicecup.classlink.features.auditlogs.domain.Audited;
 import de.dicecup.classlink.features.users.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

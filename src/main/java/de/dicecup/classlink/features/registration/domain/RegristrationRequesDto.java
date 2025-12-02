@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.registration.domain;
 
-import de.dicecup.classlink.features.users.dto.CreateUserInfoDto;
+import de.dicecup.classlink.features.users.domain.CreateUserInfoDto;
 
 import java.util.UUID;
 

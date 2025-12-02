@@ -8,8 +8,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -19,7 +25,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "users",
         uniqueConstraints = @UniqueConstraint(name = "ux_users_username", columnNames = "username"))
-public class User extends Auditable {
+public class User extends Auditable implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -27,6 +33,7 @@ public class User extends Auditable {
     @NotBlank
     @Size(max = 100)
     @Column(nullable = false, length = 100)
+    @Getter(AccessLevel.NONE)
     private String username;
 
     @NotBlank
@@ -51,4 +58,47 @@ public class User extends Auditable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Teacher teacher;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (admin != null) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if (teacher != null) {
+            return List.of(new SimpleGrantedAuthority("ROLE_TEACHER"));
+        } else if (student != null) {
+            return List.of(new SimpleGrantedAuthority("ROLE_STUDENT"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    public String getAccountUsername() {
+        return username;
+    }
+
+    @Override
+    public String getUsername() {
+        if (userInfo != null && userInfo.getEmail() != null) {
+            return userInfo.getEmail();
+        }
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
 }
