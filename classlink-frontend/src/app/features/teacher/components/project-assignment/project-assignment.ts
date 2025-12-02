@@ -25,7 +25,7 @@ export class TeacherProjectAssignmentComponent {
   // Wenn ich das Projekt im Select ändere
   @Output() projectChange = new EventEmitter<number>();
   // Klick auf den Toggle pro Schüler
-  @Output() toggle = new EventEmitter<number>();
+    @Output() studentToggle = new EventEmitter<number>();
 
   // Hilfsfunktionen für Anzeige und Performance
   isAssigned(id: number) {
