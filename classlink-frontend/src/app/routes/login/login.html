@@ -31,22 +31,22 @@
         [attr.aria-busy]="isSubmitting"
       >
         <div class="login-form__field">
-          <label for="username" class="login-form__label">Benutzername oder E-Mail</label>
+            <label for="email" class="login-form__label">Benutzername oder E-Mail</label>
           <input
             pInputText
-            id="username"
+            id="email"
             type="text"
-            formControlName="username"
+            formControlName="email"
             class="login-input"
             placeholder="max.muster@dicecup.de"
             autocomplete="username"
             [disabled]="isSubmitting"
-            [ngClass]="{ 'is-invalid': submitted && usernameControl?.invalid }"
+            [ngClass]="{ 'is-invalid': submitted && emailControl?.invalid }"
           />
           <!-- simple required check -->
           <small
             class="login-form__error"
-            *ngIf="submitted && usernameControl?.hasError('required')"
+            *ngIf="submitted && emailControl?.hasError('required')"
           >
             Dieses Feld darf nicht leer sein.
           </small>
@@ -80,7 +80,7 @@
           </small>
         </div>
         <!-- Rollenwahl (für Demo) -->
-        <div class="login-form__field">
+          <div class="login-form__field" *ngIf="loginForm.get('role')">
           <label for="role" class="login-form__label">Rolle</label>
           <select id="role" formControlName="role" class="login-input" [disabled]="isSubmitting">
             <option value="student">Student</option>
@@ -110,6 +110,7 @@
           [loading]="isSubmitting"
           [disabled]="(loginForm.invalid && submitted) || isSubmitting"
         ></p-button>
+          <p class="login-form__error" *ngIf="errorMessage">{{ errorMessage }}</p>
       </form>
     </p-card>
     <!-- login-card footer -->
