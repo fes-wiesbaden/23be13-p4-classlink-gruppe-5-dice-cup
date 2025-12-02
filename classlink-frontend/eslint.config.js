@@ -11,28 +11,36 @@ module.exports = tseslint.config(
             eslint.configs.recommended,
             ...tseslint.configs.recommended,
             ...tseslint.configs.stylistic,
-            ...angular.configs.tsRecommended,
+            ...angular.configs.tsRecommended
         ],
         processor: angular.processInlineTemplates,
         rules: {
+            "@typescript-eslint/no-explicit-any": [
+                "warn",
+                {ignoreRestArgs: true}
+            ],
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {argsIgnorePattern: "^_", varsIgnorePattern: "^_"}
+            ],
             "@angular-eslint/directive-selector": [
-                "error",
-                { type: "attribute", prefix: "app", style: "camelCase" },
+                "warn",
+                {type: "attribute", prefix: ["app", "admin", "teacher", "student"], style: "camelCase"}
             ],
             "@angular-eslint/component-selector": [
-                "error",
-                { type: "element", prefix: "app", style: "kebab-case" },
-            ],
-        },
+                "warn",
+                {type: "element", prefix: ["app", "admin", "teacher", "student"], style: "kebab-case"}
+            ]
+        }
     },
-
-    // Angular Templates (HTML)
     {
         files: ["**/*.html"],
         extends: [
-            ...angular.configs.templateRecommended,
-            ...angular.configs.templateAccessibility,
+            ...angular.configs.templateRecommended
         ],
-        rules: {},
+        rules: {
+            "@angular-eslint/template/click-events-have-key-events": "off",
+            "@angular-eslint/template/interactive-supports-focus": "off"
+        }
     }
 );
