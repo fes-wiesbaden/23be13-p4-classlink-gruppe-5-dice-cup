@@ -32,7 +32,8 @@ public class SwaggerConfig {
                                 .name("Dicecup Support")
                                 .email("support@dicecup.com"))
                         .license(new License()
-                                .name("Proprietary License — All Rights Reserved"))
+                                .name("MIT License")
+                                .identifier("MIT"))
                         .termsOfService("https://dicecup.com/terms")
                 );
     }

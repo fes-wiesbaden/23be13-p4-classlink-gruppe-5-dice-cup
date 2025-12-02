@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders, inject } from '@angular/core';
+import {NgModule, ModuleWithProviders, SkipSelf, Optional} from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
@@ -17,10 +17,8 @@ export class ApiModule {
         };
     }
 
-    constructor() {
-        const parentModule = inject(ApiModule, { optional: true, skipSelf: true });
-        const http = inject(HttpClient, { optional: true });
-
+    constructor(@Optional() @SkipSelf() parentModule: ApiModule,
+                @Optional() http: HttpClient) {
         if (parentModule) {
             throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
         }

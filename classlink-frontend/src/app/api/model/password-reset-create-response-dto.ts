@@ -9,9 +9,10 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface PasswordResetCreateResponseDto {
+    tokenId?: string;
+    token?: string;
+    expiresAt?: string;
+    userId?: string;
 }
 
