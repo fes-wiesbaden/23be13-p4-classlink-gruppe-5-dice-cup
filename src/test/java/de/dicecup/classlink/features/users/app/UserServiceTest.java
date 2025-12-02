@@ -105,7 +105,7 @@ class UserServiceTest {
 
         // assert
         assertThat(result.id()).isEqualTo(u.getId());
-        assertThat(result.username().equals(u.getUsername()));
+        assertThat(result.username().equals(u.getAccountUsername()));
         assertThat(result.userInfo().firstName()).isEqualTo(uf.getFirstName());
     }
 

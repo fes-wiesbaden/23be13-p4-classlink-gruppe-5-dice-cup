@@ -33,6 +33,7 @@ public class User extends Auditable implements UserDetails {
     @NotBlank
     @Size(max = 100)
     @Column(nullable = false, length = 100)
+    @Getter(AccessLevel.NONE)
     private String username;
 
     @NotBlank
@@ -72,6 +73,18 @@ public class User extends Auditable implements UserDetails {
     @Override
     public String getPassword() {
         return passwordHash;
+    }
+
+    public String getAccountUsername() {
+        return username;
+    }
+
+    @Override
+    public String getUsername() {
+        if (userInfo != null && userInfo.getEmail() != null) {
+            return userInfo.getEmail();
+        }
+        return username;
     }
 
     @Override

@@ -4,6 +4,7 @@ import de.dicecup.classlink.features.users.domain.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +30,8 @@ public class UserController {
      * @return Liste von UserDTO Objekten
      */
     @GetMapping("/users")
-    public List<UserDto> getUsers() {
-        return userService.list();
+    public ResponseEntity<List<UserDto>> getUsers() {
+        return ResponseEntity.ok(userService.list());
     }
 
     @Operation(
