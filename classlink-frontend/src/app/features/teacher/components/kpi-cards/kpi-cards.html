@@ -3,7 +3,14 @@
   <p-card class="kpi kpi--teacher p-card">
     <div class="kpi__head">
       <div class="kpi__title">Lehrernote</div>
-      <button *ngIf="allowTeacherEdit" class="icon-btn edit" type="button" aria-label="Note bearbeiten"><i class="pi pi-pencil"></i></button>
+      <button
+        *ngIf="allowTeacherEdit"
+        class="icon-btn edit"
+        type="button"
+        aria-label="Note bearbeiten"
+      >
+        <i class="pi pi-pencil"></i>
+      </button>
     </div>
     <div class="kpi__value">{{ sc.teacher }}</div>
   </p-card>
@@ -13,7 +20,9 @@
     </div>
     <div class="kpi__value">
       <span class="kpi__number" [ngClass]="deltaClassFor(sc.peer, sc.teacher)">{{ sc.peer }}</span>
-      <span class="kpi__delta" [ngClass]="deltaClassFor(sc.peer, sc.teacher)">{{ sc.trendPeer }}</span>
+      <span class="kpi__delta" [ngClass]="deltaClassFor(sc.peer, sc.teacher)">{{
+        sc.trendPeer
+      }}</span>
     </div>
   </p-card>
   <p-card class="kpi kpi--self p-card">
@@ -22,8 +31,9 @@
     </div>
     <div class="kpi__value">
       <span class="kpi__number" [ngClass]="deltaClassFor(sc.self, sc.teacher)">{{ sc.self }}</span>
-      <span class="kpi__delta" [ngClass]="deltaClassFor(sc.self, sc.teacher)">{{ sc.trendSelf }}</span>
+      <span class="kpi__delta" [ngClass]="deltaClassFor(sc.self, sc.teacher)">{{
+        sc.trendSelf
+      }}</span>
     </div>
   </p-card>
 </section>
-

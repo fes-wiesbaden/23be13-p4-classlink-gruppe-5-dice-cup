@@ -24,9 +24,9 @@
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
   --accent-ghost: #e0e7ff;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
   --hover: #eef2ff;
   --active-bg: #e2e8f0;
   --focus: #2563eb;
@@ -39,7 +39,7 @@
   --input-h: 40px;
   --radius: 8px;
   --radius-pill: 9999px;
-  --shadow: 0 14px 36px rgba(15,23,42,0.12);
+  --shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
 
   /* Typography */
   --font: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, sans-serif;
@@ -67,10 +67,18 @@ body {
 }
 
 /* Focus ring (2px, outside) */
-*:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+*:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
 
 /* Placeholder color baseline */
-::placeholder { color: var(--placeholder); opacity: 1; }
-::-ms-input-placeholder { color: var(--placeholder); }
+::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+::-ms-input-placeholder {
+  color: var(--placeholder);
+}
 
 /* removed side toolbar padding */

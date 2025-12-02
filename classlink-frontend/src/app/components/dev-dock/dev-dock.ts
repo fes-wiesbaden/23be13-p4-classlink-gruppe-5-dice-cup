@@ -15,26 +15,46 @@ type DockItem = MenuItem & { iconUrl: string };
   standalone: true,
   imports: [CommonModule, Dock, TooltipModule, RippleModule, SharedModule],
   templateUrl: './dev-dock.html',
-  styleUrls: ['./dev-dock.scss']
+  styleUrls: ['./dev-dock.scss'],
 })
 export class DevDockComponent implements OnDestroy {
   private sub?: Subscription;
   currentUrl = signal<string>('/admin');
 
-  constructor(private router: Router, private auth: AuthService) {
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+  ) {
     this.currentUrl.set(this.router.url);
     this.sub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(e => this.currentUrl.set(e.urlAfterRedirects || e.url));
+      .subscribe((e) => this.currentUrl.set(e.urlAfterRedirects || e.url));
   }
-  ngOnDestroy() { this.sub?.unsubscribe(); }
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+  }
 
   // icons
   private base = [
-    { label: 'Student', iconUrl: '/assets/icons/student.svg', route: '/student', roles: ['student'] as string[] },
-    { label: 'Teacher', iconUrl: '/assets/icons/teacher.svg', route: '/teacher', roles: ['teacher'] as string[] },
-    { label: 'Admin',   iconUrl: '/assets/icons/admin.svg',   route: '/admin',   roles: ['admin']   as string[] },
-    { label: 'Login',   iconUrl: '/assets/icons/login.svg',   route: '/login',   roles: []                   },
+    {
+      label: 'Student',
+      iconUrl: '/assets/icons/student.svg',
+      route: '/student',
+      roles: ['student'] as string[],
+    },
+    {
+      label: 'Teacher',
+      iconUrl: '/assets/icons/teacher.svg',
+      route: '/teacher',
+      roles: ['teacher'] as string[],
+    },
+    {
+      label: 'Admin',
+      iconUrl: '/assets/icons/admin.svg',
+      route: '/admin',
+      roles: ['admin'] as string[],
+    },
+    { label: 'Login', iconUrl: '/assets/icons/login.svg', route: '/login', roles: [] },
   ];
 
   items = computed<DockItem[]>(() => {
@@ -43,13 +63,16 @@ export class DevDockComponent implements OnDestroy {
     // Always show all dock items, including Login
     const visible = this.base;
 
-    return visible.map(i => ({
+    return visible.map((i) => ({
       label: i.label,
       iconUrl: i.iconUrl,
       // outline highlight
       styleClass: url.startsWith(i.route) ? 'is-active' : undefined,
       tooltip: i.label,
-      command: () => { if ('roles' in i) this.auth.setRoles((i as any).roles); this.router.navigateByUrl(i.route); }
+      command: () => {
+        if ('roles' in i) this.auth.setRoles((i as any).roles);
+        this.router.navigateByUrl(i.route);
+      },
     }));
   });
 }

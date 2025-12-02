@@ -17,6 +17,3 @@ export class AdminSidebarComponent {
   @Input() search = '';
   @Output() searchChange = new EventEmitter<string>(); // ändert sich bei Eingabe
 }
-
-
-

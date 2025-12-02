@@ -9,7 +9,7 @@
 
   <section class="panel hero">
     <div class="hero__left">
-      <div class="avatar">{{ studentName | slice:0:1 }}</div>
+      <div class="avatar">{{ studentName | slice: 0 : 1 }}</div>
       <div>
         <p class="eyebrow">Dashboard</p>
         <h1>{{ studentName }}</h1>
@@ -18,7 +18,7 @@
     <div class="hero__stats">
       <div class="stat-pill">
         <span>Ø Gesamt</span>
-        <strong>{{ averageGrade | number:'1.1-1' }}</strong>
+        <strong>{{ averageGrade | number: '1.1-1' }}</strong>
       </div>
       <div class="stat-pill">
         <span>Offene Projekte</span>
@@ -46,7 +46,9 @@
         <div class="lf-title">{{ lf.focus }}</div>
 
         <div class="lf-meta">
-          <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)">Ø {{ lf.average | number:'1.1-1' }}</span>
+          <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)"
+            >Ø {{ lf.average | number: '1.1-1' }}</span
+          >
           <span class="lf-trend">{{ lf.trend }}</span>
         </div>
       </button>
@@ -61,7 +63,7 @@
         </div>
         <div class="lf-detail__avg" [style.backgroundColor]="gradeColor(sel.average)">
           <span>Ø</span>
-          <strong>{{ sel.average | number:'1.1-1' }}</strong>
+          <strong>{{ sel.average | number: '1.1-1' }}</strong>
           <small>{{ sel.trend }}</small>
         </div>
       </div>
@@ -69,10 +71,12 @@
         <div class="assessment" *ngFor="let g of sel.assessments">
           <div>
             <div class="assessment__label">{{ g.label }}</div>
-            <div class="assessment__meta">{{ g.type }} · {{ g.weight * 100 | number:'1.0-0' }}%</div>
+            <div class="assessment__meta">
+              {{ g.type }} · {{ g.weight * 100 | number: '1.0-0' }}%
+            </div>
           </div>
           <div class="assessment__grade" [style.backgroundColor]="gradeColor(g.grade)">
-            {{ g.grade | number:'1.1-1' }}
+            {{ g.grade | number: '1.1-1' }}
           </div>
         </div>
       </div>
@@ -107,7 +111,11 @@
         </div>
         <div class="project-card__meter">
           <div class="meter__track">
-            <div class="meter__fill" [style.width]="project.progress + '%'" [style.background]="project.color"></div>
+            <div
+              class="meter__fill"
+              [style.width]="project.progress + '%'"
+              [style.background]="project.color"
+            ></div>
           </div>
           <span>{{ project.progress }}% Fortschritt</span>
         </div>

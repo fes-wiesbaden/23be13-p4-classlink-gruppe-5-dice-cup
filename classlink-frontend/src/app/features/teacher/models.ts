@@ -28,7 +28,10 @@ export interface Scores {
   trendSelf: string;
 }
 
-export interface ProjectOption { label: string; value: number }
+export interface ProjectOption {
+  label: string;
+  value: number;
+}
 
 // Notes sent by teachers to students
 export interface Note {

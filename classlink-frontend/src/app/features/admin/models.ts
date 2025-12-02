@@ -9,4 +9,3 @@ export type AdminUser = {
   status: 'active' | 'disabled';
   createdAt: string; // ISO date
 };
-

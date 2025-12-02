@@ -16,6 +16,3 @@ export class AdminKpiCardsComponent {
   // Zeigt kleine Kennzahlen oben (Gesamt/Aktiv/Admins)
   @Input() kpis!: AdminKpis;
 }
-
-
-

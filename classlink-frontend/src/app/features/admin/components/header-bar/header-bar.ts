@@ -14,17 +14,23 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './header-bar.scss',
 })
 export class AdminHeaderBarComponent {
-  @Output() createUser = new EventEmitter<{ name: string; email: string; roles: ('student'|'teacher'|'admin')[] }>();
+  @Output() createUser = new EventEmitter<{
+    name: string;
+    email: string;
+    roles: ('student' | 'teacher' | 'admin')[];
+  }>();
   @Input() busy = false;
 
   // simple internal state for quick create
   showCreate = false;
   name = '';
   email = '';
-  roles: ('student'|'teacher'|'admin')[] = ['student'];
+  roles: ('student' | 'teacher' | 'admin')[] = ['student'];
 
   // Öffnet/schließt das kleine Formular oben
-  toggleCreate() { this.showCreate = !this.showCreate; }
+  toggleCreate() {
+    this.showCreate = !this.showCreate;
+  }
 
   // Legt den Benutzer an, wenn Name & E-Mail gefüllt sind
   add() {
@@ -39,13 +45,11 @@ export class AdminHeaderBarComponent {
   }
 
   // Für die Checkboxen im Formular
-  roleChecked(r: 'student'|'teacher'|'admin') { return this.roles.includes(r); }
+  roleChecked(r: 'student' | 'teacher' | 'admin') {
+    return this.roles.includes(r);
+  }
   // Rolle an/aus schalten
-  toggleRole(r: 'student'|'teacher'|'admin') {
-    this.roles = this.roles.includes(r)
-      ? this.roles.filter(x => x !== r)
-      : [...this.roles, r];
+  toggleRole(r: 'student' | 'teacher' | 'admin') {
+    this.roles = this.roles.includes(r) ? this.roles.filter((x) => x !== r) : [...this.roles, r];
   }
 }
-
-

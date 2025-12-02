@@ -8,7 +8,10 @@ import { API_BASE_URL } from '../../core/api.tokens';
 
 @Injectable({ providedIn: 'root' })
 export class AdminApiService implements AdminService {
-  constructor(private http: HttpClient, @Inject(API_BASE_URL) private base: string) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(API_BASE_URL) private base: string,
+  ) {}
 
   // Holt alle Nutzer (vom echten API-Backend)
   getUsers(): Observable<AdminUser[]> {
@@ -35,6 +38,3 @@ export class AdminApiService implements AdminService {
     return this.http.post(`${this.base}/users/${id}/reset-password`, {}).pipe(map(() => void 0));
   }
 }
-
-
-

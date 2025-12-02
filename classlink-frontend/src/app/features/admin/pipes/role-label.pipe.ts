@@ -7,12 +7,14 @@ export class RoleLabelPipe implements PipeTransform {
   // Kleine Übersetzung von den technischen Rollen zu einem Label
   transform(value: Role): string {
     switch (value) {
-      case 'student': return 'Student';
-      case 'teacher': return 'Teacher';
-      case 'admin':   return 'Admin';
-      default:        return String(value);
+      case 'student':
+        return 'Student';
+      case 'teacher':
+        return 'Teacher';
+      case 'admin':
+        return 'Admin';
+      default:
+        return String(value);
     }
   }
 }
-
-

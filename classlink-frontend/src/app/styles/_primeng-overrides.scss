@@ -1,7 +1,13 @@
 /* Central place for scoped PrimeNG tweaks */
 
 /* Adjust Select chevron spacing on teacher page only */
-.teacher-page :where(.p-select) { position: relative; }
-.teacher-page :where(.p-select) .p-select-trigger { right: 10px !important; inset-inline-end: 10px !important; }
-.teacher-page :where(.p-select) .p-select-trigger .p-icon { margin-right: 10px !important; }
-
+.teacher-page :where(.p-select) {
+  position: relative;
+}
+.teacher-page :where(.p-select) .p-select-trigger {
+  right: 10px !important;
+  inset-inline-end: 10px !important;
+}
+.teacher-page :where(.p-select) .p-select-trigger .p-icon {
+  margin-right: 10px !important;
+}

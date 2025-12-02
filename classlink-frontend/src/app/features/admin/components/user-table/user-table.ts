@@ -42,7 +42,7 @@ export class AdminUserTableComponent {
   // Rolle im Erstellen-Formular umschalten
   toggleNewRole(role: Role) {
     this.newRoles = this.newRoles.includes(role)
-      ? this.newRoles.filter(x => x !== role)
+      ? this.newRoles.filter((x) => x !== role)
       : [...this.newRoles, role];
   }
 
@@ -67,18 +67,20 @@ export class AdminUserTableComponent {
   }
 
   // Für Checkboxen im Edit-Modus
-  roleChecked(r: Role) { return this.editRoles.includes(r); }
+  roleChecked(r: Role) {
+    return this.editRoles.includes(r);
+  }
   // Rolle im Edit-Modus togglen
   toggleRole(r: Role) {
     this.editRoles = this.editRoles.includes(r)
-      ? this.editRoles.filter(x => x !== r)
+      ? this.editRoles.filter((x) => x !== r)
       : [...this.editRoles, r];
   }
 
   // role labels provided by RoleLabelPipe
 
   // Für *ngFor Performance
-  trackById(_: number, u: AdminUser) { return u.id; }
+  trackById(_: number, u: AdminUser) {
+    return u.id;
+  }
 }
-
-

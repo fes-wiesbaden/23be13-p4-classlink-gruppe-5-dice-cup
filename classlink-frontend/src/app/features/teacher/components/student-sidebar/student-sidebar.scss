@@ -1,19 +1,51 @@
 ﻿/* Von Lukas bearbeitet */
-.sidebar__search { position: relative; }
-.sidebar__search .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-.sidebar__search input { padding-left: 34px; }
+.sidebar__search {
+  position: relative;
+}
+.sidebar__search .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+.sidebar__search input {
+  padding-left: 34px;
+}
 
-.sidebar__list li { position: relative; }
-.sidebar__list .active-indicator { position: absolute; left: 0; top: 6px; bottom: 6px; width: 4px; background: var(--accent); border-radius: 4px; }
+.sidebar__list li {
+  position: relative;
+}
+.sidebar__list .active-indicator {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  background: var(--accent);
+  border-radius: 4px;
+}
 
 /* Enhance spacing for active indicator */
-.sidebar__list li { padding-left: 18px; }
-.sidebar__list li.is-active { border: 1px solid var(--accent); }
+.sidebar__list li {
+  padding-left: 18px;
+}
+.sidebar__list li.is-active {
+  border: 1px solid var(--accent);
+}
 /* Input height to match mock */
-.sidebar__search input { height: var(--input-h); border: 1px solid var(--border); border-radius: 10px; }
+.sidebar__search input {
+  height: var(--input-h);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
 
 /* Ensure image avatars render correctly inside sidebar */
-.sidebar img.avatar { display: block; object-fit: cover; background: none; }
+.sidebar img.avatar {
+  display: block;
+  object-fit: cover;
+  background: none;
+}
 
 /* Make selects match input height and dark theme */
 .sidebar__filters select,
@@ -24,4 +56,3 @@
   background: var(--surface-subtle);
   color: var(--text-primary);
 }
-

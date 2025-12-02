@@ -28,12 +28,19 @@ export class TeacherProjectAssignmentComponent {
   @Output() toggle = new EventEmitter<number>();
 
   // Hilfsfunktionen für Anzeige und Performance
-  isAssigned(id: number) { return this.assignedIds.includes(id); }
-  trackById(_: number, item: TeacherStudent) { return item.id; }
+  isAssigned(id: number) {
+    return this.assignedIds.includes(id);
+  }
+  trackById(_: number, item: TeacherStudent) {
+    return item.id;
+  }
 
   // Fallback when an avatar image fails to load
   private failed = new Set<number>();
-  isFailed(id: number) { return this.failed.has(id); }
-  markFailed(id: number) { this.failed.add(id); }
+  isFailed(id: number) {
+    return this.failed.has(id);
+  }
+  markFailed(id: number) {
+    this.failed.add(id);
+  }
 }
-

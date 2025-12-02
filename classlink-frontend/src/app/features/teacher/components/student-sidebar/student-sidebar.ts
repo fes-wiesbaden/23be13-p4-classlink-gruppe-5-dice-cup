@@ -32,20 +32,29 @@ export class TeacherStudentSidebarComponent {
   @Output() assignSelected = new EventEmitter<void>();
 
   // Das brauche ich für ngFor, damit Angular effizienter rendert
-  trackById(_: number, item: TeacherStudent) { return item.id; }
+  trackById(_: number, item: TeacherStudent) {
+    return item.id;
+  }
 
   get classOptions() {
-    return [{ label: 'Alle Klassen', value: null }, ...this.classes.map(c => ({ label: c, value: c }))];
+    return [
+      { label: 'Alle Klassen', value: null },
+      ...this.classes.map((c) => ({ label: c, value: c })),
+    ];
   }
 
   get assignOptions() {
-    return this.classes.map(c => ({ label: c, value: c }));
+    return this.classes.map((c) => ({ label: c, value: c }));
   }
 
   // Fallback when an avatar image fails to load
   private failed = new Set<number>();
   // Wenn ein Bild nicht lädt, merke ich mir die ID
-  isFailed(id: number) { return this.failed.has(id); }
+  isFailed(id: number) {
+    return this.failed.has(id);
+  }
   // Dann zeige ich stattdessen den Anfangsbuchstaben an
-  markFailed(id: number) { this.failed.add(id); }
+  markFailed(id: number) {
+    this.failed.add(id);
+  }
 }

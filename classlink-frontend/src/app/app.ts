@@ -7,7 +7,7 @@ import { DevDockComponent } from './components/dev-dock/dev-dock';
   standalone: true,
   imports: [RouterOutlet, DevDockComponent],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
 })
 export class AppComponent {
   // Dev auto-login handled centrally in AuthService (to avoid duplication)

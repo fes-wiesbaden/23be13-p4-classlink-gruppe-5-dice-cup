@@ -5,24 +5,79 @@
     <div class="subtitle">Benutzerverwaltung</div>
   </div>
   <div class="header__actions">
-    <p-button type="button" label="Nutzer anlegen" icon="pi pi-user-plus" (click)="toggleCreate()" [disabled]="busy" styleClass="p-button-outlined p-button-rounded"></p-button>
+    <p-button
+      type="button"
+      label="Nutzer anlegen"
+      icon="pi pi-user-plus"
+      (click)="toggleCreate()"
+      [disabled]="busy"
+      styleClass="p-button-outlined p-button-rounded"
+    ></p-button>
   </div>
 </header>
 
-<section class="panel" *ngIf="showCreate" style="padding:16px;">
-  <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-    <input pInputText type="text" placeholder="Name" [(ngModel)]="name" class="p-inputtext p-component" [disabled]="busy" aria-label="Name" />
-    <input pInputText type="email" placeholder="E-Mail" [(ngModel)]="email" class="p-inputtext p-component" [disabled]="busy" aria-label="E-Mail" />
+<section class="panel" *ngIf="showCreate" style="padding: 16px">
+  <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+    <input
+      pInputText
+      type="text"
+      placeholder="Name"
+      [(ngModel)]="name"
+      class="p-inputtext p-component"
+      [disabled]="busy"
+      aria-label="Name"
+    />
+    <input
+      pInputText
+      type="email"
+      placeholder="E-Mail"
+      [(ngModel)]="email"
+      class="p-inputtext p-component"
+      [disabled]="busy"
+      aria-label="E-Mail"
+    />
     <div class="roles-editor">
-      <p-checkbox inputId="roleStudent" [binary]="true" [ngModel]="roleChecked('student')" (onChange)="toggleRole('student')" [disabled]="busy" ariaLabel="Student"></p-checkbox>
+      <p-checkbox
+        inputId="roleStudent"
+        [binary]="true"
+        [ngModel]="roleChecked('student')"
+        (onChange)="toggleRole('student')"
+        [disabled]="busy"
+        ariaLabel="Student"
+      ></p-checkbox>
       <label for="roleStudent">Student</label>
-      <p-checkbox inputId="roleTeacher" [binary]="true" [ngModel]="roleChecked('teacher')" (onChange)="toggleRole('teacher')" [disabled]="busy" ariaLabel="Teacher"></p-checkbox>
+      <p-checkbox
+        inputId="roleTeacher"
+        [binary]="true"
+        [ngModel]="roleChecked('teacher')"
+        (onChange)="toggleRole('teacher')"
+        [disabled]="busy"
+        ariaLabel="Teacher"
+      ></p-checkbox>
       <label for="roleTeacher">Teacher</label>
-      <p-checkbox inputId="roleAdmin" [binary]="true" [ngModel]="roleChecked('admin')" (onChange)="toggleRole('admin')" [disabled]="busy" ariaLabel="Admin"></p-checkbox>
+      <p-checkbox
+        inputId="roleAdmin"
+        [binary]="true"
+        [ngModel]="roleChecked('admin')"
+        (onChange)="toggleRole('admin')"
+        [disabled]="busy"
+        ariaLabel="Admin"
+      ></p-checkbox>
       <label for="roleAdmin">Admin</label>
     </div>
-    <span style="flex:1 1 auto"></span>
-    <p-button label="Abbrechen" (click)="toggleCreate()" [disabled]="busy" styleClass="p-button-text"></p-button>
-    <p-button label="Hinzufügen" icon="pi pi-check" (click)="add()" [disabled]="busy || !name || !email" styleClass="p-button-rounded"></p-button>
+    <span style="flex: 1 1 auto"></span>
+    <p-button
+      label="Abbrechen"
+      (click)="toggleCreate()"
+      [disabled]="busy"
+      styleClass="p-button-text"
+    ></p-button>
+    <p-button
+      label="Hinzufügen"
+      icon="pi pi-check"
+      (click)="add()"
+      [disabled]="busy || !name || !email"
+      styleClass="p-button-rounded"
+    ></p-button>
   </div>
 </section>

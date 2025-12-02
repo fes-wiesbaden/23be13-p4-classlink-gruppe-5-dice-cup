@@ -1,6 +1,18 @@
 /* Shared avatar styles */
 
-.avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; }
-.avatar.sm { width: 24px; height: 24px; font-size: 12px; }
-.avatar.lg { width: 36px; height: 36px; }
-
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.avatar.sm {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+.avatar.lg {
+  width: 36px;
+  height: 36px;
+}

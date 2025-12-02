@@ -32,13 +32,24 @@ export class TeacherMockService {
   private peerEvaluations: PeerEvaluation[] = [];
 
   // Synthetic history cache per student+project
-  private scoresHistoryCache = new Map<string, { labels: string[]; teacher: number[]; peer: number[]; self: number[] }>();
+  private scoresHistoryCache = new Map<
+    string,
+    { labels: string[]; teacher: number[]; peer: number[]; self: number[] }
+  >();
 
   // Liefert Schüler/Klassen/Projekte/Aufgaben als Kopie zurück
-  getStudents(): Student[] { return [...this.studentsData]; }
-  getClasses(): string[] { return [...this.classesData]; }
-  getProjects(): Project[] { return [...this.projectsData]; }
-  getAssignments(): Assignment[] { return this.assignmentsData.map(a => ({ ...a })); }
+  getStudents(): Student[] {
+    return [...this.studentsData];
+  }
+  getClasses(): string[] {
+    return [...this.classesData];
+  }
+  getProjects(): Project[] {
+    return [...this.projectsData];
+  }
+  getAssignments(): Assignment[] {
+    return this.assignmentsData.map((a) => ({ ...a }));
+  }
 
   // Neue Klasse hinzufügen (ohne Duplikate)
   addClass(name: string): void {
@@ -52,7 +63,7 @@ export class TeacherMockService {
   // Weist einem Schüler eine Klasse zu (Klasse wird bei Bedarf angelegt)
   setStudentClass(studentId: number, className: string): void {
     const n = (className || '').trim();
-    const st = this.studentsData.find(s => s.id === studentId);
+    const st = this.studentsData.find((s) => s.id === studentId);
     if (!st || !n) return;
     // allow free assignment; auto-add class if missing
     if (!this.classesData.includes(n)) {
@@ -63,7 +74,9 @@ export class TeacherMockService {
 
   // Schaltet die Projektzuweisung für einen Schüler um
   toggleAssignment(studentId: number, projectId: number): void {
-    const found = this.assignmentsData.find(a => a.studentId === studentId && a.projectId === projectId);
+    const found = this.assignmentsData.find(
+      (a) => a.studentId === studentId && a.projectId === projectId,
+    );
     if (found) {
       found.assigned = !found.assigned;
     } else {
@@ -80,19 +93,26 @@ export class TeacherMockService {
 
   // Liest alle Notizen zu einem Schüler/Projekt
   getNotesFor(studentId: number, projectId: number): Note[] {
-    return this.notesData.filter(n => n.toStudentId === studentId && n.projectId === projectId);
+    return this.notesData.filter((n) => n.toStudentId === studentId && n.projectId === projectId);
   }
 
   // Peer evaluations
   // Speichert eine Peer-Bewertung (Schüler bewertet Schüler)
-  submitPeerEvaluation(fromStudentId: number, toStudentId: number, projectId: number, grade: number): void {
+  submitPeerEvaluation(
+    fromStudentId: number,
+    toStudentId: number,
+    projectId: number,
+    grade: number,
+  ): void {
     const createdAt = new Date().toISOString();
     this.peerEvaluations.push({ fromStudentId, toStudentId, projectId, grade, createdAt });
   }
 
   // Durchschnitt der Peer-Bewertungen berechnen
   private getPeerAverageFor(studentId: number, projectId: number): number | null {
-    const items = this.peerEvaluations.filter(pe => pe.toStudentId === studentId && pe.projectId === projectId);
+    const items = this.peerEvaluations.filter(
+      (pe) => pe.toStudentId === studentId && pe.projectId === projectId,
+    );
     if (!items.length) return null;
     const sum = items.reduce((acc, it) => acc + it.grade, 0);
     return sum / items.length;
@@ -132,7 +152,10 @@ export class TeacherMockService {
     // base seeds
     const seed = (studentId * 13 + projectId * 3) >>> 0;
     let r = seed;
-    const rand = () => { r = (r * 1664525 + 1013904223) >>> 0; return (r % 1000) / 1000; };
+    const rand = () => {
+      r = (r * 1664525 + 1013904223) >>> 0;
+      return (r % 1000) / 1000;
+    };
 
     // start from current latest values
     const cur = this.getScores(studentId, projectId);
@@ -147,7 +170,7 @@ export class TeacherMockService {
     for (let i = items - 1; i >= 0; i--) {
       const d = new Date(now);
       d.setDate(now.getDate() - i * 7);
-      const label = `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}`;
+      const label = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}`;
 
       // small drift per step (German grading: keep around 1.0–6.0)
       t = Math.max(1.0, Math.min(6.0, t + (rand() - 0.5) * 0.2));
@@ -168,4 +191,3 @@ export class TeacherMockService {
     return res;
   }
 }
-

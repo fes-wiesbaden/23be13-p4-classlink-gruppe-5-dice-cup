@@ -23,7 +23,13 @@
     </header>
     <!-- Username und Passwort Felder -->
     <p-card styleClass="login-card">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate [attr.aria-busy]="isSubmitting">
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        class="login-form"
+        novalidate
+        [attr.aria-busy]="isSubmitting"
+      >
         <div class="login-form__field">
           <label for="username" class="login-form__label">Benutzername oder E-Mail</label>
           <input
@@ -38,7 +44,10 @@
             [ngClass]="{ 'is-invalid': submitted && usernameControl?.invalid }"
           />
           <!-- simple required check -->
-          <small class="login-form__error" *ngIf="submitted && usernameControl?.hasError('required')">
+          <small
+            class="login-form__error"
+            *ngIf="submitted && usernameControl?.hasError('required')"
+          >
             Dieses Feld darf nicht leer sein.
           </small>
         </div>
@@ -52,25 +61,28 @@
             [toggleMask]="true"
             autocomplete="current-password"
             [disabled]="isSubmitting"
-            [inputStyleClass]="submitted && passwordControl?.invalid ? 'login-input is-invalid' : 'login-input'"
+            [inputStyleClass]="
+              submitted && passwordControl?.invalid ? 'login-input is-invalid' : 'login-input'
+            "
           ></p-password>
           <!-- simple required + minlength check-->
-          <small class="login-form__error" *ngIf="submitted && passwordControl?.hasError('required')">
+          <small
+            class="login-form__error"
+            *ngIf="submitted && passwordControl?.hasError('required')"
+          >
             Bitte geben Sie Ihr Passwort ein.
           </small>
-          <small class="login-form__error" *ngIf="submitted && passwordControl?.hasError('minlength')">
+          <small
+            class="login-form__error"
+            *ngIf="submitted && passwordControl?.hasError('minlength')"
+          >
             Das Passwort muss mindestens 6 Zeichen enthalten.
           </small>
         </div>
         <!-- Rollenwahl (für Demo) -->
         <div class="login-form__field">
           <label for="role" class="login-form__label">Rolle</label>
-          <select
-            id="role"
-            formControlName="role"
-            class="login-input"
-            [disabled]="isSubmitting"
-          >
+          <select id="role" formControlName="role" class="login-input" [disabled]="isSubmitting">
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
             <option value="admin">Admin</option>
@@ -79,7 +91,12 @@
         <!-- "Angemeldet bleiben" checkbox -->
         <div class="login-form__options">
           <div class="login-form__remember">
-            <p-checkbox formControlName="rememberMe" inputId="rememberMe" [binary]="true" [disabled]="isSubmitting"></p-checkbox>
+            <p-checkbox
+              formControlName="rememberMe"
+              inputId="rememberMe"
+              [binary]="true"
+              [disabled]="isSubmitting"
+            ></p-checkbox>
             <label for="rememberMe">Angemeldet bleiben</label>
           </div>
         </div>
@@ -99,7 +116,3 @@
     <footer class="login-page__footer">Entwickelt für die DiceCup Schulplattform.</footer>
   </div>
 </div>
-
-
-
-

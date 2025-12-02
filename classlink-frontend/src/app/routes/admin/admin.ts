@@ -44,7 +44,10 @@ export class AdminComponent {
     private readonly messages: MessageService,
     private readonly confirm: ConfirmationService,
   ) {
-    this.admin.getUsers().subscribe(users => { this.users = users; this.updateFiltered(); });
+    this.admin.getUsers().subscribe((users) => {
+      this.users = users;
+      this.updateFiltered();
+    });
   }
 
   // State
@@ -58,36 +61,50 @@ export class AdminComponent {
     const q = this.search.trim().toLowerCase();
     this.filteredUsers = !q
       ? this.users
-      : this.users.filter(u =>
-          u.name.toLowerCase().includes(q) ||
-          u.email.toLowerCase().includes(q) ||
-          u.roles.some(r => r.toLowerCase().includes(q))
+      : this.users.filter(
+          (u) =>
+            u.name.toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q) ||
+            u.roles.some((r) => r.toLowerCase().includes(q)),
         );
   }
 
   get kpis() {
     const total = this.users.length;
-    const active = this.users.filter(u => u.status === 'active').length;
-    const admins = this.users.filter(u => u.roles.includes('admin')).length;
+    const active = this.users.filter((u) => u.status === 'active').length;
+    const admins = this.users.filter((u) => u.roles.includes('admin')).length;
     return { total, active, admins };
   }
 
   // Handlers
-  onSearchChange = (v: string) => { this.search = v; this.updateFiltered(); };
+  onSearchChange = (v: string) => {
+    this.search = v;
+    this.updateFiltered();
+  };
 
   onCreateUser = (payload: { name: string; email: string; roles: Role[] }) => {
     this.busy = true;
     this.admin.addUser(payload.name, payload.email, payload.roles).subscribe({
-      next: () => this.messages.add({ severity: 'success', summary: 'Nutzer erstellt', detail: payload.email }),
-      error: () => this.messages.add({ severity: 'error', summary: 'Fehlgeschlagen', detail: 'Nutzer konnte nicht erstellt werden' }),
-      complete: () => this.busy = false,
+      next: () =>
+        this.messages.add({
+          severity: 'success',
+          summary: 'Nutzer erstellt',
+          detail: payload.email,
+        }),
+      error: () =>
+        this.messages.add({
+          severity: 'error',
+          summary: 'Fehlgeschlagen',
+          detail: 'Nutzer konnte nicht erstellt werden',
+        }),
+      complete: () => (this.busy = false),
     });
   };
 
   onDeleteUser = (id: number) => {
-    const user = this.users.find(u => u.id === id);
+    const user = this.users.find((u) => u.id === id);
     this.confirm.confirm({
-      message: `Benutzer ${user?.email || '#'+id} wirklich löschen?`,
+      message: `Benutzer ${user?.email || '#' + id} wirklich löschen?`,
       header: 'Löschen bestätigen',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Löschen',
@@ -98,17 +115,22 @@ export class AdminComponent {
         this.busy = true;
         this.admin.removeUser(id).subscribe({
           next: () => this.messages.add({ severity: 'success', summary: 'Nutzer gelöscht' }),
-          error: () => this.messages.add({ severity: 'error', summary: 'Fehlgeschlagen', detail: 'Nutzer konnte nicht gelöscht werden' }),
-          complete: () => this.busy = false,
+          error: () =>
+            this.messages.add({
+              severity: 'error',
+              summary: 'Fehlgeschlagen',
+              detail: 'Nutzer konnte nicht gelöscht werden',
+            }),
+          complete: () => (this.busy = false),
         });
       },
     });
   };
 
   onResetPassword = (id: number) => {
-    const user = this.users.find(u => u.id === id);
+    const user = this.users.find((u) => u.id === id);
     this.confirm.confirm({
-      message: `Passwort für ${user?.email || '#'+id} wirklich zurücksetzen?`,
+      message: `Passwort für ${user?.email || '#' + id} wirklich zurücksetzen?`,
       header: 'Zurücksetzen bestätigen',
       icon: 'pi pi-key',
       acceptLabel: 'Zurücksetzen',
@@ -119,8 +141,13 @@ export class AdminComponent {
         this.busy = true;
         this.admin.resetPassword(id).subscribe({
           next: () => this.messages.add({ severity: 'success', summary: 'Passwort zurückgesetzt' }),
-          error: () => this.messages.add({ severity: 'error', summary: 'Fehlgeschlagen', detail: 'Passwort konnte nicht zurückgesetzt werden' }),
-          complete: () => this.busy = false,
+          error: () =>
+            this.messages.add({
+              severity: 'error',
+              summary: 'Fehlgeschlagen',
+              detail: 'Passwort konnte nicht zurückgesetzt werden',
+            }),
+          complete: () => (this.busy = false),
         });
       },
     });
@@ -130,8 +157,13 @@ export class AdminComponent {
     this.busy = true;
     this.admin.setRoles(id, roles).subscribe({
       next: () => this.messages.add({ severity: 'success', summary: 'Rollen aktualisiert' }),
-      error: () => this.messages.add({ severity: 'error', summary: 'Fehlgeschlagen', detail: 'Rollen konnten nicht aktualisiert werden' }),
-      complete: () => this.busy = false,
+      error: () =>
+        this.messages.add({
+          severity: 'error',
+          summary: 'Fehlgeschlagen',
+          detail: 'Rollen konnten nicht aktualisiert werden',
+        }),
+      complete: () => (this.busy = false),
     });
   };
 }

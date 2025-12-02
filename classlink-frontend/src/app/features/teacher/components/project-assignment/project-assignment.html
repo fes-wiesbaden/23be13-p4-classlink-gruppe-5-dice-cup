@@ -16,7 +16,8 @@
         placeholder="Bitte auswählen"
         [filter]="true"
         [showClear]="false"
-        inputId="projectSelect">
+        inputId="projectSelect"
+      >
       </p-select>
     </div>
     <div class="current" *ngIf="projectName">
@@ -28,7 +29,13 @@
   <ul class="assign__list">
     <li *ngFor="let s of students; trackBy: trackById" [hidden]="!isAssigned(s.id)">
       <div class="left">
-        <img *ngIf="s.avatarUrl && !isFailed(s.id); else letter1" class="avatar sm" [src]="s.avatarUrl" [alt]="s.name" (error)="markFailed(s.id)" />
+        <img
+          *ngIf="s.avatarUrl && !isFailed(s.id); else letter1"
+          class="avatar sm"
+          [src]="s.avatarUrl"
+          [alt]="s.name"
+          (error)="markFailed(s.id)"
+        />
         <ng-template #letter1>
           <div class="avatar sm">{{ s.name.charAt(0) }}</div>
         </ng-template>
@@ -36,7 +43,12 @@
       </div>
       <div class="right">
         <span class="status-dot ok" aria-hidden="true"></span>
-        <button type="button" class="square-btn danger" aria-label="Aus Projekt entfernen" (click)="toggle.emit(s.id)"></button>
+        <button
+          type="button"
+          class="square-btn danger"
+          aria-label="Aus Projekt entfernen"
+          (click)="toggle.emit(s.id)"
+        ></button>
       </div>
     </li>
   </ul>
@@ -45,7 +57,13 @@
   <ul class="assign__list">
     <li *ngFor="let s of students; trackBy: trackById" [hidden]="isAssigned(s.id)">
       <div class="left">
-        <img *ngIf="s.avatarUrl && !isFailed(s.id); else letter2" class="avatar sm" [src]="s.avatarUrl" [alt]="s.name" (error)="markFailed(s.id)" />
+        <img
+          *ngIf="s.avatarUrl && !isFailed(s.id); else letter2"
+          class="avatar sm"
+          [src]="s.avatarUrl"
+          [alt]="s.name"
+          (error)="markFailed(s.id)"
+        />
         <ng-template #letter2>
           <div class="avatar sm">{{ s.name.charAt(0) }}</div>
         </ng-template>
@@ -53,7 +71,12 @@
       </div>
       <div class="right">
         <span class="status-dot muted" aria-hidden="true"></span>
-        <button type="button" class="square-btn success" aria-label="Zum Projekt hinzufügen" (click)="toggle.emit(s.id)"></button>
+        <button
+          type="button"
+          class="square-btn success"
+          aria-label="Zum Projekt hinzufügen"
+          (click)="toggle.emit(s.id)"
+        ></button>
       </div>
     </li>
   </ul>

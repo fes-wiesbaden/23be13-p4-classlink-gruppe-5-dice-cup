@@ -1,7 +1,10 @@
 :host {
   position: fixed;
-  left: 0; right: 0; bottom: 12px;
-  display: grid; place-items: center;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
   z-index: 10000;
 }
 
@@ -10,50 +13,69 @@
   background: #fff;
   border: 1px solid #e6e7eb;
   border-radius: 14px;
-  padding: .45rem .55rem;
-  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+  padding: 0.45rem 0.55rem;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
 }
 
-:host ::ng-deep .p-dock-item { margin: 0 .24rem; }
+:host ::ng-deep .p-dock-item {
+  margin: 0 0.24rem;
+}
 
 /* anclickbarer button mit transition */
 :host ::ng-deep .p-dock-item-link {
-  width: 42px; height: 42px;
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
   color: #1118278a;
-  display: grid; place-items: center;
-  transition: transform .14s ease, box-shadow .18s ease,
-              background .18s ease, border-color .18s ease;
+  display: grid;
+  place-items: center;
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
-:host ::ng-deep .p-dock-item-link i { font-size: 1.1rem; }
-:host ::ng-deep .p-dock-item-link img { width: 22px; height: 22px; display: block; }
+:host ::ng-deep .p-dock-item-link i {
+  font-size: 1.1rem;
+}
+:host ::ng-deep .p-dock-item-link img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
 
 /* Hover */
 :host ::ng-deep .p-dock-item-link:hover {
   background: #e9eaee;
   border-color: #d9dde3;
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 /* Pressed */
 :host ::ng-deep .p-dock-item-link:active {
-  transform: translateY(0) scale(.97);
-  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 /* Active route beokmmt highlight  */
 :host ::ng-deep .p-dock-item.is-active .p-dock-item-link {
-  box-shadow: 0 0 0 2px #0000007c, 0 6px 14px rgba(0,0,0,.18);
+  box-shadow:
+    0 0 0 2px #0000007c,
+    0 6px 14px rgba(0, 0, 0, 0.18);
   background: #eef0f4;
   border-color: #cfd5de;
 }
 
 /* Icon animations */
 :host ::ng-deep .p-dock-item-link i {
-  transition: transform .14s ease, color .18s ease, filter .18s ease, text-shadow .18s ease;
+  transition:
+    transform 0.14s ease,
+    color 0.18s ease,
+    filter 0.18s ease,
+    text-shadow 0.18s ease;
   color: #111827;
 }
 
@@ -62,13 +84,13 @@
 :host ::ng-deep .p-dock-item-link:hover img {
   transform: scale(1.08);
   color: #0f172a;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.18));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
 }
 
 /* Pressed */
 :host ::ng-deep .p-dock-item-link:active i,
 :host ::ng-deep .p-dock-item-link:active img {
-  transform: scale(.98);
+  transform: scale(0.98);
   filter: none;
 }
 
@@ -76,15 +98,13 @@
 :host ::ng-deep .p-dock-item.is-active .p-dock-item-link i,
 :host ::ng-deep .p-dock-item.is-active .p-dock-item-link img {
   text-shadow:
-    0  1px 0 #00000083,
+    0 1px 0 #00000083,
     0 -1px 0 #00000083,
-    1px  0 0 #00000083,
-   -1px  0 0 #00000083,
-    1px  1px 0 #00000083,
-   -1px  1px 0 #00000083,
+    1px 0 0 #00000083,
+    -1px 0 0 #00000083,
+    1px 1px 0 #00000083,
+    -1px 1px 0 #00000083,
     1px -1px 0 #00000083,
-   -1px -1px 0 #00000083;
+    -1px -1px 0 #00000083;
   color: #111827d3 !important;
 }
-
-

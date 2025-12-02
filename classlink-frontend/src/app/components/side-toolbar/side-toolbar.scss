@@ -25,10 +25,18 @@
   color: var(--text-secondary);
   cursor: pointer;
 }
-.tool-btn:hover { background: var(--hover); color: var(--text-primary); }
-.tool-btn.is-active { border-color: var(--accent); color: var(--accent); background: rgba(139, 92, 246, 0.14); }
-
-@media (max-width: 960px) {
-  .side-toolbar { display: none; }
+.tool-btn:hover {
+  background: var(--hover);
+  color: var(--text-primary);
+}
+.tool-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(139, 92, 246, 0.14);
 }
 
+@media (max-width: 960px) {
+  .side-toolbar {
+    display: none;
+  }
+}

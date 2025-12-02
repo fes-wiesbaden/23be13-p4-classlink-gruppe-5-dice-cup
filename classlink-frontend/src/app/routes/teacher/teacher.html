@@ -17,19 +17,12 @@
   />
 
   <main class="content" *ngIf="selectedStudent as st">
-    <teacher-header-bar
-      [student]="st"
-      (createProject)="onCreateProject()"
-    />
+    <teacher-header-bar [student]="st" (createProject)="onCreateProject()" />
 
     <teacher-kpi-cards *ngIf="scoreSummary as sc" [scores]="sc" [allowTeacherEdit]="true" />
 
     <section class="grid">
-      <teacher-note-form
-        [studentName]="st.name"
-        [(text)]="noteText"
-        (send)="onSendNote()"
-      />
+      <teacher-note-form [studentName]="st.name" [(text)]="noteText" (send)="onSendNote()" />
 
       <teacher-project-assignment
         class="panel assign"

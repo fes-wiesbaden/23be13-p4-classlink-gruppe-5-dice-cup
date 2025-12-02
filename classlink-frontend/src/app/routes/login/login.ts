@@ -38,7 +38,9 @@ export class LoginComponent {
     });
 
     // Nach dem ersten Tick Transitions wieder erlauben
-    setTimeout(() => { this.noAnim = false; }, 0);
+    setTimeout(() => {
+      this.noAnim = false;
+    }, 0);
   }
 
   activateDecor(): void {
@@ -84,7 +86,3 @@ export class LoginComponent {
 
   // role selection removed; roles managed via DevDock for demo
 }
-
-
-
-

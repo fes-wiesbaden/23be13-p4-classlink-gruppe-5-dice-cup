@@ -24,7 +24,9 @@ export class TeacherHeaderBarComponent {
 
   imgFailed = false;
   // Falls das Bild kaputt ist, zeige ich den Initialen-Kreis
-  markImgFailed() { this.imgFailed = true; }
+  markImgFailed() {
+    this.imgFailed = true;
+  }
 
   // Optional notification count (for bell badge)
   @Input() notifications = 0;
@@ -32,16 +34,24 @@ export class TeacherHeaderBarComponent {
   constructor(private readonly notificationsSvc: NotificationService) {}
 
   showPanel = false;
-  get items$(): Observable<AppNotification[]> { return this.notificationsSvc.items$; }
-  get unreadCount$(): Observable<number> { return this.notificationsSvc.unreadCount$; }
+  get items$(): Observable<AppNotification[]> {
+    return this.notificationsSvc.items$;
+  }
+  get unreadCount$(): Observable<number> {
+    return this.notificationsSvc.unreadCount$;
+  }
 
   // Öffnet/Schließt das kleine Benachrichtigungsfenster
   togglePanel() {
     this.showPanel = !this.showPanel;
   }
-  closePanel() { this.showPanel = false; }
+  closePanel() {
+    this.showPanel = false;
+  }
 
-  trackById(_: number, item: AppNotification) { return item.id; }
+  trackById(_: number, item: AppNotification) {
+    return item.id;
+  }
 
   // Markiert alle Benachrichtigungen als gelesen
   markAllRead() {

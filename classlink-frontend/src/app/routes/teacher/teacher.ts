@@ -36,18 +36,21 @@ import { MessageService } from 'primeng/api';
   encapsulation: ViewEncapsulation.None,
 })
 export class TeacherComponent {
-  constructor(private readonly mock: TeacherMockService, private readonly messages: MessageService) {
+  constructor(
+    private readonly mock: TeacherMockService,
+    private readonly messages: MessageService,
+  ) {
     // Daten aus dem Mock holen und Ansicht vorbereiten
     this.students = this.mock.getStudents();
     this.projects = this.mock.getProjects();
     this.classes = this.mock.getClasses();
     this.assignments = this.mock.getAssignments();
-    this.projectOptions = this.projects.map(p => ({ label: p.name, value: p.id }));
+    this.projectOptions = this.projects.map((p) => ({ label: p.name, value: p.id }));
     this.selectedProjectId = this.projects[0]?.id ?? 0;
-    this.currentProjectName = this.projects.find(p => p.id === this.selectedProjectId)?.name;
+    this.currentProjectName = this.projects.find((p) => p.id === this.selectedProjectId)?.name;
     this.recomputeAssignedIds();
-  // Ausgewaehlte Klasse im kleinen Zuweisungsfeld (links in der Sidebar)
-    const st = this.students.find(s => s.id === this.selectedStudentId);
+    // Ausgewaehlte Klasse im kleinen Zuweisungsfeld (links in der Sidebar)
+    const st = this.students.find((s) => s.id === this.selectedStudentId);
     this.assignClassName = st?.class ?? null;
   }
 
@@ -71,45 +74,54 @@ export class TeacherComponent {
   newClassName = '';
 
   get selectedStudent() {
-    return this.students.find(s => s.id === this.selectedStudentId);
+    return this.students.find((s) => s.id === this.selectedStudentId);
   }
 
-  trackById(_: number, item: { id: number }) { return item.id; }
+  trackById(_: number, item: { id: number }) {
+    return item.id;
+  }
 
   get filteredStudents(): Student[] {
     const q = this.search.trim().toLowerCase();
-    return this.students.filter(s =>
-      (!this.selectedClass || s.class === this.selectedClass) &&
-      (!q || s.name.toLowerCase().includes(q))
+    return this.students.filter(
+      (s) =>
+        (!this.selectedClass || s.class === this.selectedClass) &&
+        (!q || s.name.toLowerCase().includes(q)),
     );
   }
 
   private recomputeAssignedIds() {
     this._assignedIds = this.assignments
-      .filter(a => a.projectId === this.selectedProjectId && a.assigned)
-      .map(a => a.studentId);
+      .filter((a) => a.projectId === this.selectedProjectId && a.assigned)
+      .map((a) => a.studentId);
   }
   // Wenn links ein Schüler angeklickt wird: merken und Klasse vorbelegen
   selectStudent(id: number) {
     this.selectedStudentId = id;
     // Preselect current class for assignment control
-    const st = this.students.find(s => s.id === id);
+    const st = this.students.find((s) => s.id === id);
     this.assignClassName = st?.class ?? null;
   }
 
   isAssigned(studentId: number): boolean {
-    const a = this.assignments.find(x => x.studentId === studentId && x.projectId === this.selectedProjectId);
+    const a = this.assignments.find(
+      (x) => x.studentId === studentId && x.projectId === this.selectedProjectId,
+    );
     return !!a?.assigned;
   }
 
-    // Zuweisung umschalten und kurze Rückmeldung anzeigen
+  // Zuweisung umschalten und kurze Rückmeldung anzeigen
   toggleAssignment(studentId: number) {
     this.mock.toggleAssignment(studentId, this.selectedProjectId);
     this.assignments = this.mock.getAssignments();
     const assigned = this.isAssigned(studentId);
-    const student = this.students.find(s => s.id === studentId)?.name || '#'+studentId;
+    const student = this.students.find((s) => s.id === studentId)?.name || '#' + studentId;
     const project = this.currentProjectName || '';
-    this.messages.add({ severity: 'success', summary: assigned ? 'Zugewiesen' : 'Entfernt', detail: `${student} ${assigned ? 'zugeordnet zu' : 'entfernt von'} ${project}` });
+    this.messages.add({
+      severity: 'success',
+      summary: assigned ? 'Zugewiesen' : 'Entfernt',
+      detail: `${student} ${assigned ? 'zugeordnet zu' : 'entfernt von'} ${project}`,
+    });
   }
 
   // Noten aus dem Mock holen
@@ -124,12 +136,18 @@ export class TeacherComponent {
       this.mock.addNote(to.id, this.selectedProjectId, this.noteText.trim());
     }
     this.noteText = '';
-    this.messages.add({ severity: 'success', summary: 'Nachricht gesendet', detail: to ? `An ${to.name}` : '' });
+    this.messages.add({
+      severity: 'success',
+      summary: 'Nachricht gesendet',
+      detail: to ? `An ${to.name}` : '',
+    });
   }
 
   // Derived data for presentational components
   private _assignedIds: number[] = [];
-  get assignedIds(): number[] { return this._assignedIds; }
+  get assignedIds(): number[] {
+    return this._assignedIds;
+  }
 
   // Daten fuer die KPI-Karten oben
   get scoreSummary() {
@@ -140,12 +158,12 @@ export class TeacherComponent {
 
   // Ereignisse aus den Kind-Komponenten
   onSelectStudent = (id: number) => this.selectStudent(id);
-  onSearchChange = (v: string) => this.search = v;
-  onClassChange = (cls: string | null) => this.selectedClass = cls;
+  onSearchChange = (v: string) => (this.search = v);
+  onClassChange = (cls: string | null) => (this.selectedClass = cls);
   // Beim Projektwechsel Namen und Zuweisungen aktualisieren
   onProjectChange = (id: number) => {
     this.selectedProjectId = id;
-    this.currentProjectName = this.projects.find(p => p.id === id)?.name;
+    this.currentProjectName = this.projects.find((p) => p.id === id)?.name;
     this.recomputeAssignedIds();
   };
   onToggleAssignment = (id: number) => this.toggleAssignment(id);
@@ -182,7 +200,7 @@ export class TeacherComponent {
   }
 
   // Weist den aktuell ausgewÃ¤hlten SchÃ¼ler der im Dropdown gewÃ¤hlten Klasse zu
-    // Weist den aktuell ausgewaehlten Schueler der gewaehlten Klasse zu
+  // Weist den aktuell ausgewaehlten Schueler der gewaehlten Klasse zu
   onAssignSelectedToClass = () => {
     const st = this.selectedStudent;
     const cls = (this.assignClassName || '').trim();
@@ -195,16 +213,10 @@ export class TeacherComponent {
     if (this.selectedClass && this.selectedClass !== cls) {
       this.selectedClass = cls;
     }
-    this.messages.add({ severity: 'success', summary: 'Schueler zugewiesen', detail: `${st.name} -> ${cls}` });
+    this.messages.add({
+      severity: 'success',
+      summary: 'Schueler zugewiesen',
+      detail: `${st.name} -> ${cls}`,
+    });
   };
 }
-
-
-
-
-
-
-
-
-
-

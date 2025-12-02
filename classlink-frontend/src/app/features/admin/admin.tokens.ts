@@ -13,7 +13,3 @@ export interface AdminService {
 }
 
 export const ADMIN_SERVICE = new InjectionToken<AdminService>('ADMIN_SERVICE');
-
-
-
-

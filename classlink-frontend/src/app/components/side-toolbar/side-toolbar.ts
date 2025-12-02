@@ -10,7 +10,7 @@ type Item = { icon: string; route: string; tooltip: string };
   selector: 'app-side-toolbar',
   imports: [CommonModule],
   templateUrl: './side-toolbar.html',
-  styleUrl: './side-toolbar.scss'
+  styleUrl: './side-toolbar.scss',
 })
 export class SideToolbarComponent implements OnDestroy {
   private sub?: Subscription;
@@ -20,9 +20,11 @@ export class SideToolbarComponent implements OnDestroy {
     this.currentUrl.set(this.router.url);
     this.sub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(e => this.currentUrl.set(e.urlAfterRedirects || e.url));
+      .subscribe((e) => this.currentUrl.set(e.urlAfterRedirects || e.url));
   }
-  ngOnDestroy() { this.sub?.unsubscribe(); }
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
+  }
 
   base: Item[] = [
     { icon: 'pi-th-large', route: '/student', tooltip: 'Dashboard' },
@@ -31,11 +33,14 @@ export class SideToolbarComponent implements OnDestroy {
     { icon: 'pi-cog', route: '/admin', tooltip: 'Einstellungen' },
   ];
 
-  items = computed(() => this.base.map(i => ({
-    ...i,
-    active: this.currentUrl().startsWith(i.route)
-  })));
+  items = computed(() =>
+    this.base.map((i) => ({
+      ...i,
+      active: this.currentUrl().startsWith(i.route),
+    })),
+  );
 
-  go(route: string) { this.router.navigateByUrl(route); }
+  go(route: string) {
+    this.router.navigateByUrl(route);
+  }
 }
-

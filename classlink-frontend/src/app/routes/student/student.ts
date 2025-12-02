@@ -63,13 +63,15 @@ export class StudentComponent {
     private readonly messages: MessageService,
   ) {
     this.studentName = this.auth.getUsername() || 'Anna Schmidt';
-    const cls = this.mock.getStudents().find(s => s.id === this.studentId)?.class;
+    const cls = this.mock.getStudents().find((s) => s.id === this.studentId)?.class;
     if (cls) {
       this.studentClass = cls;
     }
     this.lernfelder = this.buildLernfelder();
     this.averageGrade = Number(
-      (this.lernfelder.reduce((acc, lf) => acc + lf.average, 0) / this.lernfelder.length).toFixed(1),
+      (this.lernfelder.reduce((acc, lf) => acc + lf.average, 0) / this.lernfelder.length).toFixed(
+        1,
+      ),
     );
     this.projects = this.buildProjects();
     if (this.projects.length) {
@@ -123,15 +125,21 @@ export class StudentComponent {
   }
 
   private buildProjects(): StudentProject[] {
-    const assignments = this.mock.getAssignments().filter(a => a.studentId === this.studentId && a.assigned);
+    const assignments = this.mock
+      .getAssignments()
+      .filter((a) => a.studentId === this.studentId && a.assigned);
     const projects = this.mock.getProjects();
     const assignedProjects = assignments.length
       ? assignments
-          .map(a => projects.find(p => p.id === a.projectId))
+          .map((a) => projects.find((p) => p.id === a.projectId))
           .filter((p): p is NonNullable<typeof p> => !!p)
       : projects.slice(0, 2);
 
-    const palette = ['linear-gradient(120deg, #7c3aed, #38bdf8)', 'linear-gradient(120deg, #22c55e, #4f46e5)', 'linear-gradient(120deg, #f59e0b, #6366f1)'];
+    const palette = [
+      'linear-gradient(120deg, #7c3aed, #38bdf8)',
+      'linear-gradient(120deg, #22c55e, #4f46e5)',
+      'linear-gradient(120deg, #f59e0b, #6366f1)',
+    ];
 
     return assignedProjects.map((p, idx) => {
       const scores = this.mock.getScores(this.studentId, p.id);
@@ -140,7 +148,7 @@ export class StudentComponent {
         name: p.name,
         role: ['Team Delta', 'Team Nova', 'Team Aurora'][idx % 3],
         nextDue: ['12.12.', '18.12.', '08.01.'][idx % 3],
-        progress: 65 + (idx * 11) % 25,
+        progress: 65 + ((idx * 11) % 25),
         scores,
         peerCount: 2 + (idx % 3),
         selfDone: idx === 0,

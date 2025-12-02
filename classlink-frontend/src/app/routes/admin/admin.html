@@ -2,10 +2,7 @@
 <p-confirmDialog></p-confirmDialog>
 
 <div class="admin-page">
-  <admin-sidebar
-    [search]="search"
-    (searchChange)="onSearchChange($event)"
-  />
+  <admin-sidebar [search]="search" (searchChange)="onSearchChange($event)" />
 
   <main class="content">
     <admin-header-bar (createUser)="onCreateUser($event)" [busy]="busy" />

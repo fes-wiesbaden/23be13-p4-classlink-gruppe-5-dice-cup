@@ -8,4 +8,3 @@ export interface AppNotification {
   read: boolean;
   type: NotificationType;
 }
-
