@@ -1,12 +1,15 @@
 package de.dicecup.classlink.features.subjects;
 
+import de.dicecup.classlink.common.audit.Auditable;
 import de.dicecup.classlink.features.projects.Project;
+import de.dicecup.classlink.features.teachers.TeacherField;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,22 +18,22 @@ import java.math.BigDecimal;
 @Table(
         name = "project_subject",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"project_id", "subject_id"})
+                @UniqueConstraint(columnNames = {"teacher_field_id", "subject_id"})
         }
 )
-public class ProjectSubject {
+public class ProjectSubject extends Auditable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
+    @ManyToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_field_id", nullable = false)
+    private TeacherField teacherField;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 
-    @Column(precision = 5, scale = 2, nullable = false)
+    @Column(precision = 10, scale = 8, nullable = false)
     private BigDecimal weight;
 }

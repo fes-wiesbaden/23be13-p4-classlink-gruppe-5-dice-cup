@@ -1,5 +1,6 @@
 package de.dicecup.classlink.features.projects;
 
+import de.dicecup.classlink.common.audit.Auditable;
 import de.dicecup.classlink.features.classes.Class;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-public class Project {
+public class Project extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -29,15 +30,9 @@ public class Project {
     private String name;
     private String description;
 
-    @Column(name = "created_by")
-    private UUID createdBy;
-
-    @Column(name = "created_At", nullable = false)
-    private Instant createdAt = Instant.now();
-
     @Column(nullable = false)
     private boolean active = false;
 
-    @OneToMany(mappedBy = "project",  cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "studentGroups", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<StudentGroup> studentGroups = new ArrayList<>();
 }

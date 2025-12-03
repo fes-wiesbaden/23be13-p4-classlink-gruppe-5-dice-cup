@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -39,13 +40,8 @@ public class Grade {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
-
-    @DecimalMin("1.0") @DecimalMax("6.0")
-    @Column(name = "grade_value", nullable = false)
-    private Double gradeValue;
+    @Column(name = "grade_value", precision = 10, scale = 8, nullable = false)
+    private BigDecimal gradeValue;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
