@@ -27,13 +27,15 @@ export class LoginComponent {
   // Start im aktiven Look, damit die Karte/Orbs sofort "an" sind
   decorActive = true;
   isSubmitting = false;
+    errorMessage: string | null = null;
   // Deaktiviert Transitions/Animationen für den allerersten Paint
   noAnim = true;
 
   constructor() {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+        role: ['teacher'],
       rememberMe: [false],
     });
 
@@ -59,25 +61,27 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-    const { username } = this.loginForm.value as { username: string };
-
-    // Demo-/Stub-Login: erzeugt ein Fake-Token und setzt Default-Rolle 'teacher'
-    const fakeToken = `dc.${btoa(username || 'user')}.${Date.now()}`;
-    this.auth.login(fakeToken, ['teacher'], username);
-
-    // Redirect auf gewünschte Zielseite (QueryParam) oder rollenbasiertes Standardziel
-    const redirect = this.route.snapshot.queryParamMap.get('redirectUrl');
-    const fallback = '/teacher';
-
-    // kleine Verzögerung für visuelles Feedback
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.router.navigateByUrl(redirect || fallback);
-    }, 300);
+      const {email, password} = this.loginForm.value as { email: string; password: string };
+      this.auth
+          .login(email, password)
+          .subscribe({
+              next: () => {
+                  this.isSubmitting = false;
+                  this.errorMessage = null;
+                  const redirect = this.route.snapshot.queryParamMap.get('redirectUrl');
+                  const fallback = '/admin';
+                  this.router.navigateByUrl(redirect || fallback).catch(console.error);
+              },
+              error: (err) => {
+                  console.error('Login failed', err);
+                  this.isSubmitting = false;
+                  this.errorMessage = 'Login fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.';
+              },
+          });
   }
 
-  get usernameControl() {
-    return this.loginForm.get('username');
+    get emailControl() {
+        return this.loginForm.get('email');
   }
 
   get passwordControl() {

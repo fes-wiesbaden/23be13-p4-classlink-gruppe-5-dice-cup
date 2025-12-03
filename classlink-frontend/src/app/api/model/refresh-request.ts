@@ -9,9 +9,7 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface RefreshRequest {
+    refreshToken: string;
 }
 

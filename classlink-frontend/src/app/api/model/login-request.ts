@@ -9,9 +9,8 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface LoginRequest {
+    email: string;
+    password: string;
 }
 

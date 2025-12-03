@@ -9,9 +9,18 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
+export interface InviteRedeemResponseDto {
+    userId?: string;
+    jwt?: string;
     email?: string;
+    role?: InviteRedeemResponseDtoRoleEnum;
 }
+
+export enum InviteRedeemResponseDtoRoleEnum {
+    Admin = 'ADMIN',
+    Teacher = 'TEACHER',
+    Student = 'STUDENT'
+};
+
+
 

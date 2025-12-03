@@ -9,9 +9,10 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface InviteCreatedResponseDto {
+    inviteId?: string;
+    token?: string;
+    qrCodeUrl?: string;
+    expiresAt?: string;
 }
 

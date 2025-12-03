@@ -9,9 +9,9 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface InviteRedeemRequestDto {
+    token: string;
+    username: string;
+    password: string;
 }
 

@@ -9,9 +9,8 @@
  */
 
 
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface PasswordResetCommitRequestDto {
+    token: string;
+    newPassword: string;
 }
 
