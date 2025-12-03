@@ -92,4 +92,38 @@ class AuthIntegrationTest extends IntegrationTestBase {
 
         userRepository.save(user);
     }
+
+    @Test
+    void loginFailsWithInvalidCredentials() throws Exception {
+        String email = "invalid.user@example.com";
+        ensureUser(email, "Secret123!");
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"" + email + "\",\"password\":\"WrongPass!\"}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @Transactional
+    void refreshFailsWithTamperedToken() throws Exception {
+        String email = "tamper.user@example.com";
+        String password = "Secret123!";
+        ensureUser(email, password);
+
+        String loginResponse = mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}"))
+                .andReturn().getResponse().getContentAsString();
+
+        JsonNode loginBody = objectMapper.readTree(loginResponse);
+        String refreshToken = loginBody.get("refreshToken").asText();
+
+        String tampered = refreshToken + "tampered";
+
+        mockMvc.perform(post("/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"" + tampered + "\"}"))
+                .andExpect(status().isUnauthorized());
+    }
 }
