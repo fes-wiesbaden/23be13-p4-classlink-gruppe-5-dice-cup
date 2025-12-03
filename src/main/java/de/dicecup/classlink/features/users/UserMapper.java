@@ -20,6 +20,9 @@ public interface UserMapper {
     UserDto toDto(User user);
 
     @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "firstName", source = "firstName")
+    @Mapping(target = "lastName", source = "lastName")
+    @Mapping(target = "email", source = "email")
     UserInfoDto toDto(UserInfo userInfo);
 
     @BeanMapping(ignoreByDefault = true)

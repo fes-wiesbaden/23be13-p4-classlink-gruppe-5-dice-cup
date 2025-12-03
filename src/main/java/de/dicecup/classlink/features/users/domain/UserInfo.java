@@ -9,19 +9,35 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @Entity
+@Table(name = "user_info")
 public class UserInfo {
+    /**
+     * Shared primary-key: user_info.user_id is both PK and FK referencing users.id.
+     */
     @Id
+    @Column(name = "user_id")
     private UUID id;
 
-    @OneToOne @MapsId
+    @OneToOne
+    @MapsId
     @JoinColumn(name = "user_id")
-    @ToString.Exclude @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
-    @Size(max = 100) private String firstName;
-    @Size(max = 100) private String lastName;
-    @Column(unique = true)
-    @Email @Size(max = 255) private String email;
+    @Size(max = 100)
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Size(max = 100)
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "email", unique = true)
+    @Email
+    @Size(max = 255)
+    private String email;
 }
