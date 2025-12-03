@@ -1,5 +1,3 @@
-/*Datei von Lukas bearbeitet*/
-
 import {Injectable, inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthControllerService, LoginRequest, RefreshRequest, TokenResponse} from '../app/api';
@@ -27,10 +25,18 @@ export class AuthService {
 
     login(email: string, password: string): Observable<void> {
         const body: LoginRequest = {email, password};
+        this.log('Attempting login', email);
         return this.authApi.login(body).pipe(
             switchMap((response) => this.normalizeTokenResponse(response)),
-            tap((response) => this.persistAuth(response, email)),
-            map(() => void 0)
+            tap((response) => {
+                this.log('Login successful');
+                this.persistAuth(response, email);
+            }),
+            map(() => void 0),
+            catchError((error) => {
+                this.log('Login failed', error);
+                return throwError(() => error);
+            })
         );
   }
 
@@ -39,14 +45,16 @@ export class AuthService {
         if (!refreshToken) {
             throw new Error('Missing refresh token');
         }
+        this.log('Refreshing access token');
         const body: RefreshRequest = {refreshToken};
-        return this.authApi
-            .refresh(body)
-            .pipe(
-                switchMap((response) => this.normalizeTokenResponse(response)),
-                tap((response) => this.persistAuth(response)),
-                map(() => void 0)
-            );
+        return this.authApi.refresh(body).pipe(
+            switchMap((response) => this.normalizeTokenResponse(response)),
+            tap((response) => {
+                this.log('Refresh successful');
+                this.persistAuth(response);
+            }),
+            map(() => void 0)
+        );
   }
 
     refreshTokens(): Observable<void> {
@@ -60,6 +68,7 @@ export class AuthService {
                     this.refreshInProgress$ = null;
                 }),
                 catchError((error) => {
+                    this.log('Refresh failed; logging out', error);
                     this.logout();
                     return throwError(() => error);
                 }),
@@ -71,6 +80,7 @@ export class AuthService {
   }
 
   logout(): void {
+      this.log('Clearing auth state');
       localStorage.removeItem(this.TOKEN_KEY);
       localStorage.removeItem(this.REFRESH_KEY);
       localStorage.removeItem(this.ROLES_KEY);
@@ -117,12 +127,12 @@ export class AuthService {
             }
             const decoded = JSON.parse(this.base64UrlDecode(payload)) as { exp?: number };
             if (!decoded.exp) {
-                return false; // treat tokens without exp as non-expiring
+                return false;
             }
             const expiryMs = decoded.exp * 1000;
             return Date.now() >= expiryMs;
         } catch (error) {
-            console.warn('Failed to evaluate token expiry', error);
+            this.log('Failed to evaluate token expiry', error);
             return true;
         }
   }
@@ -132,6 +142,7 @@ export class AuthService {
   }
 
   setRoles(roles: string[]): void {
+      this.log('Updating roles', roles);
       localStorage.setItem(this.ROLES_KEY, JSON.stringify(roles));
   }
 
@@ -143,7 +154,6 @@ export class AuthService {
     }
 
     private persistAuth(res: TokenResponse, usernameHint?: string): void {
-        console.log('LOGIN RESPONSE RAW', res);
         const payload = res as TokenResponse & {
             token?: string;
             access_token?: string;
@@ -164,6 +174,7 @@ export class AuthService {
 
         const roles = this.extractRoles(accessToken);
         localStorage.setItem(this.ROLES_KEY, JSON.stringify(roles));
+        this.log('Auth data persisted');
     }
 
     private extractRoles(token: string): string[] {
@@ -180,7 +191,7 @@ export class AuthService {
                 (typeof decoded.scope === 'string' ? decoded.scope.split(' ') : []);
             return this.normalizeRoles(rawRoles);
         } catch (err) {
-            console.warn('Failed to decode roles from token', err);
+            this.log('Failed to decode roles', err);
             return [];
         }
     }
@@ -211,4 +222,12 @@ export class AuthService {
         const normalized = pad ? padded + '='.repeat(4 - pad) : padded;
         return atob(normalized);
   }
+
+    private log(message: string, payload?: unknown): void {
+        if (payload !== undefined) {
+            console.log(`[AuthService] ${message}`, payload);
+        } else {
+            console.log(`[AuthService] ${message}`);
+        }
+    }
 }
