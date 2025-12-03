@@ -1,4 +1,6 @@
+CREATE EXTENSION IF NOT EXISTS citext;
 CREATE SEQUENCE IF NOT EXISTS project_subject_seq START WITH 1 INCREMENT BY 50;
+
 
 CREATE TABLE admin
 (
@@ -60,6 +62,21 @@ CREATE TABLE group_members
     CONSTRAINT pk_group_members PRIMARY KEY (id)
 );
 
+CREATE TABLE password_reset
+(
+    id           UUID                        NOT NULL,
+    user_id      UUID                        NOT NULL,
+    token_hash   BYTEA                       NOT NULL,
+    token_salt   BYTEA                       NOT NULL,
+    status       VARCHAR(255)                NOT NULL,
+    expires_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    used_at      TIMESTAMP WITHOUT TIME ZONE,
+    note         VARCHAR(255),
+    public_token VARCHAR(255),
+    CONSTRAINT pk_password_reset PRIMARY KEY (id)
+);
+
 CREATE TABLE project
 (
     id          UUID                        NOT NULL,
@@ -83,14 +100,22 @@ CREATE TABLE project_subject
 
 CREATE TABLE registration_invites
 (
-    id         UUID                        NOT NULL,
-    email      VARCHAR(255)                NOT NULL,
-    role       VARCHAR(255)                NOT NULL,
-    token_hash VARCHAR(255)                NOT NULL,
-    expires_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    created_by UUID,
-    used_at    TIMESTAMP WITHOUT TIME ZONE,
+    id           UUID                        NOT NULL,
+    email        CITEXT                      NOT NULL,
+    role         VARCHAR(255)                NOT NULL,
+    class_id     UUID,
+    public_token VARCHAR(255),
+    token_hash   BYTEA                       NOT NULL,
+    token_salt   BYTEA                       NOT NULL,
+    status       VARCHAR(255)                NOT NULL,
+    expires_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    uses_count   INTEGER                     NOT NULL,
+    max_uses     INTEGER                     NOT NULL,
+    created_by   UUID                        NOT NULL,
+    created_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    used_at      TIMESTAMP WITHOUT TIME ZONE,
+    note         VARCHAR(255),
     CONSTRAINT pk_registration_invites PRIMARY KEY (id)
 );
 
@@ -104,7 +129,8 @@ CREATE TABLE student_groups
 
 CREATE TABLE students
 (
-    id UUID NOT NULL,
+    id       UUID NOT NULL,
+    class_id UUID,
     CONSTRAINT pk_students PRIMARY KEY (id)
 );
 
@@ -128,7 +154,7 @@ CREATE TABLE user_info
     first_name VARCHAR(100),
     last_name  VARCHAR(100),
     email      VARCHAR(255),
-    CONSTRAINT pk_userinfo PRIMARY KEY (user_id)
+    CONSTRAINT pk_user_info PRIMARY KEY (user_id)
 );
 
 CREATE TABLE users
@@ -149,7 +175,7 @@ ALTER TABLE project_subject
     ADD CONSTRAINT uc_9cae4b3d2e1b639441f482707 UNIQUE (project_id, subject_id);
 
 ALTER TABLE user_info
-    ADD CONSTRAINT uc_userinfo_email UNIQUE (email);
+    ADD CONSTRAINT uc_user_info_email UNIQUE (email);
 
 ALTER TABLE class_projects
     ADD CONSTRAINT ux_class_projects_class_project UNIQUE (class_id, project_id);
@@ -217,6 +243,9 @@ ALTER TABLE project_subject
     ADD CONSTRAINT FK_PROJECT_SUBJECT_ON_SUBJECT FOREIGN KEY (subject_id) REFERENCES subject (id);
 
 ALTER TABLE students
+    ADD CONSTRAINT FK_STUDENTS_ON_CLASS FOREIGN KEY (class_id) REFERENCES class (id);
+
+ALTER TABLE students
     ADD CONSTRAINT FK_STUDENTS_ON_ID FOREIGN KEY (id) REFERENCES users (id);
 
 ALTER TABLE student_groups
@@ -226,4 +255,4 @@ ALTER TABLE teacher
     ADD CONSTRAINT FK_TEACHER_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
 
 ALTER TABLE user_info
-    ADD CONSTRAINT FK_USERINFO_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
+    ADD CONSTRAINT FK_USER_INFO_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);
