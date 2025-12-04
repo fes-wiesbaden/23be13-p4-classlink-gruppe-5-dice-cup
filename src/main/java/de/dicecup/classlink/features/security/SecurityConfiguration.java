@@ -83,6 +83,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/scalar/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/login", "/auth/refresh", "/invites/create", "/invites/validate", "/invites/redeem", "/auth/password-reset/validate", "/auth/password-reset/commit").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
