@@ -37,7 +37,7 @@ describe('AuthService', () => {
     it('stores tokens and roles on login', (done) => {
         const token = createJwt({exp: futureExp, roles: ['ROLE_ADMIN']});
         const response: TokenResponse = {accessToken: token, refreshToken: 'refresh-1'};
-        authApi.login.and.returnValue(of(response));
+        authApi.login.and.returnValue(of(response) as any);
 
         service.login('user@example.com', 'Secret123!').subscribe({
             next: () => {
@@ -64,7 +64,7 @@ describe('AuthService', () => {
     it('refreshTokens updates stored tokens when successful', (done) => {
         localStorage.setItem('app_refresh_token', 'refresh-1');
         const newToken = createJwt({exp: futureExp, roles: ['ROLE_TEACHER']});
-        authApi.refresh.and.returnValue(of({accessToken: newToken, refreshToken: 'refresh-2'}));
+        authApi.refresh.and.returnValue(of({accessToken: newToken, refreshToken: 'refresh-2'}) as any);
 
         service.refreshTokens().subscribe({
             next: () => {
@@ -77,9 +77,23 @@ describe('AuthService', () => {
         });
     });
 
+    it('accepts single role claim named "role"', (done) => {
+        const token = createJwt({exp: futureExp, role: 'ADMIN'});
+        const response: TokenResponse = {accessToken: token, refreshToken: 'refresh-1'};
+        authApi.login.and.returnValue(of(response) as any);
+
+        service.login('user@example.com', 'Secret123!').subscribe({
+            next: () => {
+                expect(localStorage.getItem('app_roles')).toBe(JSON.stringify(['admin']));
+                done();
+            },
+            error: done.fail,
+        });
+    });
+
     it('refreshTokens logs out when refresh fails', (done) => {
         localStorage.setItem('app_refresh_token', 'refresh-1');
-        authApi.refresh.and.returnValue(throwError(() => new Error('invalid refresh')));
+        authApi.refresh.and.returnValue(throwError(() => new Error('invalid refresh')) as any);
 
         service.refreshTokens().subscribe({
             next: () => done.fail('expected error'),

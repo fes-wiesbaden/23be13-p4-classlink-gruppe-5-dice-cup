@@ -1,12 +1,28 @@
 package de.dicecup.classlink.features.security.refreshtoken;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class RefreshTokenException extends RuntimeException {
 
-    public RefreshTokenException(String message) {
+    public enum Reason {
+        NOT_FOUND,
+        INVALID,
+        EXPIRED,
+        REUSED,
+        ROTATED,
+        MALFORMED
+    }
+
+    private final Reason reason;
+
+    public RefreshTokenException(Reason reason, String message) {
         super(message);
+        this.reason = reason;
+    }
+
+    public RefreshTokenException(String message) {
+        this(Reason.INVALID, message);
+    }
+
+    public Reason getReason() {
+        return reason;
     }
 }

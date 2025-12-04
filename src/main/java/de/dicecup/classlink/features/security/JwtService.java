@@ -4,25 +4,30 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
     private static final Logger log = LoggerFactory.getLogger(JwtService.class);
     private static final String DEFAULT_TOKEN_TYPE = "ACCESS";
+    private static final String ROLES_CLAIM = "roles";
 
     @Value("${security.jwt.secret-key}")
     private String secretKey;
@@ -69,6 +74,12 @@ public class JwtService {
             long expiration
     ) {
         Map<String, Object> claims = new HashMap<>(extraClaims);
+        List<String> roleClaims = normalizeRoles(claims.get(ROLES_CLAIM));
+        if (roleClaims.isEmpty()) {
+            roleClaims = extractRoleNames(userDetails.getAuthorities());
+        }
+        claims.put(ROLES_CLAIM, roleClaims);
+
         String jti = (String) claims.computeIfAbsent("jti", key -> UUID.randomUUID().toString());
         long now = System.currentTimeMillis();
         Date issuedAt = new Date(now);
@@ -128,5 +139,82 @@ public class JwtService {
             return DEFAULT_TOKEN_TYPE;
         }
         return String.valueOf(type).toUpperCase();
+    }
+
+    public List<String> extractRoles(String token) {
+        Claims claims = extractAllClaims(token);
+        Object rawRoles = claims.get(ROLES_CLAIM);
+        List<String> normalized = normalizeRoles(rawRoles);
+        if (normalized.isEmpty()) {
+            return List.of("USER");
+        }
+        return normalized;
+    }
+
+    public List<SimpleGrantedAuthority> extractAuthorities(String token) {
+        return extractRoles(token).stream()
+                .map(this::ensureRolePrefix)
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
+
+    private List<String> normalizeRoles(Object rawRoles) {
+        if (rawRoles instanceof Collection<?> collection) {
+            return collection.stream()
+                    .map(String::valueOf)
+                    .map(String::trim)
+                    .filter(role -> !role.isEmpty())
+                    .map(this::stripRolePrefix)
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toList());
+        }
+        if (rawRoles instanceof String value) {
+            return Arrays.stream(value.split("[, ]+"))
+                    .map(String::trim)
+                    .filter(role -> !role.isEmpty())
+                    .map(this::stripRolePrefix)
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toList());
+        }
+        if (rawRoles instanceof Object[] array) {
+            return Arrays.stream(array)
+                    .map(String::valueOf)
+                    .map(String::trim)
+                    .filter(role -> !role.isEmpty())
+                    .map(this::stripRolePrefix)
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+    }
+
+    private List<String> extractRoleNames(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .map(this::stripRolePrefix)
+                .map(String::toUpperCase)
+                .collect(Collectors.toList());
+    }
+
+    private String stripRolePrefix(String role) {
+        if (role == null) {
+            return "";
+        }
+        String normalized = role.trim();
+        if (normalized.toUpperCase().startsWith("ROLE_")) {
+            return normalized.substring(5);
+        }
+        return normalized;
+    }
+
+    private String ensureRolePrefix(String role) {
+        if (role == null || role.isBlank()) {
+            return "ROLE_USER";
+        }
+        String upper = role.toUpperCase();
+        if (upper.startsWith("ROLE_")) {
+            return upper;
+        }
+        return "ROLE_" + upper;
     }
 }

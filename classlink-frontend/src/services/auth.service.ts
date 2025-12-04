@@ -6,6 +6,7 @@ import {Observable, catchError, finalize, from, map, of, shareReplay, switchMap,
 interface DecodedJwt {
     sub?: string;
     roles?: string[] | string;
+    role?: string[] | string;
     authorities?: string[] | string;
     scope?: string;
 
@@ -187,6 +188,7 @@ export class AuthService {
             const decoded = JSON.parse(json) as DecodedJwt;
             const rawRoles =
                 decoded.roles ??
+                decoded.role ??
                 decoded.authorities ??
                 (typeof decoded.scope === 'string' ? decoded.scope.split(' ') : []);
             return this.normalizeRoles(rawRoles);

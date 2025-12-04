@@ -31,32 +31,36 @@ public class RefreshTokenService {
     public RefreshRotationResult rotate(String presentedToken) {
         ParsedToken parsed = parseToken(presentedToken);
         RefreshToken stored = refreshTokenRepository.findById(parsed.id())
-                .orElseThrow(() -> new RefreshTokenException("Refresh token not found"));
+                .orElseThrow(() -> new RefreshTokenException(RefreshTokenException.Reason.NOT_FOUND, "Refresh token not found"));
 
         Instant now = Instant.now();
         byte[] calculatedHash = tokenService.hash(stored.getTokenSalt(), parsed.value());
         if (!tokenService.constantTimeEquals(calculatedHash, stored.getTokenHash())) {
             markReuseIfNecessary(stored, now);
-            throw new RefreshTokenException("Invalid refresh token");
+            throw new RefreshTokenException(RefreshTokenException.Reason.INVALID, "Invalid refresh token");
         }
 
         if (stored.getExpiresAt().isBefore(now)) {
             stored.setRevokedAt(now);
-            throw new RefreshTokenException("Refresh token expired");
+            throw new RefreshTokenException(RefreshTokenException.Reason.EXPIRED, "Refresh token expired");
         }
 
         if (stored.getReusedAt() != null) {
-            throw new RefreshTokenException("Refresh token reuse detected");
+            throw new RefreshTokenException(RefreshTokenException.Reason.REUSED, "Refresh token reuse detected");
         }
 
         if (stored.getRevokedAt() != null) {
             markReuseIfNecessary(stored, now);
-            throw new RefreshTokenException("Refresh token already rotated");
+            throw new RefreshTokenException(RefreshTokenException.Reason.ROTATED, "Refresh token already rotated");
         }
 
         stored.setRevokedAt(now);
-        RefreshTokenResult newToken = createRefreshToken(stored.getUser());
-        return new RefreshRotationResult(stored.getUser(), newToken.token(), newToken.expiresAt());
+        var user = stored.getUser();
+        // Ensure the associated user is initialized before leaving the transaction
+        user.getUsername();
+        user.getAuthorities();
+        RefreshTokenResult newToken = createRefreshToken(user);
+        return new RefreshRotationResult(user, newToken.token(), newToken.expiresAt());
     }
 
     private RefreshTokenResult createRefreshToken(User user) {
@@ -90,7 +94,7 @@ public class RefreshTokenService {
 
     private ParsedToken parseToken(String value) {
         if (value == null || !value.contains(".")) {
-            throw new RefreshTokenException("Malformed refresh token");
+            throw new RefreshTokenException(RefreshTokenException.Reason.MALFORMED, "Malformed refresh token");
         }
         try {
             String[] parts = value.split("\\.", 2);
@@ -98,7 +102,7 @@ public class RefreshTokenService {
             byte[] tokenBytes = tokenService.decode(parts[1]);
             return new ParsedToken(id, tokenBytes);
         } catch (IllegalArgumentException ex) {
-            throw new RefreshTokenException("Malformed refresh token");
+            throw new RefreshTokenException(RefreshTokenException.Reason.MALFORMED, "Malformed refresh token");
         }
     }
 

@@ -55,7 +55,7 @@ public class UserService {
         }
 
         @Transactional
-    public void delete(UUID id) {
+        public void delete(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User %s not found".formatted(id)));
         user.setEnabled(false);
