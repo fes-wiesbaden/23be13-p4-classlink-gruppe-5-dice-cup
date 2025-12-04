@@ -47,7 +47,7 @@ function handleAuthError(
     if (!(error instanceof HttpErrorResponse)) {
         return throwError(() => error);
     }
-
+// Stein ist super :D
     if (error.status === 401 && shouldAttemptRetry(request, auth)) {
         return auth.refreshTokens().pipe(
             switchMap(() => {
@@ -61,7 +61,6 @@ function handleAuthError(
             catchError((refreshError) => throwError(() => refreshError))
         );
     }
-
     return throwError(() => error);
 }
 
