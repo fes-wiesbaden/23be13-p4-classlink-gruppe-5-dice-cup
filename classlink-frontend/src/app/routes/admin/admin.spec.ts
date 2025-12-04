@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import { AdminComponent } from './admin';
 
 describe('Admin', () => {
@@ -8,7 +8,8 @@ describe('Admin', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminComponent],
+        imports: [AdminComponent, HttpClientTestingModule],
+        // AdminComponent injects UserControllerService -> HttpClient, so include test client.
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminComponent);

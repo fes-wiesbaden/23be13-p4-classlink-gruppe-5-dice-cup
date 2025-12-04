@@ -1,4 +1,4 @@
-import {HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpHandler, HttpRequest} from '@angular/common/http';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {TestBed} from '@angular/core/testing';
 import {of, throwError} from 'rxjs';
@@ -20,7 +20,8 @@ describe('authInterceptor', () => {
                 {
                     provide: HTTP_INTERCEPTORS,
                     useFactory: () => ({
-                        intercept: (req: any, next: any) => authInterceptor(req, next),
+                        intercept: (req: HttpRequest<unknown>, next: HttpHandler) =>
+                            authInterceptor(req, (forwardReq) => next.handle(forwardReq)),
                     }),
                     multi: true,
                 },
