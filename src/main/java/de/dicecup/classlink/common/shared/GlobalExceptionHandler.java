@@ -1,5 +1,7 @@
 package de.dicecup.classlink.common.shared;
 
+import de.dicecup.classlink.features.security.AccessTokenExpiredException;
+import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,6 +86,39 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
+
+    @ExceptionHandler(AccessTokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleAccessTokenExpired(AccessTokenExpiredException ex) {
+        ErrorResponse body = ErrorResponse.of(
+                HttpStatus.UNAUTHORIZED,
+                "ACCESS_TOKEN_EXPIRED",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenException(RefreshTokenException ex) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ErrorResponse body = ErrorResponse.of(
+                status,
+                mapRefreshTokenCode(ex.getReason()),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(status).body(body);
+    }
+
+    private String mapRefreshTokenCode(RefreshTokenException.Reason reason) {
+        return switch (reason) {
+            case NOT_FOUND -> "REFRESH_TOKEN_NOT_FOUND";
+            case INVALID -> "REFRESH_TOKEN_INVALID";
+            case EXPIRED -> "REFRESH_TOKEN_EXPIRED";
+            case REUSED -> "REFRESH_TOKEN_REUSED";
+            case ROTATED -> "REFRESH_TOKEN_ALREADY_ROTATED";
+            case MALFORMED -> "REFRESH_TOKEN_MALFORMED";
+        };
+    }
+    
 
     public record ErrorResponse(
             Instant timestamp,

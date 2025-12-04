@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -124,6 +125,7 @@ class AuthIntegrationTest extends IntegrationTestBase {
         mockMvc.perform(post("/auth/refresh")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"refreshToken\":\"" + tampered + "\"}"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("REFRESH_TOKEN_INVALID"));
     }
 }

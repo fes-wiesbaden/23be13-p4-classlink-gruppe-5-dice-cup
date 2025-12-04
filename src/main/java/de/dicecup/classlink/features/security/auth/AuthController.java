@@ -2,7 +2,6 @@ package de.dicecup.classlink.features.security.auth;
 
 import de.dicecup.classlink.features.security.JwtService;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshRotationResult;
-import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenException;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenResult;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenService;
 import de.dicecup.classlink.features.users.domain.User;
@@ -52,13 +51,9 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public TokenResponse refresh(@Valid @RequestBody RefreshRequest request) {
-        try {
-            RefreshRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
-            String accessToken = jwtService.generateToken(buildRoleClaims(rotation.user()), rotation.user());
-            return new TokenResponse(accessToken, rotation.refreshToken());
-        } catch (RefreshTokenException ex) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage(), ex);
-        }
+        RefreshRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
+        String accessToken = jwtService.generateToken(buildRoleClaims(rotation.user()), rotation.user());
+        return new TokenResponse(accessToken, rotation.refreshToken());
     }
 
     private Map<String, Object> buildRoleClaims(User user) {
