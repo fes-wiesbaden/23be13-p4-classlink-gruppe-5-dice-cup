@@ -1,7 +1,5 @@
 package de.dicecup.classlink.features.projects;
 
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,29 +29,28 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "project")
-public class Project {
+@Table(
+        name = "project_groups",
+        uniqueConstraints = @UniqueConstraint(name = "uk_project_group_number", columnNames = {"project_id", "group_number"})
+)
+public class ProjectGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "description", length = 2000)
-    private String description;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
-    private Class schoolClass;
+    @Column(name = "group_number", nullable = false)
+    private Integer groupNumber;
 
-    @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "term_id", nullable = false)
-    private Term term;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supervising_teacher_id")
+    private Teacher supervisingTeacher;
 
     @NotNull
     @Column(name = "created_at", nullable = false)
@@ -62,12 +60,8 @@ public class Project {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    @NotNull
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ProjectGroup> projectGroups = new ArrayList<>();
+    @OneToMany(mappedBy = "projectGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ProjectGroupMember> members = new ArrayList<>();
 
     @PrePersist
     void onCreate() {
