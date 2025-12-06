@@ -5,6 +5,9 @@ import de.dicecup.classlink.features.security.refreshtoken.RefreshRotationResult
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenResult;
 import de.dicecup.classlink.features.security.refreshtoken.RefreshTokenService;
 import de.dicecup.classlink.features.users.domain.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,20 @@ public class AuthController {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
+    @Operation(
+            summary = "Anmeldung durchführen",
+            description = "Authentifiziert einen Benutzer und gibt Access- und Refresh-Token zurück."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Anmeldung erfolgreich, Tokens wurden ausgegeben."),
+            @ApiResponse(responseCode = "401", description = "Ungültige Anmeldedaten.")
+    })
+    /**
+     * Führt die Benutzeranmeldung durch und gibt JWT-Access- und Refresh-Tokens aus.
+     *
+     * @param request Login-Daten mit E-Mail und Passwort
+     * @return Antwort mit Access- und Refresh-Token
+     */
     @PostMapping("/login")
     public TokenResponse login(@Valid @RequestBody LoginRequest request) {
         try {
@@ -49,6 +66,20 @@ public class AuthController {
         }
     }
 
+    @Operation(
+            summary = "Tokens erneuern",
+            description = "Erneuert den Access-Token mithilfe eines gültigen Refresh-Tokens."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Token wurde erfolgreich erneuert."),
+            @ApiResponse(responseCode = "401", description = "Refresh-Token ist ungültig oder abgelaufen.")
+    })
+    /**
+     * Erneuert Tokens anhand eines gültigen Refresh-Tokens.
+     *
+     * @param request Anfrage mit dem vorhandenen Refresh-Token
+     * @return Neue Access- und Refresh-Token
+     */
     @PostMapping("/refresh")
     public TokenResponse refresh(@Valid @RequestBody RefreshRequest request) {
         RefreshRotationResult rotation = refreshTokenService.rotate(request.refreshToken());
