@@ -23,17 +23,13 @@ public class ProjectGroupService {
     private final StudentRepository studentRepository;
 
     @Transactional
-    public ProjectGroup createGroup(UUID projectId, int groupNumber, UUID supervisingTeacherId) {
+    public ProjectGroup createGroup(UUID projectId, int groupNumber) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found"));
         ProjectGroup group = new ProjectGroup();
         group.setProject(project);
         group.setGroupNumber(groupNumber);
-        if (supervisingTeacherId != null) {
-            Teacher teacher = teacherRepository.findById(supervisingTeacherId)
-                    .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
-            group.setSupervisingTeacher(teacher);
-        }
+
         return projectGroupRepository.save(group);
     }
 

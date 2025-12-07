@@ -51,15 +51,13 @@ class ProjectGroupServiceTest {
         teacher.setId(teacherId);
 
         when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
-        when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(teacher));
         when(projectGroupRepository.save(any(ProjectGroup.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ProjectGroup group = projectGroupService.createGroup(projectId, 1, teacherId);
+        ProjectGroup group = projectGroupService.createGroup(projectId, 1);
 
         assertThat(group.getProject()).isEqualTo(project);
         assertThat(group.getGroupNumber()).isEqualTo(1);
-        assertThat(group.getSupervisingTeacher()).isEqualTo(teacher);
     }
 
     @Test

@@ -47,9 +47,9 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
         Project project = projectService.createProject(
                 classOne.getId(),
                 term.getId(),
-                new ProjectService.ProjectRequest("Project", "Desc", null)
+                new ProjectService.ProjectRequest("Project", "Desc")
         );
-        ProjectGroup group = projectGroupService.createGroup(project.getId(), 1, null);
+        ProjectGroup group = projectGroupService.createGroup(project.getId(), 1);
 
         Student validStudent = createStudent(classOne, "student1");
         Student invalidStudent = createStudent(classTwo, "student2");
@@ -73,9 +73,9 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
         Project project = projectService.createProject(
                 schoolClass.getId(),
                 term.getId(),
-                new ProjectService.ProjectRequest("Project", "Desc", null)
+                new ProjectService.ProjectRequest("Project", "Desc")
         );
-        ProjectGroup group = projectGroupService.createGroup(project.getId(), 1, null);
+        ProjectGroup group = projectGroupService.createGroup(project.getId(), 1);
 
         Student studentOne = createStudent(schoolClass, "student3");
         Student studentTwo = createStudent(schoolClass, "student4");

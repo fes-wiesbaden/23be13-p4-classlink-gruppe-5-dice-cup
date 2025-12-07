@@ -34,7 +34,7 @@ class ProjectServiceIntegrationTest extends IntegrationTestBase {
         Project project = projectService.createProject(
                 schoolClass.getId(),
                 term.getId(),
-                new ProjectService.ProjectRequest("Projekt 1", "Desc", null)
+                new ProjectService.ProjectRequest("Projekt 1", "Desc")
         );
 
         Project reloaded = projectRepository.findById(project.getId()).orElseThrow();
@@ -53,7 +53,7 @@ class ProjectServiceIntegrationTest extends IntegrationTestBase {
         assertThatThrownBy(() -> projectService.createProject(
                 schoolClass.getId(),
                 term.getId(),
-                new ProjectService.ProjectRequest("Projekt 1", "Desc", null)
+                new ProjectService.ProjectRequest("Projekt 1", "Desc")
         )).isInstanceOf(EntityNotFoundException.class);
 
         assertThat(projectRepository.count()).isZero();

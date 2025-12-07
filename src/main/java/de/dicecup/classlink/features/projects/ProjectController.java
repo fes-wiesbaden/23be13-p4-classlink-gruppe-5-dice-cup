@@ -69,7 +69,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> createProject(@PathVariable UUID classId,
                                                     @PathVariable UUID termId,
                                                     @RequestBody @Valid ProjectRequestDto request) {
-        Project project = projectService.createProject(classId, termId, new ProjectService.ProjectRequest(request.name(), request.description(), request.responsibleTeacherId()));
+        Project project = projectService.createProject(classId, termId, new ProjectService.ProjectRequest(request.name(), request.description()));
         return ResponseEntity.created(java.net.URI.create("/api/projects/" + project.getId()))
                 .body(ProjectDto.from(project));
     }
@@ -111,7 +111,7 @@ public class ProjectController {
     @PutMapping("/projects/{projectId}")
     public ProjectDto updateProject(@PathVariable UUID projectId,
                                     @RequestBody @Valid ProjectRequestDto request) {
-        Project updated = projectService.updateProject(projectId, new ProjectService.ProjectRequest(request.name(), request.description(), request.responsibleTeacherId()));
+        Project updated = projectService.updateProject(projectId, new ProjectService.ProjectRequest(request.name(), request.description()));
         return ProjectDto.from(updated);
     }
 

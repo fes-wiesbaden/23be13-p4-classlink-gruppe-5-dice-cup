@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public record ProjectRequestDto(
         @NotBlank String name,
-        String description,
-        UUID responsibleTeacherId
+        String description
 ) {
 }

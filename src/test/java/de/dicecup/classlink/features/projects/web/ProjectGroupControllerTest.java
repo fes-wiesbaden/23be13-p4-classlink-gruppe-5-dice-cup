@@ -49,7 +49,7 @@ class ProjectGroupControllerTest {
         ProjectGroup group = new ProjectGroup();
         group.setId(UUID.randomUUID());
         group.setGroupNumber(1);
-        when(projectGroupService.createGroup(eq(projectId), eq(1), any())).thenReturn(group);
+        when(projectGroupService.createGroup(eq(projectId), eq(1))).thenReturn(group);
 
         var request = new CreateGroupRequest(1, null);
 

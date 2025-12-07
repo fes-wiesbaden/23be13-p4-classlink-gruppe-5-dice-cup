@@ -46,7 +46,7 @@ class ProjectServiceTest {
     void createProject_throwsWhenClassTermMissing() {
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
-        var request = new ProjectService.ProjectRequest("Project", "Desc", null);
+        var request = new ProjectService.ProjectRequest("Project", "Desc");
 
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.empty());
 
@@ -60,7 +60,7 @@ class ProjectServiceTest {
     void createProject_throwsWhenClassTermInactive() {
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
-        var request = new ProjectService.ProjectRequest("Project", "Desc", null);
+        var request = new ProjectService.ProjectRequest("Project", "Desc");
 
         ClassTerm classTerm = new ClassTerm();
         classTerm.setStatus(ClassTermStatus.INACTIVE);
@@ -84,7 +84,7 @@ class ProjectServiceTest {
         classTerm.setSchoolClass(schoolClass);
         classTerm.setTerm(term);
         classTerm.setStatus(ClassTermStatus.ACTIVE);
-        var request = new ProjectService.ProjectRequest("Project", "Desc", null);
+        var request = new ProjectService.ProjectRequest("Project", "Desc");
 
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
         when(projectRepository.save(any(Project.class))).thenAnswer(invocation -> invocation.getArgument(0));

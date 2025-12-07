@@ -51,7 +51,7 @@ class ProjectControllerTest {
         project.setName("Project 1");
         when(projectService.createProject(eq(classId), eq(termId), any())).thenReturn(project);
 
-        var request = new ProjectRequestDto("Project 1", "desc", null);
+        var request = new ProjectRequestDto("Project 1", "desc");
 
         mockMvc.perform(post("/api/classes/" + classId + "/terms/" + termId + "/projects")
                         .contentType(MediaType.APPLICATION_JSON)

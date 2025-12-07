@@ -63,7 +63,7 @@ public class ProjectGroupController {
      */
     @PostMapping
     public ResponseEntity<ProjectGroupDto> create(@PathVariable UUID projectId, @RequestBody CreateGroupRequest request) {
-        ProjectGroup group = projectGroupService.createGroup(projectId, request.groupNumber(), request.supervisingTeacherId());
+        ProjectGroup group = projectGroupService.createGroup(projectId, request.groupNumber());
         return ResponseEntity.created(java.net.URI.create("/api/projects/" + projectId + "/groups/" + group.getId()))
                 .body(ProjectGroupDto.from(group));
     }
