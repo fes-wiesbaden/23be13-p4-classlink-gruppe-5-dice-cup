@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { GradeHistoryStripComponent } from '../../features/student/components/grade-history/grade-history';
 import { AuthService } from '../../../services/auth.service';
 import { TeacherMockService } from '../../features/teacher/mock.service';
 import { Scores } from '../../features/teacher/models';
@@ -31,8 +30,6 @@ interface StudentProject {
   nextDue: string;
   progress: number;
   scores: Scores;
-  peerCount: number;
-  selfDone: boolean;
   peerDone: boolean;
   color: string;
 }
@@ -53,16 +50,17 @@ export class StudentComponent {
 
   readonly studentId = 1;
   studentName: string;
+  studentEmail = '';
   studentClass = '10A';
   lernfelder: Lernfeld[] = [];
   projects: StudentProject[] = [];
   averageGrade = 0;
-  history: { labels: string[]; teacher: number[]; peer: number[]; self: number[] } | null = null;
-  historyProjectName = '';
+  openProjects = 0;
   selectedLernfeld: Lernfeld | null = null;
 
   constructor() {
     this.studentName = this.auth.getUsername() || 'Anna Schmidt';
+    this.studentEmail = this.makeEmail(this.studentName);
     const cls = this.mock.getStudents().find((s) => s.id === this.studentId)?.class;
     if (cls) {
       this.studentClass = cls;
@@ -74,11 +72,7 @@ export class StudentComponent {
       ),
     );
     this.projects = this.buildProjects();
-    if (this.projects.length) {
-      const first = this.projects[0];
-      this.history = this.mock.getScoreHistory(this.studentId, first.id, 6);
-      this.historyProjectName = first.name;
-    }
+    this.openProjects = this.projects.filter((p) => !p.peerDone).length;
     this.selectedLernfeld = this.lernfelder[0] ?? null;
   }
 
@@ -98,17 +92,15 @@ export class StudentComponent {
     return this.selectedLernfeld?.id === id;
   }
 
-  startSelfEvaluation(project: StudentProject): void {
-    project.selfDone = true;
-    this.messages.add({
-      severity: 'info',
-      summary: 'Selbst-Evaluation',
-      detail: `${project.name} vorbereitet.`,
-    });
+  gradeProgress(grade: number): number {
+    const clamped = Math.min(6, Math.max(1, grade));
+    const normalized = (6 - clamped) / 5;
+    return Math.round(normalized * 100);
   }
 
   startPeerEvaluation(project: StudentProject): void {
     project.peerDone = true;
+    this.openProjects = this.projects.filter((p) => !p.peerDone).length;
     this.messages.add({
       severity: 'success',
       summary: 'Peer-Evaluation',
@@ -116,12 +108,13 @@ export class StudentComponent {
     });
   }
 
-  gradeColor(grade: number): string {
-    if (grade <= 1.5) return '#c7f6d9';
-    if (grade <= 2.5) return '#d7f0ff';
-    if (grade <= 3.5) return '#ffeec7';
-    if (grade <= 4.5) return '#ffe0c2';
-    return '#ffd5d5';
+  private makeEmail(name: string): string {
+    const sanitized = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/gi, '.')
+      .replace(/\.+/g, '.')
+      .replace(/^\.+|\.+$/g, '');
+    return `${sanitized || 'student'}@dicecup.local`;
   }
 
   private buildProjects(): StudentProject[] {
@@ -150,8 +143,6 @@ export class StudentComponent {
         nextDue: ['12.12.', '18.12.', '08.01.'][idx % 3],
         progress: 65 + ((idx * 11) % 25),
         scores,
-        peerCount: 2 + (idx % 3),
-        selfDone: idx === 0,
         peerDone: false,
         color: palette[idx % palette.length],
       };

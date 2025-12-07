@@ -1,142 +1,147 @@
 <p-toast></p-toast>
 
 <div class="student-page">
-  <div class="page-decor" aria-hidden="true">
-    <span class="orb orb--a"></span>
-    <span class="orb orb--b"></span>
-    <span class="orb orb--c"></span>
-  </div>
+  <div class="soft-glow" aria-hidden="true"></div>
 
-  <section class="panel hero">
-    <div class="hero__left">
+  <section class="card header-card">
+    <div class="identity">
       <div class="avatar">{{ studentName | slice: 0 : 1 }}</div>
       <div>
-        <p class="eyebrow">Dashboard</p>
         <h1>{{ studentName }}</h1>
-      </div>
-    </div>
-    <div class="hero__stats">
-      <div class="stat-pill">
-        <span>Ø Gesamt</span>
-        <strong>{{ averageGrade | number: '1.1-1' }}</strong>
-      </div>
-      <div class="stat-pill">
-        <span>Offene Projekte</span>
-        <strong>{{ projects.length }}</strong>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel grades">
-    <div class="panel__header">
-      <div>
-        <h2>Notenuebersicht</h2>
+        <p class="muted">{{ studentEmail }}</p>
       </div>
     </div>
 
-    <div class="lf-scroll">
-      <button
-        class="lf-tile"
-        type="button"
-        *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
-        (click)="selectLernfeld(lf)"
-        [class.lf-tile--active]="isSelected(lf.id)"
-      >
-        <span class="lf-chip">LF {{ lf.id }}</span>
-        <div class="lf-title">{{ lf.focus }}</div>
-
-        <div class="lf-meta">
-          <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)"
-            >Ø {{ lf.average | number: '1.1-1' }}</span
-          >
-          <span class="lf-trend">{{ lf.trend }}</span>
-        </div>
-      </button>
-    </div>
-
-    <div class="lf-detail" *ngIf="selectedLernfeld as sel">
-      <div class="lf-detail__head">
+    <div class="headline-stats">
+      <div class="stat-chip">
+        <span class="icon pi pi-chart-scatter"></span>
         <div>
-          <p class="eyebrow">Details</p>
-          <h3>{{ sel.title }}</h3>
-          <p class="muted">{{ sel.focus }}</p>
-        </div>
-        <div class="lf-detail__avg" [style.backgroundColor]="gradeColor(sel.average)">
-          <span>Ø</span>
-          <strong>{{ sel.average | number: '1.1-1' }}</strong>
-          <small>{{ sel.trend }}</small>
+          <p class="label">Gesamt Note</p>
+          <div class="value-row">
+            <span class="value">{{ averageGrade | number: '1.1-1' }}</span>
+          </div>
         </div>
       </div>
-      <div class="lf-detail__assessments">
-        <div class="assessment" *ngFor="let g of sel.assessments">
-          <div>
-            <div class="assessment__label">{{ g.label }}</div>
-            <div class="assessment__meta">
-              {{ g.type }} · {{ g.weight * 100 | number: '1.0-0' }}%
-            </div>
-          </div>
-          <div class="assessment__grade" [style.backgroundColor]="gradeColor(g.grade)">
-            {{ g.grade | number: '1.1-1' }}
-          </div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="stat-chip">
+        <span class="icon pi pi-users"></span>
+        <div>
+          <p class="label">Laufende Projekte</p>
+          <div class="value">{{ openProjects }}</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="panel projects">
-    <div class="panel__header">
-      <div>
-        <p class="eyebrow">Projekte</p>
-        <h2>Teamarbeiten & Abgaben</h2>
-      </div>
-    </div>
-    <div class="project-grid">
-      <article class="project-card" *ngFor="let project of projects; trackBy: trackByProject">
-        <div class="project-card__head">
+  <div class="main-grid">
+    <div class="grade-column">
+      <section class="card grades-card">
+        <div class="section-header">
+          <h2>Notenübersicht</h2>
+          <span class="muted">Klasse {{ studentClass }}</span>
+        </div>
+
+        <div class="grade-grid">
+          <button
+            class="grade-card"
+            type="button"
+            *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
+            (click)="selectLernfeld(lf)"
+            [class.grade-card--active]="isSelected(lf.id)"
+          >
+            <div class="grade-card__top">
+              <!-- Lf Nummber -->
+              <span class="pill">LF {{ lf.id }}</span>
+            </div>
+            <!-- Lf Thema -->
+            <div class="grade-card__title">{{ lf.focus }}</div>
+            <div class="grade-card__meta">
+              <div class="grade-card__value">{{ lf.average | number: '1.1-1' }}</div>
+              <span class="label">Note</span>
+            </div>
+            <div class="bar">
+              <span class="fill" [style.width.%]="gradeProgress(lf.average)"></span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <section class="card details-card" *ngIf="selectedLernfeld as sel">
+        <div class="section-header">
           <div>
-            <div class="chip">Projekt</div>
-            <h3>{{ project.name }}</h3>
-            <p class="muted">{{ project.role }} · Fällig {{ project.nextDue }}</p>
+            <h2> Details </h2>
+            <p class="eyebrow"> </p>
+            <p class="muted">{{ sel.focus }}</p>
           </div>
-          <div class="project-card__score">
-            <div>
-              <span>Lehrer</span>
-              <strong>{{ project.scores.teacher }}</strong>
+          <div class="detail-score">
+            <span>Durchschnitt</span>
+                 <!-- <span class="icon pi pi-chart-scatter"></span> -->
+                <strong>{{ sel.average | number: '1.1-1' }}</strong>
+          </div>
+        </div>
+
+        <div class="assessment-grid">
+          <div class="assessment-card" *ngFor="let g of sel.assessments">
+            <div class="assessment-card__head">
+              <div>
+                <div class="assessment-card__label">{{ g.label }}</div>
+                <div class="assessment-card__meta">
+                  {{ g.type }} - {{ g.weight * 100 | number: '1.0-0' }}%
+                </div>
+              </div>
+              <div class="badge">{{ g.grade | number: '1.1-1' }}</div>
             </div>
-            <div>
-              <span>Peer</span>
-              <strong>{{ project.scores.peer }}</strong>
+            <div class="bar thin">
+              <span class="fill" [style.width.%]="gradeProgress(g.grade)"></span>
             </div>
           </div>
         </div>
-        <div class="project-card__meter">
-          <div class="meter__track">
-            <div
-              class="meter__fill"
-              [style.width]="project.progress + '%'"
-              [style.background]="project.color"
-            ></div>
-          </div>
-          <span>{{ project.progress }}% Fortschritt</span>
-        </div>
-        <div class="project-card__actions">
-          <p-button
-            type="button"
-            label="Selbst-Evaluation"
-            icon="pi pi-user"
-            [severity]="project.selfDone ? 'success' : 'secondary'"
-            styleClass="ghost"
-            (onClick)="startSelfEvaluation(project)"
-          ></p-button>
-          <p-button
-            type="button"
-            label="Peer-Evaluation"
-            icon="pi pi-users"
-            [severity]="project.peerDone ? 'success' : 'primary'"
-            (onClick)="startPeerEvaluation(project)"
-          ></p-button>
-        </div>
-      </article>
+      </section>
     </div>
-  </section>
+
+    <section class="card projects-card">
+      <div class="section-header">
+        <p class="eyebrow">Projekte</p>
+        <h2>Gruppenarbeiten</h2>
+      </div>
+
+      <div class="project-list">
+        <article class="project-card" *ngFor="let project of projects; trackBy: trackByProject">
+          <div class="project-card__head">
+            <div>
+              <h3>{{ project.name }}</h3>
+              <p class="muted">{{ project.role }} - Abgabe {{ project.nextDue }}</p>
+            </div>
+            <div class="project-card__score">
+              <div>
+                <span>Note</span>
+                <strong>{{ project.scores.teacher }}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-row">
+            <div class="progress-bar">
+              <span
+                class="fill"
+                [style.width.%]="project.progress"
+                [style.background]="project.color"
+              ></span>
+            </div>
+            <span class="muted">{{ project.progress }}% Fortschritt</span>
+          </div>
+
+          <div class="project-card__actions">
+            <p-button
+              type="button"
+              label="Bewertung"
+              icon="pi pi-user"
+              [severity]="project.peerDone ? 'success' : 'primary'"
+              (onClick)="startPeerEvaluation(project)"
+            ></p-button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
 </div>
