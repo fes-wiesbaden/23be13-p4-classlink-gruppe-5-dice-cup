@@ -10,11 +10,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "admin")
 public class Admin {
     @Id
     private UUID id;
 
-    @OneToOne @MapsId
+    @OneToOne
+    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 }
