@@ -19,6 +19,7 @@ public class ClassManagementService {
 
     private final ClassTermRepository classTermRepository;
     private final ClassSubjectAssignmentRepository assignmentRepository;
+    private final ClassFinalGradeAssignmentRepository classFinalGradeAssignmentRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
 

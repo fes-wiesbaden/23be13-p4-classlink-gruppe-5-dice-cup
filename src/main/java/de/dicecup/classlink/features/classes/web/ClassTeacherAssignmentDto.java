@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public record ClassTeacherAssignmentDto(
         UUID id,
+        String name,
         UUID classId,
         UUID termId,
         UUID teacherId,
@@ -16,6 +17,7 @@ public record ClassTeacherAssignmentDto(
     public static ClassTeacherAssignmentDto from(ClassSubjectAssignment assignment) {
         return new ClassTeacherAssignmentDto(
                 assignment.getId(),
+                assignment.getName(),
                 assignment.getSchoolClass().getId(),
                 assignment.getTerm().getId(),
                 assignment.getTeacher().getId(),

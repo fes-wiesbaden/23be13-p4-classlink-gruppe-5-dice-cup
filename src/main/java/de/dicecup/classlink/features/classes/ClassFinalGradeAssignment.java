@@ -1,5 +1,7 @@
 package de.dicecup.classlink.features.classes;
 
+
+import de.dicecup.classlink.features.grades.FinalGrade;
 import de.dicecup.classlink.features.grades.Grade;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.terms.Term;
@@ -21,10 +23,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "class_subject_assignments",
+        name = "class_final_grade_assignments",
         uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"class_id", "term_id", "subject_id", "teacher_id"})
 )
-public class ClassSubjectAssignment {
+public class ClassFinalGradeAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -54,11 +56,11 @@ public class ClassSubjectAssignment {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_subject_assignments")
-    private List<Grade> grades = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignments")
+    private List<ClassSubjectAssignment> subGradeAssignments;
 
-    @Column(name = "weighting")
-    private BigDecimal weighting;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignments")
+    private List<FinalGrade> grades;
 
     @NotNull
     @Column(name = "created_at", nullable = false)
