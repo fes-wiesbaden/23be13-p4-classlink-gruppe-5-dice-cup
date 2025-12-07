@@ -21,7 +21,7 @@ export enum CreateInviteRequestDtoRoleEnum {
     Admin = 'ADMIN',
     Teacher = 'TEACHER',
     Student = 'STUDENT'
-};
+}
 
 
 

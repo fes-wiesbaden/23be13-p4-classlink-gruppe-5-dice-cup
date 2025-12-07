@@ -3,6 +3,7 @@ package de.dicecup.classlink.features.users;
 import de.dicecup.classlink.features.users.domain.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,11 @@ public class UserController {
             summary = "Liste aller Benutzer",
             description = "Gibt eine vollständige Liste aller registrierten Benutzer zurück"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Liste erfolgreich abgerufen"
-    )
+    @ApiResponse(responseCode = "200", description = "Liste erfolgreich abgerufen")
     /**
-     * Gibt alle hinterlegten Benutzer zurück
-     * @return Liste von UserDTO Objekten
+     * Gibt alle hinterlegten Benutzer zurück.
+     *
+     * @return ResponseEntity mit einer Liste von UserDto-Objekten
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getUsers() {
@@ -35,16 +34,18 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Suche Nutzer nach ID",
-            description = "Gibt einen Benutzer anhand mitgegebener ID zurück"
+            summary = "Benutzer nach ID abrufen",
+            description = "Gibt einen Benutzer anhand der übergebenen ID zurück"
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Nutzer erfolgreich geladen"
-    )
-    /*
-     * Gibt alle hinterlegten Benutzer zurück
-     * @return Liste von UserDTO Objekten
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Benutzer erfolgreich geladen"),
+            @ApiResponse(responseCode = "404", description = "Benutzer wurde nicht gefunden")
+    })
+    /**
+     * Ruft einen einzelnen Benutzer anhand seiner ID ab.
+     *
+     * @param id Eindeutige ID des Benutzers
+     * @return UserDto des gefundenen Benutzers
      */
     @GetMapping("/users/{id}")
     public UserDto getUser(@PathVariable UUID id) {

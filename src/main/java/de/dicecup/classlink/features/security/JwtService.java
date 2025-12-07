@@ -145,9 +145,6 @@ public class JwtService {
         Claims claims = extractAllClaims(token);
         Object rawRoles = claims.get(ROLES_CLAIM);
         List<String> normalized = normalizeRoles(rawRoles);
-        if (normalized.isEmpty()) {
-            return List.of("USER");
-        }
         return normalized;
     }
 
