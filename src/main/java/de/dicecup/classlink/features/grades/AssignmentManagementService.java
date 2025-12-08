@@ -21,15 +21,56 @@ public class AssignmentManagementService {
 
     private final ClassTermRepository classTermRepository;
     private final SubjectAssignmentRepository assignmentRepository;
+    private final FinalGradeAssignmentRepository finalGradeAssignmentRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
 
     @Transactional
-    public SubjectAssignment assignTeacher(UUID classId,
-                                           UUID termId,
-                                           UUID subjectId,
-                                           UUID teacherId,
-                                           BigDecimal weighting) {
+    public SubjectAssignment createAndSaveAssignment(String name,
+                                                     UUID classId,
+                                                     UUID termId,
+                                                     UUID subjectId,
+                                                     UUID teacherId,
+                                                     UUID finalGradeAssignmentId,
+                                                     BigDecimal weighting) {
+        ClassTerm classTerm = classTermRepository
+                .findBySchoolClassIdAndTermId(classId, termId)
+                .orElseThrow(() -> new EntityNotFoundException("Class term not found"));
+        Subject subject = subjectRepository
+                .findById(subjectId)
+                .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
+        Teacher teacher = teacherRepository
+                .findById(teacherId)
+                .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
+        FinalGradeAssignment finalGradeAssignment = finalGradeAssignmentRepository
+                .findById(finalGradeAssignmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Final grade assignment not found"));
+
+        SubjectAssignment assignment = new SubjectAssignment();
+
+        assignment.setName(name);
+        assignment.setSchoolClass(classTerm.getSchoolClass());
+        assignment.setTerm(classTerm.getTerm());
+        assignment.setSubject(subject);
+        assignment.setTeacher(teacher);
+        assignment.setWeighting(weighting);
+        assignment.setFinalGradeAssignment(finalGradeAssignment);
+
+        List<SubjectAssignment> temp = finalGradeAssignment.getSubGradeAssignments();
+        temp.add(assignment);
+        finalGradeAssignment.setSubGradeAssignments(temp);
+
+        finalGradeAssignmentRepository.save(finalGradeAssignment);
+
+        return assignmentRepository.save(assignment);
+    }
+
+    @Transactional
+    public FinalGradeAssignment createAndSaveFinalAssignment(String name,
+                                                          UUID classId,
+                                                          UUID termId,
+                                                          UUID subjectId,
+                                                          UUID teacherId) {
         ClassTerm classTerm = classTermRepository.findBySchoolClassIdAndTermId(classId, termId)
                 .orElseThrow(() -> new EntityNotFoundException("Class term not found"));
         Subject subject = subjectRepository.findById(subjectId)
@@ -37,13 +78,15 @@ public class AssignmentManagementService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
 
-        SubjectAssignment assignment = new SubjectAssignment();
+        FinalGradeAssignment assignment = new FinalGradeAssignment();
+
+        assignment.setName(name);
         assignment.setSchoolClass(classTerm.getSchoolClass());
         assignment.setTerm(classTerm.getTerm());
         assignment.setSubject(subject);
         assignment.setTeacher(teacher);
-        assignment.setWeighting(weighting);
-        return assignmentRepository.save(assignment);
+
+        return finalGradeAssignmentRepository.save(assignment);
     }
 
     @Transactional(readOnly = true)

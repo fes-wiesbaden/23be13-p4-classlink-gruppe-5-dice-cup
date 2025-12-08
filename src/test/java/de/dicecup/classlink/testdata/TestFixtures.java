@@ -1,6 +1,6 @@
 package de.dicecup.classlink.testdata;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassTerm;
 import de.dicecup.classlink.features.projects.Project;
 import de.dicecup.classlink.features.projects.ProjectGroup;
@@ -36,16 +36,16 @@ public class TestFixtures {
         return term(name, new ArrayList<>(), new ArrayList<>(), year, TermStatus.CLOSED, startDate, endDate);
     }
 
-    public static Class schoolClass(String name) {
+    public static SchoolClass schoolClass(String name) {
         return schoolClass(name, new ArrayList<>());
     }
 
-    public static Project project(String name, Class clazz, Term term) {
+    public static Project project(String name, SchoolClass clazz, Term term) {
         return project(name, true, "Test project", new ArrayList<>(), clazz, term);
     }
 
-    public static Class schoolClass(String name, List<ClassTerm> classTerms) {
-        Class clazz = new Class();
+    public static SchoolClass schoolClass(String name, List<ClassTerm> classTerms) {
+        SchoolClass clazz = new SchoolClass();
         clazz.setName(name);
         clazz.setTerms(classTerms);
         return clazz;
@@ -74,7 +74,7 @@ public class TestFixtures {
         return t;
     }
 
-    public static Project project(String name, boolean active, String description, List<ProjectGroup> projectGroups, Class clazz, Term term) {
+    public static Project project(String name, boolean active, String description, List<ProjectGroup> projectGroups, SchoolClass clazz, Term term) {
         Project p = new Project();
         p.setName(name);
         p.setActive(active);

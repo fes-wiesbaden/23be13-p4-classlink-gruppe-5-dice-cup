@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.registration;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassRepository;
 import de.dicecup.classlink.features.registration.domain.*;
 import de.dicecup.classlink.features.security.JwtService;
@@ -195,9 +195,9 @@ public class InvitationService {
         Student student = new Student();
         student.setUser(user);
         if (classId != null) {
-            Class clazz = classRepository.findById(classId)
+            SchoolClass clazz = classRepository.findById(classId)
                     .orElseThrow(() -> new EntityNotFoundException("Class %s not found".formatted(classId)));
-            student.setClazz(clazz);
+            student.setSchoolClass(clazz);
         }
         user.setStudent(student);
     }

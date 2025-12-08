@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.users.domain.roles;
 
 import de.dicecup.classlink.features.users.domain.User;
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +24,6 @@ public class Student {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private Class clazz;
+    @JoinColumn(name = "school_class_id")
+    private SchoolClass schoolClass;
 }

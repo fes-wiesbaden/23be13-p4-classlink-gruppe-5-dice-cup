@@ -40,7 +40,7 @@ public class ClassTerm {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", nullable = false)
-    private Class schoolClass;
+    private SchoolClass schoolClass;
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

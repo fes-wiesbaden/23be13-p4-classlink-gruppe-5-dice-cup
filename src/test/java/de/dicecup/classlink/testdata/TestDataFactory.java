@@ -1,6 +1,6 @@
 package de.dicecup.classlink.testdata;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassRepository;
 import de.dicecup.classlink.features.classes.ClassTerm;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
@@ -35,12 +35,12 @@ public class TestDataFactory {
         return schoolYearRepository.save(schoolYear);
     }
 
-    public Class persistClass(String name) {
+    public SchoolClass persistClass(String name) {
         return persistClass(name, new ArrayList<>());
     }
 
-    public Class persistClass(String name, List<ClassTerm> classTerms) {
-        Class clazz = TestFixtures.schoolClass(name, classTerms);
+    public SchoolClass persistClass(String name, List<ClassTerm> classTerms) {
+        SchoolClass clazz = TestFixtures.schoolClass(name, classTerms);
         return classRepository.save(clazz);
     }
 
@@ -49,7 +49,7 @@ public class TestDataFactory {
         return termRepository.save(term);
     }
 
-    public ClassTerm assign(Class schoolClass, Term term, ClassTermStatus status) {
+    public ClassTerm assign(SchoolClass schoolClass, Term term, ClassTermStatus status) {
         ClassTerm classTerm = new ClassTerm();
         classTerm.setSchoolClass(schoolClass);
         classTerm.setTerm(term);
@@ -62,12 +62,12 @@ public class TestDataFactory {
         return termRepository.save(term);
     }
 
-    public Project persistProject(String name, Class schoolClass, Term term) {
+    public Project persistProject(String name, SchoolClass schoolClass, Term term) {
         Project project = TestFixtures.project(name, schoolClass, term);
         return projectRepository.save(project);
     }
 
-    public Project persistProject(String name, boolean active, String description, List<ProjectGroup> projectGroups, Class clazz, Term term) {
+    public Project persistProject(String name, boolean active, String description, List<ProjectGroup> projectGroups, SchoolClass clazz, Term term) {
         Project p = TestFixtures.project(name, active, description, projectGroups, clazz, term);
         return projectRepository.save(p);
     }

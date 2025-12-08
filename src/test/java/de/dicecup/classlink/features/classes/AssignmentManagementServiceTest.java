@@ -42,13 +42,14 @@ class AssignmentManagementServiceTest {
     private AssignmentManagementService assignmentManagementService;
 
     @Test
-    void assignTeacher_createsAssignmentWhenDependenciesExist() {
+    void createAssignment_createsAndSaveAssignmentWhenDependenciesExist() {
+        String name = UUID.randomUUID().toString();
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
         UUID subjectId = UUID.randomUUID();
         UUID teacherId = UUID.randomUUID();
 
-        Class schoolClass = new Class();
+        SchoolClass schoolClass = new SchoolClass();
         schoolClass.setId(classId);
         Term term = new Term();
         term.setId(termId);
@@ -67,9 +68,10 @@ class AssignmentManagementServiceTest {
         when(assignmentRepository.save(any(SubjectAssignment.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        SubjectAssignment assignment = assignmentManagementService.assignTeacher(
-                classId, termId, subjectId, teacherId, BigDecimal.ONE);
+        SubjectAssignment assignment = assignmentManagementService.createAndSaveAssignment(
+                name, classId, termId, subjectId, teacherId, BigDecimal.ONE);
 
+        assertThat(assignment.getName()).isEqualTo(name);
         assertThat(assignment.getSchoolClass()).isEqualTo(schoolClass);
         assertThat(assignment.getTerm()).isEqualTo(term);
         assertThat(assignment.getSubject()).isEqualTo(subject);
@@ -78,13 +80,14 @@ class AssignmentManagementServiceTest {
     }
 
     @Test
-    void assignTeacher_throwsWhenClassTermNotFound() {
+    void createAndSaveAssignment_throwsWhenClassTermNotFound() {
+        String name = UUID.randomUUID().toString();
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
 
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, UUID.randomUUID(), UUID.randomUUID(), BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, UUID.randomUUID(), UUID.randomUUID(), BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(subjectRepository, never()).findById(any());
@@ -93,19 +96,20 @@ class AssignmentManagementServiceTest {
     }
 
     @Test
-    void assignTeacher_throwsWhenSubjectNotFound() {
+    void createAndSaveAssignment_throwsWhenSubjectNotFound() {
+        String name = UUID.randomUUID().toString();
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
         UUID subjectId = UUID.randomUUID();
 
         ClassTerm classTerm = new ClassTerm();
-        classTerm.setSchoolClass(new Class());
+        classTerm.setSchoolClass(new SchoolClass());
         classTerm.setTerm(new Term());
 
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, subjectId, UUID.randomUUID(), BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, subjectId, UUID.randomUUID(), BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(teacherRepository, never()).findById(any());
@@ -113,13 +117,14 @@ class AssignmentManagementServiceTest {
     }
 
     @Test
-    void assignTeacher_throwsWhenTeacherNotFound() {
+    void createAndSaveAssignmentNotFound() {
+        String name = UUID.randomUUID().toString();
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
         UUID teacherId = UUID.randomUUID();
 
         ClassTerm classTerm = new ClassTerm();
-        classTerm.setSchoolClass(new Class());
+        classTerm.setSchoolClass(new SchoolClass());
         classTerm.setTerm(new Term());
 
         Subject subject = new Subject();
@@ -128,7 +133,7 @@ class AssignmentManagementServiceTest {
         when(subjectRepository.findById(any())).thenReturn(Optional.of(subject));
         when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, UUID.randomUUID(), teacherId, BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, UUID.randomUUID(), teacherId, BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(assignmentRepository, never()).save(any());

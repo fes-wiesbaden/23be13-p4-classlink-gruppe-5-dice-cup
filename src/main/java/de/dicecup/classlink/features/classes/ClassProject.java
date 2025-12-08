@@ -30,7 +30,7 @@ public class ClassProject {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", nullable = false)
-    private Class clazz;
+    private SchoolClass clazz;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)

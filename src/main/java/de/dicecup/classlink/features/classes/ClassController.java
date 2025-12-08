@@ -3,9 +3,7 @@ package de.dicecup.classlink.features.classes;
 import de.dicecup.classlink.features.classes.web.ClassCreateRequest;
 import de.dicecup.classlink.features.classes.web.ClassDto;
 import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentDto;
-import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentRequest;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
-import de.dicecup.classlink.features.grades.SubjectAssignment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -65,9 +63,9 @@ public class ClassController {
      */
     @PostMapping
     public ResponseEntity<ClassDto> create(@RequestBody @Valid ClassCreateRequest request) {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setName(request.name());
-        Class saved = classRepository.save(clazz);
+        SchoolClass saved = classRepository.save(clazz);
         return ResponseEntity.created(java.net.URI.create("/api/classes/" + saved.getId()))
                 .body(ClassDto.from(saved));
     }
@@ -88,35 +86,10 @@ public class ClassController {
      * @return Aktualisierte Klasse
      */
     @PutMapping("/{id}")
-    public Class update(@PathVariable UUID id, @RequestBody ClassCreateRequest request) {
-        Class clazz = classRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+    public SchoolClass update(@PathVariable UUID id, @RequestBody ClassCreateRequest request) {
+        SchoolClass clazz = classRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
         clazz.setName(request.name());
         return classRepository.save(clazz);
-    }
-
-    @Operation(
-            summary = "Lehrkraft einer Klasse zuordnen",
-            description = "Ordnet einer Klasse und einem Halbjahr eine Lehrkraft und ein Fach zu."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Zuordnung wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "404", description = "Klasse, Halbjahr, Fach oder Lehrkraft wurde nicht gefunden.")
-    })
-    /**
-     * Ordnet einer Klasse in einem Halbjahr eine Lehrkraft und ein Fach zu.
-     *
-     * @param classId ID der Klasse
-     * @param termId  ID des Halbjahres
-     * @param request Anfrage mit Fach, Lehrkraft und optionaler Gewichtung
-     * @return ResponseEntity mit der erzeugten Zuordnung als DTO
-     */
-    @PostMapping("/{classId}/terms/{termId}/teachers")
-    public ResponseEntity<ClassTeacherAssignmentDto> assignTeacher(@PathVariable UUID classId,
-                                                                   @PathVariable UUID termId,
-                                                                   @RequestBody @Valid ClassTeacherAssignmentRequest request) {
-        SubjectAssignment assignment = assignmentManagementService.assignTeacher(classId, termId, request.subjectId(), request.teacherId(), request.weighting());
-        return ResponseEntity.created(java.net.URI.create("/api/classes/" + classId + "/terms/" + termId + "/teachers/" + assignment.getId()))
-                .body(ClassTeacherAssignmentDto.from(assignment));
     }
 
     @Operation(

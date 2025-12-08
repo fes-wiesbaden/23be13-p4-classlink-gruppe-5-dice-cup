@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.classes.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassController;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
 import de.dicecup.classlink.features.classes.ClassRepository;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ClassController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class ClassControllerTest {
+class SchoolClassControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -50,10 +50,10 @@ class ClassControllerTest {
 
     @Test
     void createClass_returnsCreated() throws Exception {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("Class A");
-        when(classRepository.save(any(Class.class))).thenReturn(clazz);
+        when(classRepository.save(any(SchoolClass.class))).thenReturn(clazz);
 
         var request = new ClassCreateRequest("Class A");
 
@@ -67,7 +67,7 @@ class ClassControllerTest {
 
     @Test
     void listClasses_returnsDtos() throws Exception {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("Class A");
         when(classRepository.findAll()).thenReturn(List.of(clazz));
@@ -79,13 +79,13 @@ class ClassControllerTest {
     }
 
     @Test
-    void assignTeacher_returnsCreated() throws Exception {
+    void createAssignment_returnsCreated() throws Exception {
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
         UUID assignmentId = UUID.randomUUID();
         SubjectAssignment assignment = new SubjectAssignment();
         assignment.setId(assignmentId);
-        assignment.setSchoolClass(new Class());
+        assignment.setSchoolClass(new SchoolClass());
         assignment.getSchoolClass().setId(classId);
         assignment.setTerm(new de.dicecup.classlink.features.terms.Term());
         assignment.getTerm().setId(termId);
@@ -94,7 +94,7 @@ class ClassControllerTest {
         assignment.setSubject(new de.dicecup.classlink.features.subjects.Subject());
         assignment.getSubject().setId(UUID.randomUUID());
 
-        when(assignmentManagementService.assignTeacher(eq(classId), eq(termId), any(), any(), any())).thenReturn(assignment);
+        when(assignmentManagementService.createAndSaveAssignment(any(), eq(classId), eq(termId), any(), any(), any())).thenReturn(assignment);
 
         var request = new ClassTeacherAssignmentRequest(assignment.getSubject().getId(), assignment.getTeacher().getId(), null);
 

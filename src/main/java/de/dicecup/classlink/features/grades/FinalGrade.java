@@ -27,7 +27,7 @@ public class FinalGrade {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "class_final_grade_assignment_id", nullable = false)
+    @JoinColumn(name = "final_grade_assignment_id", nullable = false)
     private FinalGradeAssignment classFinalGradeAssignment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

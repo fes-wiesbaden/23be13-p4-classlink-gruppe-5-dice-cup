@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.grades.web;
 
-import de.dicecup.classlink.features.grades.Grade;
+import de.dicecup.classlink.features.grades.FinalGrade;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,10 +12,10 @@ public record FinalGradeDto(
         BigDecimal gradeValue,
         UUID changedBy
 ) {
-    public static GradeDto from(Grade grade) {
-        return new GradeDto(
+    public static FinalGradeDto from(FinalGrade grade) {
+        return new FinalGradeDto(
                 grade.getId(),
-                grade.getSubjectAssignment().getId(),
+                grade.getClassFinalGradeAssignment().getId(),
                 grade.getStudent().getId(),
                 grade.getGradeValue(),
                 grade.getChangedBy().getId()

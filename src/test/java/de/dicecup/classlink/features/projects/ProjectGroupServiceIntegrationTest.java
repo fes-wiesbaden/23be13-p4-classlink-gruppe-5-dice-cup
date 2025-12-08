@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.projects;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassTermStatus;
 import de.dicecup.classlink.features.schoolyear.SchoolYear;
 import de.dicecup.classlink.features.terms.Term;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,19 +39,19 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
     @Test
     void assignStudents_onlyAcceptsStudentsFromProjectClass() {
         SchoolYear year = testDataFactory.persistActiveSchoolYear("2025/26");
-        Class classOne = testDataFactory.persistClass("C1");
-        Class classTwo = testDataFactory.persistClass("C2");
+        SchoolClass schoolClassOne = testDataFactory.persistClass("C1");
+        SchoolClass schoolClassTwo = testDataFactory.persistClass("C2");
         Term term = testDataFactory.persistOpenTerm("H1", year);
-        testDataFactory.assign(classOne, term, ClassTermStatus.ACTIVE);
+        testDataFactory.assign(schoolClassOne, term, ClassTermStatus.ACTIVE);
         Project project = projectService.createProject(
-                classOne.getId(),
+                schoolClassOne.getId(),
                 term.getId(),
                 new ProjectService.ProjectRequest("Project", "Desc")
         );
         ProjectGroup group = projectGroupService.createGroup(project.getId(), 1);
 
-        Student validStudent = createStudent(classOne, "student1");
-        Student invalidStudent = createStudent(classTwo, "student2");
+        Student validStudent = createStudent(schoolClassOne, "student1");
+        Student invalidStudent = createStudent(schoolClassTwo, "student2");
 
         ProjectGroupService.MemberAssignment invalidAssignment = new ProjectGroupService.MemberAssignment(invalidStudent.getId(), MemberRole.MEMBER);
         ProjectGroupService.MemberAssignment validAssignment = new ProjectGroupService.MemberAssignment(validStudent.getId(), MemberRole.MEMBER);
@@ -67,7 +66,7 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
     @Transactional
     void assignStudents_succeedsForStudentsInProjectClass() {
         SchoolYear year = testDataFactory.persistActiveSchoolYear("2025/26");
-        Class schoolClass = testDataFactory.persistClass("C1");
+        SchoolClass schoolClass = testDataFactory.persistClass("C1");
         Term term = testDataFactory.persistOpenTerm("H1", year);
         testDataFactory.assign(schoolClass, term, ClassTermStatus.ACTIVE);
         Project project = projectService.createProject(
@@ -92,7 +91,7 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
                 .containsExactlyInAnyOrder(studentOne, studentTwo);
     }
 
-    private Student createStudent(Class clazz, String username) {
+    private Student createStudent(SchoolClass clazz, String username) {
         User user = new User();
         user.setUsername(username);
         user.setPasswordHash("hash");
@@ -100,7 +99,7 @@ class ProjectGroupServiceIntegrationTest extends IntegrationTestBase {
 
         Student student = new Student();
         student.setUser(user);
-        student.setClazz(clazz);
+        student.setSchoolClass(clazz);
         user.setStudent(student);
 
         userRepository.save(user);
