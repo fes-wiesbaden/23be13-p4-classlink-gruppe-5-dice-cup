@@ -1,9 +1,8 @@
 package de.dicecup.classlink.features.classes.web;
 
-import de.dicecup.classlink.features.classes.ClassFinalGradeAssignment;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
+import de.dicecup.classlink.features.grades.FinalGradeAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
 import de.dicecup.classlink.features.grades.FinalGrade;
-import de.dicecup.classlink.features.grades.Grade;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +18,7 @@ public record ClassFinalGradeAssignmentDto(
         List<UUID> grades,
         UUID subjectId
 ) {
-    public static ClassFinalGradeAssignmentDto from(ClassFinalGradeAssignment assignment) {
+    public static ClassFinalGradeAssignmentDto from(FinalGradeAssignment assignment) {
         return new ClassFinalGradeAssignmentDto(
                 assignment.getId(),
                 assignment.getName(),
@@ -28,7 +27,7 @@ public record ClassFinalGradeAssignmentDto(
                 assignment.getTeacher().getId(),
                 assignment.getSubGradeAssignments()
                         .stream()
-                        .map(ClassSubjectAssignment::getId)
+                        .map(SubjectAssignment::getId)
                         .collect(Collectors.toList()),
                 assignment.getGrades()
                         .stream()

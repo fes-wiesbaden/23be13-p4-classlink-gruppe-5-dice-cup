@@ -15,7 +15,7 @@ public record GradeDto(
     public static GradeDto from(Grade grade) {
         return new GradeDto(
                 grade.getId(),
-                grade.getClassSubjectAssignment().getId(),
+                grade.getSubjectAssignment().getId(),
                 grade.getStudent().getId(),
                 grade.getGradeValue(),
                 grade.getChangedBy().getId()

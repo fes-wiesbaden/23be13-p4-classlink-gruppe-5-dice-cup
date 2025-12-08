@@ -1,8 +1,7 @@
-package de.dicecup.classlink.features.classes;
+package de.dicecup.classlink.features.grades;
 
 
-import de.dicecup.classlink.features.grades.FinalGrade;
-import de.dicecup.classlink.features.grades.Grade;
+import de.dicecup.classlink.features.classes.Class;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
@@ -12,9 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +20,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "class_final_grade_assignments",
+        name = "final_grade_assignments",
         uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"class_id", "term_id", "subject_id", "teacher_id"})
 )
-public class ClassFinalGradeAssignment {
+public class FinalGradeAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -56,10 +53,10 @@ public class ClassFinalGradeAssignment {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignments")
-    private List<ClassSubjectAssignment> subGradeAssignments;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignment_id")
+    private List<SubjectAssignment> subGradeAssignments;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignments")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "class_final_grade_assignment_id")
     private List<FinalGrade> grades;
 
     @NotNull

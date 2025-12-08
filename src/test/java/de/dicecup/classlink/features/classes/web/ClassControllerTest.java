@@ -3,9 +3,9 @@ package de.dicecup.classlink.features.classes.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.dicecup.classlink.features.classes.Class;
 import de.dicecup.classlink.features.classes.ClassController;
-import de.dicecup.classlink.features.classes.ClassManagementService;
+import de.dicecup.classlink.features.grades.AssignmentManagementService;
 import de.dicecup.classlink.features.classes.ClassRepository;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class ClassControllerTest {
     @MockBean
     ClassRepository classRepository;
     @MockBean
-    ClassManagementService classManagementService;
+    AssignmentManagementService assignmentManagementService;
     @MockBean
     ClassTermRepository classTermRepository;
     @MockBean
@@ -83,7 +83,7 @@ class ClassControllerTest {
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
         UUID assignmentId = UUID.randomUUID();
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setId(assignmentId);
         assignment.setSchoolClass(new Class());
         assignment.getSchoolClass().setId(classId);
@@ -94,7 +94,7 @@ class ClassControllerTest {
         assignment.setSubject(new de.dicecup.classlink.features.subjects.Subject());
         assignment.getSubject().setId(UUID.randomUUID());
 
-        when(classManagementService.assignTeacher(eq(classId), eq(termId), any(), any(), any())).thenReturn(assignment);
+        when(assignmentManagementService.assignTeacher(eq(classId), eq(termId), any(), any(), any())).thenReturn(assignment);
 
         var request = new ClassTeacherAssignmentRequest(assignment.getSubject().getId(), assignment.getTeacher().getId(), null);
 
