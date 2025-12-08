@@ -9,7 +9,7 @@
  */
 
 
-export interface PasswordResetCreateResponseDto {
+export interface PasswordResetCreateResponseDto { 
     tokenId?: string;
     token?: string;
     expiresAt?: string;

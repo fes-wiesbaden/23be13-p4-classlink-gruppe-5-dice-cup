@@ -24,6 +24,7 @@ import {Configuration} from '../configuration';
 import {BaseService} from '../api.base.service';
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -34,8 +35,10 @@ export class DevTokenControllerService extends BaseService {
     }
 
     /**
+     * Entwickler-Token generieren
+     * Erzeugt ein JWT für einen Benutzer im Dev-Profil.
      * @param username
-     * @param expirationMillis
+     * @param expirationMillis 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

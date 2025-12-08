@@ -34,6 +34,7 @@ import {Configuration} from '../configuration';
 import {BaseService} from '../api.base.service';
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -44,7 +45,9 @@ export class PasswordResetControllerService extends BaseService {
     }
 
     /**
-     * @param passwordResetCommitRequestDto
+     * Passwort-Reset durchführen
+     * Bestätigt einen gültigen Passwort-Reset-Token und setzt das Passwort.
+     * @param passwordResetCommitRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -121,7 +124,9 @@ export class PasswordResetControllerService extends BaseService {
     }
 
     /**
-     * @param passwordResetCreateRequestDto
+     * Passwort-Reset-Token erstellen
+     * Erstellt ein neues Passwort-Reset-Token und liefert die Informationen zurück.
+     * @param passwordResetCreateRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -200,8 +205,10 @@ export class PasswordResetControllerService extends BaseService {
     }
 
     /**
+     * QR-Code für Passwort-Reset abrufen
+     * Liefert den QR-Code für ein Passwort-Reset-Token als PNG oder PDF.
      * @param id
-     * @param format
+     * @param format 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -283,7 +290,9 @@ export class PasswordResetControllerService extends BaseService {
     }
 
     /**
-     * @param passwordResetValidateRequestDto
+     * Passwort-Reset-Token validieren
+     * Prüft, ob ein Passwort-Reset-Token gültig ist.
+     * @param passwordResetValidateRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

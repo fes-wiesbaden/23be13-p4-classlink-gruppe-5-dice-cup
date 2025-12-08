@@ -9,7 +9,7 @@
  */
 
 
-export interface InviteRedeemRequestDto {
+export interface InviteRedeemRequestDto { 
     token: string;
     username: string;
     password: string;

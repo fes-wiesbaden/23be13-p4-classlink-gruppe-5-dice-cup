@@ -36,6 +36,7 @@ import {Configuration} from '../configuration';
 import {BaseService} from '../api.base.service';
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -46,7 +47,9 @@ export class InvitationControllerService extends BaseService {
     }
 
     /**
-     * @param createInviteRequestDto
+     * Einladung erstellen
+     * Erstellt eine neue Registrierungseinladung.
+     * @param createInviteRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -125,7 +128,9 @@ export class InvitationControllerService extends BaseService {
     }
 
     /**
-     * @param inviteRedeemRequestDto
+     * Einladung einlösen
+     * Löst eine gültige Einladung ein und legt den Benutzer an.
+     * @param inviteRedeemRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -204,7 +209,9 @@ export class InvitationControllerService extends BaseService {
     }
 
     /**
-     * @param inviteValidationRequestDto
+     * Einladung validieren
+     * Validiert eine Einladung anhand des Tokens.
+     * @param inviteValidationRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

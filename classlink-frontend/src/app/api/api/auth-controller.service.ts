@@ -30,6 +30,7 @@ import {Configuration} from '../configuration';
 import {BaseService} from '../api.base.service';
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -40,7 +41,9 @@ export class AuthControllerService extends BaseService {
     }
 
     /**
-     * @param loginRequest
+     * Anmeldung durchführen
+     * Authentifiziert einen Benutzer und gibt Access- und Refresh-Token zurück.
+     * @param loginRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -119,7 +122,9 @@ export class AuthControllerService extends BaseService {
     }
 
     /**
-     * @param refreshRequest
+     * Tokens erneuern
+     * Erneuert den Access-Token mithilfe eines gültigen Refresh-Tokens.
+     * @param refreshRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
