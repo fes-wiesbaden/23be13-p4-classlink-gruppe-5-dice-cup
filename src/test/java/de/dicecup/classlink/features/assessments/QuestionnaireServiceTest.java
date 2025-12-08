@@ -98,4 +98,28 @@ class QuestionnaireServiceTest {
         assertThatThrownBy(() -> service.updateQuestion(q.getId(), question.getId(), "t", 1, true))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void questionModification_rejectedWhenClosed() {
+        Questionnaire q = new Questionnaire();
+        q.setId(UUID.randomUUID());
+        q.setStatus(QuestionnaireStatus.CLOSED);
+        when(questionnaireRepository.findById(q.getId())).thenReturn(Optional.of(q));
+
+        assertThatThrownBy(() -> service.addQuestion(q.getId(), "text", 1))
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void closeQuestionnaire_onlyFromOpen() {
+        UUID projectId = UUID.randomUUID();
+        Questionnaire q = new Questionnaire();
+        q.setId(UUID.randomUUID());
+        q.setProjectId(projectId);
+        q.setStatus(QuestionnaireStatus.DRAFT);
+        when(questionnaireRepository.findByProjectId(projectId)).thenReturn(Optional.of(q));
+
+        assertThatThrownBy(() -> service.closeQuestionnaire(projectId))
+                .isInstanceOf(IllegalStateException.class);
+    }
 }

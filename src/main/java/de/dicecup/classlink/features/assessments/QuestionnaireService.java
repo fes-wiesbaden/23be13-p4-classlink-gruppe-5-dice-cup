@@ -92,6 +92,18 @@ public class QuestionnaireService {
         return questionnaire;
     }
 
+    @Transactional
+    public Questionnaire openById(UUID questionnaireId) {
+        Questionnaire questionnaire = loadQuestionnaire(questionnaireId);
+        return openQuestionnaire(questionnaire.getProjectId());
+    }
+
+    @Transactional
+    public Questionnaire closeById(UUID questionnaireId) {
+        Questionnaire questionnaire = loadQuestionnaire(questionnaireId);
+        return closeQuestionnaire(questionnaire.getProjectId());
+    }
+
     private Questionnaire loadQuestionnaire(UUID questionnaireId) {
         return questionnaireRepository.findById(questionnaireId)
                 .orElseThrow(() -> new EntityNotFoundException("Questionnaire not found"));
