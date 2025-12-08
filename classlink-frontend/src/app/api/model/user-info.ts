@@ -9,7 +9,7 @@
  */
 
 
-export interface UserInfo { 
+export interface UserInfo {
     id?: string;
     user?: any | null;
     firstName?: string;

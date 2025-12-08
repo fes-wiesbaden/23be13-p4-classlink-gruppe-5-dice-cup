@@ -9,12 +9,13 @@
  */
 
 
-export interface ProjectGroupMemberDto { 
+export interface ProjectGroupMemberDto {
     id?: string;
     groupId?: string;
     studentId?: string;
     role?: ProjectGroupMemberDtoRoleEnum;
 }
+
 export enum ProjectGroupMemberDtoRoleEnum {
     Leader = 'LEADER',
     Member = 'MEMBER'

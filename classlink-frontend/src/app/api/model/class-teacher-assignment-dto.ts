@@ -9,7 +9,7 @@
  */
 
 
-export interface ClassTeacherAssignmentDto { 
+export interface ClassTeacherAssignmentDto {
     id?: string;
     classId?: string;
     termId?: string;

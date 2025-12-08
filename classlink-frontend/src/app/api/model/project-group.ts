@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Project } from './project';
-import { ProjectGroupMember } from './project-group-member';
-import { Teacher } from './teacher';
+import {Project} from './project';
+import {ProjectGroupMember} from './project-group-member';
+import {Teacher} from './teacher';
 
 
-export interface ProjectGroup { 
+export interface ProjectGroup {
     id?: string;
     project: Project;
     groupNumber: number;

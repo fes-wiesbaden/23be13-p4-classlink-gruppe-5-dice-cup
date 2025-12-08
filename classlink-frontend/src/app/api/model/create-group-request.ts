@@ -9,7 +9,7 @@
  */
 
 
-export interface CreateGroupRequest { 
+export interface CreateGroupRequest {
     groupNumber: number;
     supervisingTeacherId?: string;
 }

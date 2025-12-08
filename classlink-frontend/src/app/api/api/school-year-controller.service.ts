@@ -9,57 +9,72 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
-        }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
-import { Observable }                                        from 'rxjs';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {
+    HttpClient, HttpHeaders, HttpParams,
+    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+} from '@angular/common/http';
+import {CustomHttpParameterCodec} from '../encoder';
+import {Observable} from 'rxjs';
 
 // @ts-ignore
-import { SchoolYearCreateRequest } from '../model/school-year-create-request';
+import {SchoolYearCreateRequest} from '../model/school-year-create-request';
 // @ts-ignore
-import { SchoolYearDto } from '../model/school-year-dto';
+import {SchoolYearDto} from '../model/school-year-dto';
 // @ts-ignore
-import { TermCreateWebRequest } from '../model/term-create-web-request';
+import {TermCreateWebRequest} from '../model/term-create-web-request';
 // @ts-ignore
-import { TermDto } from '../model/term-dto';
+import {TermDto} from '../model/term-dto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
-import { BaseService } from '../api.base.service';
-
+import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
+import {Configuration} from '../configuration';
+import {BaseService} from '../api.base.service';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SchoolYearControllerService extends BaseService {
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
      * Schuljahr schließen
      * Schließt ein bestehendes Schuljahr anhand seiner ID.
-     * @param id 
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public closeYear(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public closeYear(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public closeYear(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public closeYear(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public closeYear(id: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any>;
+    public closeYear(id: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<any>>;
+    public closeYear(id: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<any>>;
+    public closeYear(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling closeYear.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
@@ -80,13 +95,21 @@ export class SchoolYearControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/school-years/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/close`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/school-years/${this.configuration.encodeParam({
+            name: "id",
+            value: id,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/close`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -98,15 +121,31 @@ export class SchoolYearControllerService extends BaseService {
     /**
      * Halbjahr für Schuljahr eröffnen
      * Erstellt ein neues Halbjahr innerhalb eines Schuljahres.
-     * @param id 
-     * @param termCreateWebRequest 
+     * @param id
+     * @param termCreateWebRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<TermDto>;
-    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TermDto>>;
-    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TermDto>>;
-    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<TermDto>;
+    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<TermDto>>;
+    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<TermDto>>;
+    public createTerm(id: string, termCreateWebRequest: TermCreateWebRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling createTerm.');
         }
@@ -148,14 +187,22 @@ export class SchoolYearControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/school-years/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/terms`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/school-years/${this.configuration.encodeParam({
+            name: "id",
+            value: id,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/terms`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<TermDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: termCreateWebRequest,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -167,14 +214,30 @@ export class SchoolYearControllerService extends BaseService {
     /**
      * Neues Schuljahr erstellen
      * Erstellt ein neues Schuljahr mit Namen und Zeitraum.
-     * @param schoolYearCreateRequest 
+     * @param schoolYearCreateRequest
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<SchoolYearDto>;
-    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SchoolYearDto>>;
-    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SchoolYearDto>>;
-    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<SchoolYearDto>;
+    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<SchoolYearDto>>;
+    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<SchoolYearDto>>;
+    public createYear(schoolYearCreateRequest: SchoolYearCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (schoolYearCreateRequest === null || schoolYearCreateRequest === undefined) {
             throw new Error('Required parameter schoolYearCreateRequest was null or undefined when calling createYear.');
         }
@@ -214,13 +277,13 @@ export class SchoolYearControllerService extends BaseService {
         }
 
         let localVarPath = `/api/school-years`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<SchoolYearDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: schoolYearCreateRequest,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -232,18 +295,34 @@ export class SchoolYearControllerService extends BaseService {
     /**
      * Schuljahre auflisten
      * Gibt alle Schuljahre zurück, optional gefiltert nach Status.
-     * @param status 
+     * @param status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<SchoolYearDto>>;
-    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<SchoolYearDto>>>;
-    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<SchoolYearDto>>>;
-    public list(status?: 'ACTIVE' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<Array<SchoolYearDto>>;
+    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<Array<SchoolYearDto>>>;
+    public list(status?: 'ACTIVE' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<Array<SchoolYearDto>>>;
+    public list(status?: 'ACTIVE' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>status, 'status');
+            <any>status, 'status');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -271,13 +350,13 @@ export class SchoolYearControllerService extends BaseService {
         }
 
         let localVarPath = `/api/school-years`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<Array<SchoolYearDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -289,22 +368,38 @@ export class SchoolYearControllerService extends BaseService {
     /**
      * Halbjahre eines Schuljahres auflisten
      * Listet alle Halbjahre eines Schuljahres, optional gefiltert nach Status.
-     * @param id 
-     * @param status 
+     * @param id
+     * @param status
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<TermDto>>;
-    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TermDto>>>;
-    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TermDto>>>;
-    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<Array<TermDto>>;
+    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<Array<TermDto>>>;
+    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<Array<TermDto>>>;
+    public listTerms(id: string, status?: 'OPEN' | 'CLOSED', observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling listTerms.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>status, 'status');
+            <any>status, 'status');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -331,14 +426,22 @@ export class SchoolYearControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/school-years/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/terms`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/school-years/${this.configuration.encodeParam({
+            name: "id",
+            value: id,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/terms`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<Array<TermDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

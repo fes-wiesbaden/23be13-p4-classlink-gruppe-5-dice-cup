@@ -9,37 +9,38 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
-        }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
-import { Observable }                                        from 'rxjs';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {
+    HttpClient, HttpHeaders, HttpParams,
+    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+} from '@angular/common/http';
+import {CustomHttpParameterCodec} from '../encoder';
+import {Observable} from 'rxjs';
 
 // @ts-ignore
-import { PasswordResetCommitRequestDto } from '../model/password-reset-commit-request-dto';
+import {PasswordResetCommitRequestDto} from '../model/password-reset-commit-request-dto';
 // @ts-ignore
-import { PasswordResetCreateRequestDto } from '../model/password-reset-create-request-dto';
+import {PasswordResetCreateRequestDto} from '../model/password-reset-create-request-dto';
 // @ts-ignore
-import { PasswordResetCreateResponseDto } from '../model/password-reset-create-response-dto';
+import {PasswordResetCreateResponseDto} from '../model/password-reset-create-response-dto';
 // @ts-ignore
-import { PasswordResetValidateRequestDto } from '../model/password-reset-validate-request-dto';
+import {PasswordResetValidateRequestDto} from '../model/password-reset-validate-request-dto';
 // @ts-ignore
-import { PasswordResetValidateResponseDto } from '../model/password-reset-validate-response-dto';
+import {PasswordResetValidateResponseDto} from '../model/password-reset-validate-response-dto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
-import { BaseService } from '../api.base.service';
+import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
+import {Configuration} from '../configuration';
+import {BaseService} from '../api.base.service';
 
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PasswordResetControllerService extends BaseService {
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
@@ -50,18 +51,33 @@ export class PasswordResetControllerService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any>;
+    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<any>>;
+    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<any>>;
+    public commit(passwordResetCommitRequestDto: PasswordResetCommitRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (passwordResetCommitRequestDto === null || passwordResetCommitRequestDto === undefined) {
             throw new Error('Required parameter passwordResetCommitRequestDto was null or undefined when calling commit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
@@ -92,13 +108,13 @@ export class PasswordResetControllerService extends BaseService {
         }
 
         let localVarPath = `/auth/password-reset/commit`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: passwordResetCommitRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -114,10 +130,26 @@ export class PasswordResetControllerService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PasswordResetCreateResponseDto>;
-    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PasswordResetCreateResponseDto>>;
-    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PasswordResetCreateResponseDto>>;
-    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<PasswordResetCreateResponseDto>;
+    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<PasswordResetCreateResponseDto>>;
+    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<PasswordResetCreateResponseDto>>;
+    public create1(passwordResetCreateRequestDto: PasswordResetCreateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (passwordResetCreateRequestDto === null || passwordResetCreateRequestDto === undefined) {
             throw new Error('Required parameter passwordResetCreateRequestDto was null or undefined when calling create1.');
         }
@@ -157,13 +189,13 @@ export class PasswordResetControllerService extends BaseService {
         }
 
         let localVarPath = `/auth/password-reset/create`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<PasswordResetCreateResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: passwordResetCreateRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -175,22 +207,38 @@ export class PasswordResetControllerService extends BaseService {
     /**
      * QR-Code für Passwort-Reset abrufen
      * Liefert den QR-Code für ein Passwort-Reset-Token als PNG oder PDF.
-     * @param id 
+     * @param id
      * @param format 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public qrCode(id: string, format?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public qrCode(id: string, format?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public qrCode(id: string, format?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public qrCode(id: string, format?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public qrCode(id: string, format?: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<string>;
+    public qrCode(id: string, format?: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<string>>;
+    public qrCode(id: string, format?: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<string>>;
+    public qrCode(id: string, format?: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling qrCode.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>format, 'format');
+            <any>format, 'format');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -217,14 +265,22 @@ export class PasswordResetControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/auth/password-reset/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/qrcode`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/auth/password-reset/${this.configuration.encodeParam({
+            name: "id",
+            value: id,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/qrcode`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -240,10 +296,26 @@ export class PasswordResetControllerService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<PasswordResetValidateResponseDto>;
-    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PasswordResetValidateResponseDto>>;
-    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PasswordResetValidateResponseDto>>;
-    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<PasswordResetValidateResponseDto>;
+    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<PasswordResetValidateResponseDto>>;
+    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<PasswordResetValidateResponseDto>>;
+    public validate1(passwordResetValidateRequestDto: PasswordResetValidateRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (passwordResetValidateRequestDto === null || passwordResetValidateRequestDto === undefined) {
             throw new Error('Required parameter passwordResetValidateRequestDto was null or undefined when calling validate1.');
         }
@@ -283,13 +355,13 @@ export class PasswordResetControllerService extends BaseService {
         }
 
         let localVarPath = `/auth/password-reset/validate`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<PasswordResetValidateResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: passwordResetValidateRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

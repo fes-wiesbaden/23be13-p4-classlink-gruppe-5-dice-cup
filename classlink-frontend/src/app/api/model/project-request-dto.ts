@@ -9,7 +9,7 @@
  */
 
 
-export interface ProjectRequestDto { 
+export interface ProjectRequestDto {
     name: string;
     description?: string;
 }

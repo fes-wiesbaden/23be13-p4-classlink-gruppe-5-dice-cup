@@ -9,7 +9,7 @@
  */
 
 
-export interface TermCreateWebRequest { 
+export interface TermCreateWebRequest {
     name: string;
     sequenceNumber: number;
     startDate: string;

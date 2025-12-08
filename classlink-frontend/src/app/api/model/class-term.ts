@@ -7,11 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Class } from './class';
-import { Term } from './term';
+import {Class} from './class';
+import {Term} from './term';
 
 
-export interface ClassTerm { 
+export interface ClassTerm {
     id?: string;
     schoolClass: Class;
     term: Term;
@@ -19,6 +19,7 @@ export interface ClassTerm {
     createdAt: string;
     updatedAt: string;
 }
+
 export enum ClassTermStatusEnum {
     Active = 'ACTIVE',
     Inactive = 'INACTIVE'

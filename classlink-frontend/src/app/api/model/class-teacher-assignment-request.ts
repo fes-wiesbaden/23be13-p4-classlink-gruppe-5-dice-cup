@@ -9,7 +9,7 @@
  */
 
 
-export interface ClassTeacherAssignmentRequest { 
+export interface ClassTeacherAssignmentRequest {
     subjectId: string;
     teacherId: string;
     weighting?: number;

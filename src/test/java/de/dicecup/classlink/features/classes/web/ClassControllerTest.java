@@ -6,7 +6,9 @@ import de.dicecup.classlink.features.classes.ClassController;
 import de.dicecup.classlink.features.classes.ClassManagementService;
 import de.dicecup.classlink.features.classes.ClassRepository;
 import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
+import de.dicecup.classlink.features.classes.ClassService;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
+import de.dicecup.classlink.features.classes.StudentInClassDto;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,8 @@ class ClassControllerTest {
     @MockBean
     ClassTermRepository classTermRepository;
     @MockBean
+    ClassService classService;
+    @MockBean
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
@@ -76,6 +80,20 @@ class ClassControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(clazz.getId().toString())));
+    }
+
+    @Test
+    void listClassStudents_returnsDtos() throws Exception {
+        UUID classId = UUID.randomUUID();
+        StudentInClassDto student = new StudentInClassDto(UUID.randomUUID(), "Alice", "Anderson", classId, "Class A");
+        when(classService.loadStudentsOfClass(classId)).thenReturn(List.of(student));
+
+        mockMvc.perform(get("/api/classes/" + classId + "/students"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].studentId", is(student.studentId().toString())))
+                .andExpect(jsonPath("$[0].firstName", is("Alice")))
+                .andExpect(jsonPath("$[0].classId", is(classId.toString())));
     }
 
     @Test

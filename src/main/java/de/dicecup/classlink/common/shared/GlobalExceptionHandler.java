@@ -66,6 +66,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 
+    @ExceptionHandler(de.dicecup.classlink.features.assessments.AssessmentAlreadySubmittedException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadySubmitted(de.dicecup.classlink.features.assessments.AssessmentAlreadySubmittedException ex) {
+        ErrorResponse body = ErrorResponse.of(
+                HttpStatus.CONFLICT,
+                "ASSESSMENT_ALREADY_SUBMITTED",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleResponseStatus(ResponseStatusException ex) {
         HttpStatus status = ex.getStatusCode() instanceof HttpStatus ? (HttpStatus) ex.getStatusCode() : HttpStatus.INTERNAL_SERVER_ERROR;

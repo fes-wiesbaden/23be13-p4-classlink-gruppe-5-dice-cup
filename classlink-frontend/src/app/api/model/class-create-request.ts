@@ -9,7 +9,7 @@
  */
 
 
-export interface ClassCreateRequest { 
+export interface ClassCreateRequest {
     name: string;
 }
 

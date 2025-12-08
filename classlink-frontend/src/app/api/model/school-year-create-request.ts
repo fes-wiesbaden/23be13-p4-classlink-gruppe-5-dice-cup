@@ -9,7 +9,7 @@
  */
 
 
-export interface SchoolYearCreateRequest { 
+export interface SchoolYearCreateRequest {
     name: string;
     startDate: string;
     endDate: string;

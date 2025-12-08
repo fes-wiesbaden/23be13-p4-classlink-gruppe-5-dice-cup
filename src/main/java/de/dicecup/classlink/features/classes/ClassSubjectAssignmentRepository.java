@@ -7,4 +7,8 @@ import java.util.UUID;
 
 public interface ClassSubjectAssignmentRepository extends JpaRepository<ClassSubjectAssignment, UUID> {
     List<ClassSubjectAssignment> findBySchoolClassIdAndTermId(UUID classId, UUID termId);
+
+    List<ClassSubjectAssignment> findBySchoolClassId(UUID classId);
+
+    List<ClassSubjectAssignment> findByTeacherId(UUID teacherId);
 }

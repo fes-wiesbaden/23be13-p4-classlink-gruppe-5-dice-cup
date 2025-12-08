@@ -9,55 +9,70 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
-        }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
-import { Observable }                                        from 'rxjs';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {
+    HttpClient, HttpHeaders, HttpParams,
+    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+} from '@angular/common/http';
+import {CustomHttpParameterCodec} from '../encoder';
+import {Observable} from 'rxjs';
 
 // @ts-ignore
-import { ProjectDetailsDto } from '../model/project-details-dto';
+import {ProjectDetailsDto} from '../model/project-details-dto';
 // @ts-ignore
-import { ProjectDto } from '../model/project-dto';
+import {ProjectDto} from '../model/project-dto';
 // @ts-ignore
-import { ProjectRequestDto } from '../model/project-request-dto';
+import {ProjectRequestDto} from '../model/project-request-dto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
-import { BaseService } from '../api.base.service';
-
+import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
+import {Configuration} from '../configuration';
+import {BaseService} from '../api.base.service';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ProjectControllerService extends BaseService {
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
      * Projekt archivieren
      * Archiviert ein Projekt anhand seiner ID.
-     * @param projectId 
+     * @param projectId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public archiveProject(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public archiveProject(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public archiveProject(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public archiveProject(projectId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public archiveProject(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any>;
+    public archiveProject(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<any>>;
+    public archiveProject(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<any>>;
+    public archiveProject(projectId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: undefined,
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (projectId === null || projectId === undefined) {
             throw new Error('Required parameter projectId was null or undefined when calling archiveProject.');
         }
 
         let localVarHeaders = this.defaultHeaders;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-        ]);
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
         }
@@ -78,13 +93,21 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/archive`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({
+            name: "projectId",
+            value: projectId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/archive`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -96,16 +119,32 @@ export class ProjectControllerService extends BaseService {
     /**
      * Neues Projekt erstellen
      * Erstellt ein neues Projekt für die angegebene Klasse und das angegebene Halbjahr.
-     * @param classId 
-     * @param termId 
-     * @param projectRequestDto 
+     * @param classId
+     * @param termId
+     * @param projectRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
-    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
-    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
-    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<ProjectDto>;
+    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<ProjectDto>>;
+    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<ProjectDto>>;
+    public createProject(classId: string, termId: string, projectRequestDto: ProjectRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (classId === null || classId === undefined) {
             throw new Error('Required parameter classId was null or undefined when calling createProject.');
         }
@@ -150,14 +189,30 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({name: "classId", value: classId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/terms/${this.configuration.encodeParam({name: "termId", value: termId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/projects`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/classes/${this.configuration.encodeParam({
+            name: "classId",
+            value: classId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/terms/${this.configuration.encodeParam({
+            name: "termId",
+            value: termId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/projects`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<ProjectDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: projectRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -169,14 +224,30 @@ export class ProjectControllerService extends BaseService {
     /**
      * Projekt nach ID abrufen
      * Gibt die Details eines Projekts anhand der ID zurück.
-     * @param projectId 
+     * @param projectId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProject(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDetailsDto>;
-    public getProject(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDetailsDto>>;
-    public getProject(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDetailsDto>>;
-    public getProject(projectId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProject(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<ProjectDetailsDto>;
+    public getProject(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<ProjectDetailsDto>>;
+    public getProject(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<ProjectDetailsDto>>;
+    public getProject(projectId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (projectId === null || projectId === undefined) {
             throw new Error('Required parameter projectId was null or undefined when calling getProject.');
         }
@@ -206,13 +277,21 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({
+            name: "projectId",
+            value: projectId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<ProjectDetailsDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -224,15 +303,31 @@ export class ProjectControllerService extends BaseService {
     /**
      * Projekte einer Klasse und eines Halbjahres auflisten
      * Gibt alle Projekte für die angegebene Klasse und das angegebene Halbjahr zurück.
-     * @param classId 
-     * @param termId 
+     * @param classId
+     * @param termId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listProjects(classId: string, termId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
-    public listProjects(classId: string, termId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
-    public listProjects(classId: string, termId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
-    public listProjects(classId: string, termId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listProjects(classId: string, termId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<Array<ProjectDto>>;
+    public listProjects(classId: string, termId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<Array<ProjectDto>>>;
+    public listProjects(classId: string, termId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<Array<ProjectDto>>>;
+    public listProjects(classId: string, termId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (classId === null || classId === undefined) {
             throw new Error('Required parameter classId was null or undefined when calling listProjects.');
         }
@@ -265,13 +360,29 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({name: "classId", value: classId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/terms/${this.configuration.encodeParam({name: "termId", value: termId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/projects`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/classes/${this.configuration.encodeParam({
+            name: "classId",
+            value: classId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/terms/${this.configuration.encodeParam({
+            name: "termId",
+            value: termId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/projects`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -283,15 +394,31 @@ export class ProjectControllerService extends BaseService {
     /**
      * Projekte eines Schülers auflisten
      * Listet Projekte eines Schülers für ein bestimmtes Halbjahr auf.
-     * @param studentId 
-     * @param termId 
+     * @param studentId
+     * @param termId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listProjectsForStudent(studentId: string, termId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Array<ProjectDto>>;
-    public listProjectsForStudent(studentId: string, termId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ProjectDto>>>;
-    public listProjectsForStudent(studentId: string, termId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ProjectDto>>>;
-    public listProjectsForStudent(studentId: string, termId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listProjectsForStudent(studentId: string, termId: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<Array<ProjectDto>>;
+    public listProjectsForStudent(studentId: string, termId: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<Array<ProjectDto>>>;
+    public listProjectsForStudent(studentId: string, termId: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<Array<ProjectDto>>>;
+    public listProjectsForStudent(studentId: string, termId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (studentId === null || studentId === undefined) {
             throw new Error('Required parameter studentId was null or undefined when calling listProjectsForStudent.');
         }
@@ -324,13 +451,29 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/students/${this.configuration.encodeParam({name: "studentId", value: studentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/terms/${this.configuration.encodeParam({name: "termId", value: termId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/projects`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/students/${this.configuration.encodeParam({
+            name: "studentId",
+            value: studentId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/terms/${this.configuration.encodeParam({
+            name: "termId",
+            value: termId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/projects`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<Array<ProjectDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -342,15 +485,31 @@ export class ProjectControllerService extends BaseService {
     /**
      * Projekt aktualisieren
      * Aktualisiert die Daten eines bestehenden Projekts.
-     * @param projectId 
-     * @param projectRequestDto 
+     * @param projectId
+     * @param projectRequestDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<ProjectDto>;
-    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectDto>>;
-    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectDto>>;
-    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<ProjectDto>;
+    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<ProjectDto>>;
+    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<ProjectDto>>;
+    public updateProject(projectId: string, projectRequestDto: ProjectRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (projectId === null || projectId === undefined) {
             throw new Error('Required parameter projectId was null or undefined when calling updateProject.');
         }
@@ -392,14 +551,22 @@ export class ProjectControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({
+            name: "projectId",
+            value: projectId,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<ProjectDto>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: projectRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

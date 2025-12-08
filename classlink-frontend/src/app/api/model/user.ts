@@ -7,14 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GrantedAuthority } from './granted-authority';
-import { Teacher } from './teacher';
-import { UserInfo } from './user-info';
-import { Admin } from './admin';
-import { Student } from './student';
+import {GrantedAuthority} from './granted-authority';
+import {Teacher} from './teacher';
+import {UserInfo} from './user-info';
+import {Admin} from './admin';
+import {Student} from './student';
 
 
-export interface User { 
+export interface User {
     createdAt?: string;
     updatedAt?: string;
     createdBy?: string;
@@ -30,9 +30,9 @@ export interface User {
     teacher?: Teacher;
     password?: string;
     authorities?: Array<GrantedAuthority>;
-    accountUsername?: string;
     accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
     accountNonLocked?: boolean;
+    accountUsername?: string;
+    credentialsNonExpired?: boolean;
 }
 

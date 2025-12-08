@@ -9,31 +9,32 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
-        }       from '@angular/common/http';
-import { CustomHttpParameterCodec }                          from '../encoder';
-import { Observable }                                        from 'rxjs';
+import {Inject, Injectable, Optional} from '@angular/core';
+import {
+    HttpClient, HttpHeaders, HttpParams,
+    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+} from '@angular/common/http';
+import {CustomHttpParameterCodec} from '../encoder';
+import {Observable} from 'rxjs';
 
 // @ts-ignore
-import { CreateInviteRequestDto } from '../model/create-invite-request-dto';
+import {CreateInviteRequestDto} from '../model/create-invite-request-dto';
 // @ts-ignore
-import { InviteCreatedResponseDto } from '../model/invite-created-response-dto';
+import {InviteCreatedResponseDto} from '../model/invite-created-response-dto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
-import { Configuration }                                     from '../configuration';
-import { BaseService } from '../api.base.service';
+import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
+import {Configuration} from '../configuration';
+import {BaseService} from '../api.base.service';
 
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AdminInvitationControllerService extends BaseService {
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
@@ -44,10 +45,26 @@ export class AdminInvitationControllerService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<InviteCreatedResponseDto>;
-    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InviteCreatedResponseDto>>;
-    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InviteCreatedResponseDto>>;
-    public create4(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<InviteCreatedResponseDto>;
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<InviteCreatedResponseDto>>;
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<InviteCreatedResponseDto>>;
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (createInviteRequestDto === null || createInviteRequestDto === undefined) {
             throw new Error('Required parameter createInviteRequestDto was null or undefined when calling create4.');
         }
@@ -87,13 +104,13 @@ export class AdminInvitationControllerService extends BaseService {
         }
 
         let localVarPath = `/admin/invites`;
-        const { basePath, withCredentials } = this.configuration;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<InviteCreatedResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createInviteRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -105,22 +122,38 @@ export class AdminInvitationControllerService extends BaseService {
     /**
      * QR-Code für Einladung abrufen
      * Liefert den QR-Code für eine Einladung als PNG oder PDF.
-     * @param id 
+     * @param id
      * @param format 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public qrCode1(id: string, format?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public qrCode1(id: string, format?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public qrCode1(id: string, format?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public qrCode1(id: string, format?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public qrCode1(id: string, format?: string, observe?: 'body', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<string>;
+    public qrCode1(id: string, format?: string, observe?: 'response', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpResponse<string>>;
+    public qrCode1(id: string, format?: string, observe?: 'events', reportProgress?: boolean, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<HttpEvent<string>>;
+    public qrCode1(id: string, format?: string, observe: any = 'body', reportProgress: boolean = false, options?: {
+        httpHeaderAccept?: '*/*',
+        context?: HttpContext,
+        transferCache?: boolean
+    }): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling qrCode1.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>format, 'format');
+            <any>format, 'format');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -147,14 +180,22 @@ export class AdminInvitationControllerService extends BaseService {
             }
         }
 
-        let localVarPath = `/admin/invites/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/qrcode`;
-        const { basePath, withCredentials } = this.configuration;
+        let localVarPath = `/admin/invites/${this.configuration.encodeParam({
+            name: "id",
+            value: id,
+            in: "path",
+            style: "simple",
+            explode: false,
+            dataType: "string",
+            dataFormat: "uuid"
+        })}/qrcode`;
+        const {basePath, withCredentials} = this.configuration;
         return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                ...(withCredentials ? {withCredentials} : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

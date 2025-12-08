@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Project } from './project';
-import { ClassTerm } from './class-term';
-import { SchoolYear } from './school-year';
+import {Project} from './project';
+import {ClassTerm} from './class-term';
+import {SchoolYear} from './school-year';
 
 
-export interface Term { 
+export interface Term {
     id?: string;
     name: string;
     status: TermStatusEnum;
@@ -25,6 +25,7 @@ export interface Term {
     classTerms?: Array<ClassTerm>;
     projects?: Array<Project>;
 }
+
 export enum TermStatusEnum {
     Open = 'OPEN',
     Closed = 'CLOSED'

@@ -9,7 +9,7 @@
  */
 
 
-export interface ClassDto { 
+export interface ClassDto {
     id?: string;
     name?: string;
 }
