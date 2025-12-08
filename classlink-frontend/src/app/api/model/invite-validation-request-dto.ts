@@ -9,7 +9,7 @@
  */
 
 
-export interface InviteValidationRequestDto {
+export interface InviteValidationRequestDto { 
     token: string;
 }
 

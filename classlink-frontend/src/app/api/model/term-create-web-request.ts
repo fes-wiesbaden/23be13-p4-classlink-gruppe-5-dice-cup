@@ -9,7 +9,10 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface TermCreateWebRequest { 
+    name: string;
+    sequenceNumber: number;
+    startDate: string;
+    endDate: string;
 }
 

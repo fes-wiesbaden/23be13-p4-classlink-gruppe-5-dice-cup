@@ -7,9 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProjectDto } from './project-dto';
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface ProjectDetailsDto { 
+    project?: ProjectDto;
 }
 

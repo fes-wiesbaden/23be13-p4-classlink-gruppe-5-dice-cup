@@ -9,13 +9,12 @@
  */
 
 
-export interface InviteRedeemResponseDto {
+export interface InviteRedeemResponseDto { 
     userId?: string;
     jwt?: string;
     email?: string;
     role?: InviteRedeemResponseDtoRoleEnum;
 }
-
 export enum InviteRedeemResponseDtoRoleEnum {
     Admin = 'ADMIN',
     Teacher = 'TEACHER',

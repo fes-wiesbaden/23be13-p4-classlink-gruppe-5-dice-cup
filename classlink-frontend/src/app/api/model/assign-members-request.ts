@@ -7,9 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { MemberAssignment } from './member-assignment';
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface AssignMembersRequest { 
+    members: Array<MemberAssignment>;
 }
 

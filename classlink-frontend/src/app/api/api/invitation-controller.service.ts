@@ -9,67 +9,53 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import {Inject, Injectable, Optional} from '@angular/core';
-import {
-    HttpClient, HttpHeaders, HttpParams,
-    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
-} from '@angular/common/http';
-import {CustomHttpParameterCodec} from '../encoder';
-import {Observable} from 'rxjs';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+        }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
+import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import {CreateInviteRequestDto} from '../model/create-invite-request-dto';
+import { CreateInviteRequestDto } from '../model/create-invite-request-dto';
 // @ts-ignore
-import {InviteCreatedResponseDto} from '../model/invite-created-response-dto';
+import { InviteCreatedResponseDto } from '../model/invite-created-response-dto';
 // @ts-ignore
-import {InviteRedeemRequestDto} from '../model/invite-redeem-request-dto';
+import { InviteRedeemRequestDto } from '../model/invite-redeem-request-dto';
 // @ts-ignore
-import {InviteRedeemResponseDto} from '../model/invite-redeem-response-dto';
+import { InviteRedeemResponseDto } from '../model/invite-redeem-response-dto';
 // @ts-ignore
-import {InviteValidationRequestDto} from '../model/invite-validation-request-dto';
+import { InviteValidationRequestDto } from '../model/invite-validation-request-dto';
 // @ts-ignore
-import {InviteValidationResponseDto} from '../model/invite-validation-response-dto';
+import { InviteValidationResponseDto } from '../model/invite-validation-response-dto';
 
 // @ts-ignore
-import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
-import {Configuration} from '../configuration';
-import {BaseService} from '../api.base.service';
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+import { BaseService } from '../api.base.service';
+
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class InvitationControllerService extends BaseService {
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
     }
 
     /**
-     * @param createInviteRequestDto
+     * Einladung erstellen
+     * Erstellt eine neue Registrierungseinladung.
+     * @param createInviteRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<InviteCreatedResponseDto>;
-    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<InviteCreatedResponseDto>>;
-    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<InviteCreatedResponseDto>>;
-    public create(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
+    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<InviteCreatedResponseDto>;
+    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InviteCreatedResponseDto>>;
+    public create(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InviteCreatedResponseDto>>;
+    public create(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createInviteRequestDto === null || createInviteRequestDto === undefined) {
             throw new Error('Required parameter createInviteRequestDto was null or undefined when calling create.');
         }
@@ -109,13 +95,13 @@ export class InvitationControllerService extends BaseService {
         }
 
         let localVarPath = `/invites/create`;
-        const {basePath, withCredentials} = this.configuration;
+        const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InviteCreatedResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createInviteRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -125,30 +111,16 @@ export class InvitationControllerService extends BaseService {
     }
 
     /**
-     * @param inviteRedeemRequestDto
+     * Einladung einlösen
+     * Löst eine gültige Einladung ein und legt den Benutzer an.
+     * @param inviteRedeemRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<InviteRedeemResponseDto>;
-    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<InviteRedeemResponseDto>>;
-    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<InviteRedeemResponseDto>>;
-    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
+    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<InviteRedeemResponseDto>;
+    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InviteRedeemResponseDto>>;
+    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InviteRedeemResponseDto>>;
+    public redeem(inviteRedeemRequestDto: InviteRedeemRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inviteRedeemRequestDto === null || inviteRedeemRequestDto === undefined) {
             throw new Error('Required parameter inviteRedeemRequestDto was null or undefined when calling redeem.');
         }
@@ -188,13 +160,13 @@ export class InvitationControllerService extends BaseService {
         }
 
         let localVarPath = `/invites/redeem`;
-        const {basePath, withCredentials} = this.configuration;
+        const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InviteRedeemResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: inviteRedeemRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -204,30 +176,16 @@ export class InvitationControllerService extends BaseService {
     }
 
     /**
-     * @param inviteValidationRequestDto
+     * Einladung validieren
+     * Validiert eine Einladung anhand des Tokens.
+     * @param inviteValidationRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<InviteValidationResponseDto>;
-    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<InviteValidationResponseDto>>;
-    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<InviteValidationResponseDto>>;
-    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
+    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<InviteValidationResponseDto>;
+    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InviteValidationResponseDto>>;
+    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InviteValidationResponseDto>>;
+    public validate(inviteValidationRequestDto: InviteValidationRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (inviteValidationRequestDto === null || inviteValidationRequestDto === undefined) {
             throw new Error('Required parameter inviteValidationRequestDto was null or undefined when calling validate.');
         }
@@ -267,13 +225,13 @@ export class InvitationControllerService extends BaseService {
         }
 
         let localVarPath = `/invites/validate`;
-        const {basePath, withCredentials} = this.configuration;
+        const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<InviteValidationResponseDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: inviteValidationRequestDto,
                 responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
+                ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

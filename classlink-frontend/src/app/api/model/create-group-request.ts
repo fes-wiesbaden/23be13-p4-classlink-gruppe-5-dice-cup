@@ -9,7 +9,8 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface CreateGroupRequest { 
+    groupNumber: number;
+    supervisingTeacherId?: string;
 }
 

@@ -9,7 +9,9 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface ClassTeacherAssignmentRequest { 
+    subjectId: string;
+    teacherId: string;
+    weighting?: number;
 }
 

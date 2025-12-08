@@ -9,7 +9,9 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface SchoolYearCreateRequest { 
+    name: string;
+    startDate: string;
+    endDate: string;
 }
 

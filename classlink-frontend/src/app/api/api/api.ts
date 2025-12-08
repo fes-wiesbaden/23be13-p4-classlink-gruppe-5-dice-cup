@@ -1,18 +1,23 @@
 export * from './admin-invitation-controller.service';
-import {AdminInvitationControllerService} from './admin-invitation-controller.service';
-
+import { AdminInvitationControllerService } from './admin-invitation-controller.service';
 export * from './auth-controller.service';
-import {AuthControllerService} from './auth-controller.service';
-
+import { AuthControllerService } from './auth-controller.service';
+export * from './class-controller.service';
+import { ClassControllerService } from './class-controller.service';
 export * from './dev-token-controller.service';
-import {DevTokenControllerService} from './dev-token-controller.service';
-
+import { DevTokenControllerService } from './dev-token-controller.service';
 export * from './invitation-controller.service';
-import {InvitationControllerService} from './invitation-controller.service';
-
+import { InvitationControllerService } from './invitation-controller.service';
 export * from './password-reset-controller.service';
-import {PasswordResetControllerService} from './password-reset-controller.service';
+import { PasswordResetControllerService } from './password-reset-controller.service';
+export * from './project-controller.service';
+import { ProjectControllerService } from './project-controller.service';
+export * from './project-group-controller.service';
+import { ProjectGroupControllerService } from './project-group-controller.service';
+export * from './school-year-controller.service';
+import { SchoolYearControllerService } from './school-year-controller.service';
+export * from './term-controller.service';
+import { TermControllerService } from './term-controller.service';
 export * from './user-controller.service';
 import { UserControllerService } from './user-controller.service';
-
-export const APIS = [AdminInvitationControllerService, AuthControllerService, DevTokenControllerService, InvitationControllerService, PasswordResetControllerService, UserControllerService];
+export const APIS = [AdminInvitationControllerService, AuthControllerService, ClassControllerService, DevTokenControllerService, InvitationControllerService, PasswordResetControllerService, ProjectControllerService, ProjectGroupControllerService, SchoolYearControllerService, TermControllerService, UserControllerService];
