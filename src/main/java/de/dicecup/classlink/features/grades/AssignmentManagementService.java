@@ -1,5 +1,7 @@
-package de.dicecup.classlink.features.classes;
+package de.dicecup.classlink.features.grades;
 
+import de.dicecup.classlink.features.classes.ClassTerm;
+import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.subjects.SubjectRepository;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
@@ -15,20 +17,19 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ClassManagementService {
+public class AssignmentManagementService {
 
     private final ClassTermRepository classTermRepository;
-    private final ClassSubjectAssignmentRepository assignmentRepository;
-    private final ClassFinalGradeAssignmentRepository classFinalGradeAssignmentRepository;
+    private final SubjectAssignmentRepository assignmentRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
 
     @Transactional
-    public ClassSubjectAssignment assignTeacher(UUID classId,
-                                                UUID termId,
-                                                UUID subjectId,
-                                                UUID teacherId,
-                                                BigDecimal weighting) {
+    public SubjectAssignment assignTeacher(UUID classId,
+                                           UUID termId,
+                                           UUID subjectId,
+                                           UUID teacherId,
+                                           BigDecimal weighting) {
         ClassTerm classTerm = classTermRepository.findBySchoolClassIdAndTermId(classId, termId)
                 .orElseThrow(() -> new EntityNotFoundException("Class term not found"));
         Subject subject = subjectRepository.findById(subjectId)
@@ -36,7 +37,7 @@ public class ClassManagementService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
 
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(classTerm.getSchoolClass());
         assignment.setTerm(classTerm.getTerm());
         assignment.setSubject(subject);
@@ -46,7 +47,7 @@ public class ClassManagementService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClassSubjectAssignment> listAssignments(UUID classId, UUID termId) {
+    public List<SubjectAssignment> listAssignments(UUID classId, UUID termId) {
         return assignmentRepository.findBySchoolClassIdAndTermId(classId, termId);
     }
 }

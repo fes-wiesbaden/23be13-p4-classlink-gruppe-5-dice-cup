@@ -1,5 +1,8 @@
 package de.dicecup.classlink.features.classes;
 
+import de.dicecup.classlink.features.grades.AssignmentManagementService;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.subjects.SubjectRepository;
 import de.dicecup.classlink.features.terms.Term;
@@ -24,19 +27,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ClassManagementServiceTest {
+class AssignmentManagementServiceTest {
 
     @Mock
     private ClassTermRepository classTermRepository;
     @Mock
-    private ClassSubjectAssignmentRepository assignmentRepository;
+    private SubjectAssignmentRepository assignmentRepository;
     @Mock
     private SubjectRepository subjectRepository;
     @Mock
     private TeacherRepository teacherRepository;
 
     @InjectMocks
-    private ClassManagementService classManagementService;
+    private AssignmentManagementService assignmentManagementService;
 
     @Test
     void assignTeacher_createsAssignmentWhenDependenciesExist() {
@@ -61,10 +64,10 @@ class ClassManagementServiceTest {
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(subject));
         when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(teacher));
-        when(assignmentRepository.save(any(ClassSubjectAssignment.class)))
+        when(assignmentRepository.save(any(SubjectAssignment.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        ClassSubjectAssignment assignment = classManagementService.assignTeacher(
+        SubjectAssignment assignment = assignmentManagementService.assignTeacher(
                 classId, termId, subjectId, teacherId, BigDecimal.ONE);
 
         assertThat(assignment.getSchoolClass()).isEqualTo(schoolClass);
@@ -81,7 +84,7 @@ class ClassManagementServiceTest {
 
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> classManagementService.assignTeacher(classId, termId, UUID.randomUUID(), UUID.randomUUID(), BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, UUID.randomUUID(), UUID.randomUUID(), BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(subjectRepository, never()).findById(any());
@@ -102,7 +105,7 @@ class ClassManagementServiceTest {
         when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> classManagementService.assignTeacher(classId, termId, subjectId, UUID.randomUUID(), BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, subjectId, UUID.randomUUID(), BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(teacherRepository, never()).findById(any());
@@ -125,7 +128,7 @@ class ClassManagementServiceTest {
         when(subjectRepository.findById(any())).thenReturn(Optional.of(subject));
         when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> classManagementService.assignTeacher(classId, termId, UUID.randomUUID(), teacherId, BigDecimal.ONE))
+        assertThatThrownBy(() -> assignmentManagementService.assignTeacher(classId, termId, UUID.randomUUID(), teacherId, BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(assignmentRepository, never()).save(any());

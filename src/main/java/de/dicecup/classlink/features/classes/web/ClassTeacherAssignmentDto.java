@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.classes.web;
 
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -14,7 +14,7 @@ public record ClassTeacherAssignmentDto(
         UUID subjectId,
         BigDecimal weighting
 ) {
-    public static ClassTeacherAssignmentDto from(ClassSubjectAssignment assignment) {
+    public static ClassTeacherAssignmentDto from(SubjectAssignment assignment) {
         return new ClassTeacherAssignmentDto(
                 assignment.getId(),
                 assignment.getName(),

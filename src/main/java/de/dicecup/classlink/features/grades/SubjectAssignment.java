@@ -1,6 +1,6 @@
-package de.dicecup.classlink.features.classes;
+package de.dicecup.classlink.features.grades;
 
-import de.dicecup.classlink.features.grades.Grade;
+import de.dicecup.classlink.features.classes.Class;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
@@ -24,7 +24,7 @@ import java.util.UUID;
         name = "class_subject_assignments",
         uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"class_id", "term_id", "subject_id", "teacher_id"})
 )
-public class ClassSubjectAssignment {
+public class SubjectAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

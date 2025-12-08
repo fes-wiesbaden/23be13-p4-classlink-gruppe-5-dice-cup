@@ -1,9 +1,5 @@
 package de.dicecup.classlink.features.grades;
 
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
-import de.dicecup.classlink.features.subjects.ProjectSubject;
-import de.dicecup.classlink.features.subjects.Subject;
-import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import jakarta.persistence.Column;
@@ -43,7 +39,7 @@ public class Grade {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "class_subject_assignment_id", nullable = false)
-    private ClassSubjectAssignment classSubjectAssignment;
+    private SubjectAssignment subjectAssignment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
