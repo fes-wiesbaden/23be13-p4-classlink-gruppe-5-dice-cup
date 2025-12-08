@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface ProjectGroupMemberRepository extends JpaRepository<ProjectGroupMember, UUID> {
     void deleteByProjectGroupIdAndStudentId(UUID projectGroupId, UUID studentId);
+
+    boolean existsByProjectGroupProjectIdAndStudentId(UUID projectId, UUID studentId);
 }

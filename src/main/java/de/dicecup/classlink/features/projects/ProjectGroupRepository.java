@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface ProjectGroupRepository extends JpaRepository<ProjectGroup, UUID> {
     List<ProjectGroup> findByProjectId(UUID projectId);
+
+    boolean existsByProjectIdAndSupervisingTeacherId(UUID projectId, UUID teacherId);
 }
