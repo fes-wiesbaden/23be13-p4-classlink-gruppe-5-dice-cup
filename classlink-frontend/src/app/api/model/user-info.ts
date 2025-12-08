@@ -9,7 +9,11 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface UserInfo { 
+    id?: string;
+    user?: any | null;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
 }
 

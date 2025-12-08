@@ -9,7 +9,8 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface Admin { 
+    id?: string;
+    user?: any | null;
 }
 

@@ -7,9 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { User } from './user';
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface Teacher { 
+    id?: string;
+    user?: User;
 }
 

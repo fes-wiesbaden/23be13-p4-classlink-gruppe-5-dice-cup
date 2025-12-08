@@ -9,7 +9,14 @@
  */
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface MemberAssignment { 
+    studentId?: string;
+    role?: MemberAssignmentRoleEnum;
 }
+export enum MemberAssignmentRoleEnum {
+    Leader = 'LEADER',
+    Member = 'MEMBER'
+};
+
+
 

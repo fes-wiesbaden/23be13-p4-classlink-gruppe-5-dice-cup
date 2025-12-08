@@ -7,9 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ClassTerm } from './class-term';
 
 
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface Class { 
+    id?: string;
+    name?: string;
+    terms?: Array<ClassTerm>;
 }
 
