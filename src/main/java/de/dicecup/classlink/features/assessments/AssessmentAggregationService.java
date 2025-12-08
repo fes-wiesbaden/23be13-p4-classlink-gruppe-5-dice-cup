@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +27,11 @@ public class AssessmentAggregationService {
         Questionnaire questionnaire = questionnaireRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Questionnaire not found"));
 
-        Map<UUID, Question> questions = questionRepository.findByQuestionnaireId(questionnaire.getId())
+        List<Question> questions = questionRepository.findByQuestionnaireId(questionnaire.getId())
                 .stream()
-                .collect(Collectors.toMap(Question::getId, Function.identity()));
+                .filter(Question::isActive)
+                .sorted(Comparator.comparingInt(Question::getPosition))
+                .toList();
 
         List<AssessmentAnswer> answers = assessmentAnswerRepository.findSubmittedByQuestionnaire(questionnaire.getId());
 
@@ -71,7 +72,7 @@ public class AssessmentAggregationService {
             Map<UUID, List<AssessmentAnswer>> peerByQuestion = peerAnswers.stream()
                     .collect(Collectors.groupingBy(a -> a.getQuestion().getId()));
 
-            List<StudentQuestionAssessmentDTO> questionDtos = questions.values().stream()
+            List<StudentQuestionAssessmentDTO> questionDtos = questions.stream()
                     .map(q -> {
                         Integer selfScore = selfByQuestion.getOrDefault(q.getId(), List.of()).stream()
                                 .findFirst()
@@ -80,7 +81,6 @@ public class AssessmentAggregationService {
                         Double peerAvgScore = average(peerByQuestion.getOrDefault(q.getId(), List.of()));
                         return new StudentQuestionAssessmentDTO(q.getId(), q.getText(), selfScore, peerAvgScore);
                     })
-                    .sorted(Comparator.comparing(StudentQuestionAssessmentDTO::questionId, Comparator.nullsLast(UUID::compareTo)))
                     .toList();
 
             String studentName = studentNames != null ? studentNames.get(studentId) : null;

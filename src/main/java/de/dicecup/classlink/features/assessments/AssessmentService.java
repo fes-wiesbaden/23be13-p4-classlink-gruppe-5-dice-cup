@@ -1,5 +1,6 @@
 package de.dicecup.classlink.features.assessments;
 
+import de.dicecup.classlink.features.projects.ProjectGroupMemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,17 +22,22 @@ public class AssessmentService {
     private final QuestionRepository questionRepository;
     private final AssessmentRepository assessmentRepository;
     private final AssessmentAnswerRepository assessmentAnswerRepository;
+    private final ProjectGroupMemberRepository projectGroupMemberRepository;
 
     @Transactional
     public Assessment submitSelf(UUID projectId, UUID studentId, List<AnswerCommand> answers) {
         Questionnaire questionnaire = questionnaireRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Questionnaire not found"));
         ensureOpen(questionnaire);
+        ensureParticipant(projectId, studentId);
 
         Assessment existing = assessmentRepository.findByQuestionnaireIdAndTypeAndAssessorStudentIdAndAssesseeStudentId(
                 questionnaire.getId(), AssessmentType.SELF, studentId, studentId
         ).orElse(null);
-        if (existing != null) {
+        if (existing != null && existing.getSubmittedAt() != null) {
+            throw new AssessmentAlreadySubmittedException("Self assessment already submitted");
+        }
+        if (existing != null && existing.getSubmittedAt() == null) {
             assessmentAnswerRepository.deleteAll(existing.getAnswers());
         }
         Assessment assessment = existing != null ? existing : new Assessment();
@@ -61,11 +67,16 @@ public class AssessmentService {
         Questionnaire questionnaire = questionnaireRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Questionnaire not found"));
         ensureOpen(questionnaire);
+        ensureParticipant(projectId, assessorStudentId);
+        ensureParticipant(projectId, assesseeStudentId);
 
         Assessment existing = assessmentRepository.findByQuestionnaireIdAndTypeAndAssessorStudentIdAndAssesseeStudentId(
                 questionnaire.getId(), AssessmentType.PEER, assessorStudentId, assesseeStudentId
         ).orElse(null);
-        if (existing != null) {
+        if (existing != null && existing.getSubmittedAt() != null) {
+            throw new AssessmentAlreadySubmittedException("Peer assessment already submitted");
+        }
+        if (existing != null && existing.getSubmittedAt() == null) {
             assessmentAnswerRepository.deleteAll(existing.getAnswers());
         }
         Assessment assessment = existing != null ? existing : new Assessment();
@@ -105,6 +116,12 @@ public class AssessmentService {
     private void ensureOpen(Questionnaire questionnaire) {
         if (questionnaire.getStatus() != QuestionnaireStatus.OPEN) {
             throw new IllegalStateException("Questionnaire not open");
+        }
+    }
+
+    private void ensureParticipant(UUID projectId, UUID studentId) {
+        if (!projectGroupMemberRepository.existsByProjectGroupProjectIdAndStudentId(projectId, studentId)) {
+            throw new IllegalArgumentException("Student is not participant of project");
         }
     }
 

@@ -16,4 +16,6 @@ public interface AssessmentAnswerRepository extends JpaRepository<AssessmentAnsw
             and a.submittedAt is not null
             """)
     List<AssessmentAnswer> findSubmittedByQuestionnaire(@Param("questionnaireId") UUID questionnaireId);
+
+    List<AssessmentAnswer> findByAssessmentId(UUID assessmentId);
 }
