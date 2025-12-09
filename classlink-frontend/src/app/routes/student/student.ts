@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { GradeHistoryStripComponent } from '../../features/student/components/grade-history/grade-history';
 import { AuthService } from '../../../services/auth.service';
 import { TeacherMockService } from '../../features/teacher/mock.service';
 import { Scores } from '../../features/teacher/models';
+import { UserControllerService, UserDto } from '../../api';
+import { finalize, take } from 'rxjs';
 
 interface Assessment {
   label: string;
@@ -31,8 +32,6 @@ interface StudentProject {
   nextDue: string;
   progress: number;
   scores: Scores;
-  peerCount: number;
-  selfDone: boolean;
   peerDone: boolean;
   color: string;
 }
@@ -46,23 +45,30 @@ interface StudentProject {
   providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentComponent {
+export class StudentComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly mock = inject(TeacherMockService);
   private readonly messages = inject(MessageService);
+  private readonly usersApi = inject(UserControllerService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly studentId = 1;
   studentName: string;
+  studentEmail = '';
   studentClass = '10A';
   lernfelder: Lernfeld[] = [];
   projects: StudentProject[] = [];
   averageGrade = 0;
-  history: { labels: string[]; teacher: number[]; peer: number[]; self: number[] } | null = null;
-  historyProjectName = '';
+  openProjects = 0;
   selectedLernfeld: Lernfeld | null = null;
+  apiUser: UserDto | null = null;
+  userLoading = false;
+  userLoadError = false;
 
   constructor() {
-    this.studentName = this.auth.getUsername() || 'Anna Schmidt';
+    const rawUser = this.auth.getUsername();
+    this.studentName = this.extractDisplayName(rawUser);
+    this.studentEmail = this.makeEmail(rawUser ?? this.studentName);
     const cls = this.mock.getStudents().find((s) => s.id === this.studentId)?.class;
     if (cls) {
       this.studentClass = cls;
@@ -74,12 +80,12 @@ export class StudentComponent {
       ),
     );
     this.projects = this.buildProjects();
-    if (this.projects.length) {
-      const first = this.projects[0];
-      this.history = this.mock.getScoreHistory(this.studentId, first.id, 6);
-      this.historyProjectName = first.name;
-    }
+    this.openProjects = this.projects.filter((p) => !p.peerDone).length;
     this.selectedLernfeld = this.lernfelder[0] ?? null;
+  }
+
+  ngOnInit(): void {
+    this.loadStudentFromApi();
   }
 
   trackByLernfeld(_: number, lf: Lernfeld) {
@@ -98,17 +104,15 @@ export class StudentComponent {
     return this.selectedLernfeld?.id === id;
   }
 
-  startSelfEvaluation(project: StudentProject): void {
-    project.selfDone = true;
-    this.messages.add({
-      severity: 'info',
-      summary: 'Selbst-Evaluation',
-      detail: `${project.name} vorbereitet.`,
-    });
+  gradeProgress(grade: number): number {
+    const clamped = Math.min(6, Math.max(1, grade));
+    const normalized = (6 - clamped) / 5;
+    return Math.round(normalized * 100);
   }
 
   startPeerEvaluation(project: StudentProject): void {
     project.peerDone = true;
+    this.openProjects = this.projects.filter((p) => !p.peerDone).length;
     this.messages.add({
       severity: 'success',
       summary: 'Peer-Evaluation',
@@ -116,12 +120,20 @@ export class StudentComponent {
     });
   }
 
-  gradeColor(grade: number): string {
-    if (grade <= 1.5) return '#c7f6d9';
-    if (grade <= 2.5) return '#d7f0ff';
-    if (grade <= 3.5) return '#ffeec7';
-    if (grade <= 4.5) return '#ffe0c2';
-    return '#ffd5d5';
+  private makeEmail(name: string): string {
+    if (!name) {
+      return 'student@dicecup.local';
+    }
+    const trimmed = name.trim().toLowerCase();
+    if (trimmed.includes('@')) {
+      return trimmed;
+    }
+    const sanitized = name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/gi, '.')
+      .replace(/\.+/g, '.')
+      .replace(/^\.+|\.+$/g, '');
+    return `${sanitized || 'student'}@dicecup.local`;
   }
 
   private buildProjects(): StudentProject[] {
@@ -150,12 +162,61 @@ export class StudentComponent {
         nextDue: ['12.12.', '18.12.', '08.01.'][idx % 3],
         progress: 65 + ((idx * 11) % 25),
         scores,
-        peerCount: 2 + (idx % 3),
-        selfDone: idx === 0,
         peerDone: false,
         color: palette[idx % palette.length],
       };
     });
+  }
+
+  /**
+   * Load student data from backend; show an error if it fails
+   */
+  private loadStudentFromApi(): void {
+    this.userLoading = true;
+    this.userLoadError = false;
+    this.usersApi
+      .getUsers()
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.userLoading = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (users) => {
+          const user = users.find((u) => u.id) ?? users[0];
+          if (!user) {
+            this.userLoadError = true;
+            return;
+          }
+          this.apiUser = user;
+          const info = user.userInfo;
+          const fullName =
+            info?.firstName && info?.lastName
+              ? `${info.firstName} ${info.lastName}`
+              : this.extractDisplayName(user.username);
+          this.studentName = fullName || this.studentName;
+          this.studentEmail = info?.email
+            ? info.email
+            : this.makeEmail(user.username ?? this.studentName);
+        },
+        error: (error) => {
+          console.error('Failed to load student from API', error);
+          this.userLoadError = true;
+        },
+      });
+  }
+
+  private extractDisplayName(username?: string | null): string {
+    if (!username) {
+      return '';
+    }
+    const trimmed = username.trim();
+    if (trimmed.includes('@')) {
+      return trimmed.split('@')[0] || trimmed;
+    }
+    return trimmed;
   }
 
   private buildLernfelder(): Lernfeld[] {
