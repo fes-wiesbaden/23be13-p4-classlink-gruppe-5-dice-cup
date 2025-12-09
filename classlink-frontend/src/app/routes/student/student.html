@@ -71,16 +71,8 @@
 
       <section class="card details-card" *ngIf="selectedLernfeld as sel">
         <div class="section-header">
-          <div>
-            <h2> Details </h2>
-            <p class="eyebrow"> </p>
-            <p class="muted">{{ sel.focus }}</p>
-          </div>
-          <div class="detail-score">
-            <span>Durchschnitt</span>
-                 <!-- <span class="icon pi pi-chart-scatter"></span> -->
-                <strong>{{ sel.average | number: '1.1-1' }}</strong>
-          </div>
+          <h2>Details</h2>
+          <p class="eyebrow">{{ sel.focus }}</p>
         </div>
 
         <div class="assessment-grid">
