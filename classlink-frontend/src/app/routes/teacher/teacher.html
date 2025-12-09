@@ -17,12 +17,85 @@
   />
 
   <main class="content" *ngIf="selectedStudent as st">
-    <teacher-header-bar [student]="st" (createProject)="onCreateProject()" />
-
-    <teacher-kpi-cards *ngIf="scoreSummary as sc" [scores]="sc" [allowTeacherEdit]="true" />
-
     <section class="grid">
-      <teacher-note-form [studentName]="st.name" [(text)]="noteText" (send)="onSendNote()" />
+      <section class="panel grades" *ngIf="lernfelder.length">
+        <div class="panel__header grades__head">
+          <div>
+            <h2>Lernfelder &amp; Noten</h2>
+            <p class="muted">Aktuelle Bewertungen und Details</p>
+          </div>
+        </div>
+
+        <div class="lf-scroll">
+          <button
+            class="lf-tile"
+            type="button"
+            *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
+            (click)="selectLernfeld(lf)"
+            [class.lf-tile--active]="isLernfeldSelected(lf.id)"
+          >
+            <span class="lf-chip">LF {{ lf.id }}</span>
+            <div class="lf-title">{{ lf.title }}</div>
+            <div class="lf-sub">{{ lf.focus }}</div>
+            <div class="lf-meta">
+              <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)">
+                Ø {{ lf.average | number: '1.1-1' }}
+              </span>
+              <span class="lf-trend">{{ lf.trend }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="lf-detail" *ngIf="selectedLernfeld as sel">
+          <div class="lf-detail__head">
+            <div>
+              <p class="eyebrow">Details</p>
+              <h3>{{ sel.title }}</h3>
+              <p class="muted">{{ sel.focus }}</p>
+            </div>
+            <div class="lf-detail__avg" [style.backgroundColor]="gradeColor(sel.average)">
+              <span>Ø</span>
+              <strong>{{ sel.average | number: '1.1-1' }}</strong>
+              <small>{{ sel.trend }}</small>
+            </div>
+          </div>
+
+          <div class="eval-status" *ngIf="evaluationStatus as es">
+            <div class="eval-card" [class.done]="es.selfSubmitted">
+              <div class="eval-label">Selbstbewertung</div>
+              <div class="eval-grade" *ngIf="es.selfSubmitted && es.selfGrade !== null; else selfOpen">
+                {{ es.selfGrade | number: '1.1-1' }}
+              </div>
+              <ng-template #selfOpen>
+                <div class="eval-open">offen</div>
+              </ng-template>
+            </div>
+            <div class="eval-card" [class.done]="es.peerSubmitted">
+              <div class="eval-label">Peer-Bewertung</div>
+              <div class="eval-grade" *ngIf="es.peerSubmitted && es.peerGrade !== null; else peerOpen">
+                {{ es.peerGrade | number: '1.1-1' }}
+              </div>
+              <ng-template #peerOpen>
+                <div class="eval-open">offen</div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="lf-detail__assessments">
+            <div class="assessment" *ngFor="let g of sel.assessments">
+              <div>
+                <div class="assessment__label">{{ g.label }}</div>
+                <div class="assessment__meta">
+                  {{ g.type }} ・ {{ g.weight * 100 | number: '1.0-0' }}%
+                </div>
+              </div>
+              <div class="assessment__grade" [style.backgroundColor]="gradeColor(g.grade)">
+                {{ g.grade | number: '1.1-1' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <teacher-project-assignment
         class="panel assign"
@@ -37,3 +110,32 @@
     </section>
   </main>
 </div>
+
+<p-dialog
+  header="Neue Klasse anlegen"
+  [(visible)]="showCreateClass"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '420px' }"
+>
+  <div class="dialog-body">
+    <label for="newClassName" class="field-label">Klassenname</label>
+    <input
+      pInputText
+      id="newClassName"
+      type="text"
+      [(ngModel)]="newClassName"
+      placeholder="z. B. 10D"
+      autocomplete="off"
+    />
+    <small class="muted">Name muss einzigartig sein.</small>
+  </div>
+  <ng-template pTemplate="footer">
+    <button type="button" class="btn ghost" (click)="cancelCreateClass()">Abbrechen</button>
+    <button type="button" class="btn-accent" [disabled]="!isNewClassValid" (click)="confirmCreateClass()">
+      Speichern
+    </button>
+  </ng-template>
+</p-dialog>

@@ -21,6 +21,8 @@ export class TeacherHeaderBarComponent {
 
   // Der Schüler, der oben in der Leiste angezeigt wird
   @Input() student!: SimpleStudent;
+  @Input() average: number | null = null;
+  @Input() trend: string | null = null;
   // Klick auf den Button: neues Projekt anlegen (Event nach außen)
   @Output() createProject = new EventEmitter<void>();
 
