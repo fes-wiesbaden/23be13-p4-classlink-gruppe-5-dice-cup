@@ -27,17 +27,21 @@ export class LoginComponent {
   // Start im aktiven Look, damit die Karte/Orbs sofort "an" sind
   decorActive = true;
   isSubmitting = false;
-  errorMessage: string | null = null;
+    errorMessage: string | null = null;
   // Deaktiviert Transitions/Animationen für den allerersten Paint
   noAnim = true;
 
   constructor() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['teacher'],
       rememberMe: [false],
     });
+
+    if (this.auth.isLoggedIn()) {
+      this.router.navigateByUrl(this.auth.getHomeRoute()).catch(console.error);
+      return;
+    }
 
     // Nach dem ersten Tick Transitions wieder erlauben
     setTimeout(() => {
@@ -61,30 +65,39 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-    const { email, password } = this.loginForm.value as { email: string; password: string };
-    this.auth.login(email, password).subscribe({
-      next: () => {
-        this.isSubmitting = false;
-        this.errorMessage = null;
-        const redirect = this.route.snapshot.queryParamMap.get('redirectUrl');
-        const fallback = '/admin';
-        this.router.navigateByUrl(redirect || fallback).catch(console.error);
-      },
-      error: (err) => {
-        console.error('Login failed', err);
-        this.isSubmitting = false;
-        this.errorMessage = 'Login fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.';
-      },
-    });
+      const {email, password} = this.loginForm.value as { email: string; password: string };
+      this.auth
+          .login(email, password)
+          .subscribe({
+              next: (homeRoute) => {
+                  this.isSubmitting = false;
+                  this.errorMessage = null;
+                  const redirect = this.route.snapshot.queryParamMap.get('redirectUrl');
+                  const roles = this.auth.getRoles();
+                  const target = this.chooseRedirect(redirect, roles, homeRoute);
+                  this.router.navigateByUrl(target).catch(console.error);
+              },
+              error: (err) => {
+                  console.error('Login failed', err);
+                  this.isSubmitting = false;
+                  this.errorMessage = 'Login fehlgeschlagen. Bitte prüfen Sie Ihre Eingaben.';
+              },
+          });
   }
 
-  get emailControl() {
-    return this.loginForm.get('email');
+    get emailControl() {
+        return this.loginForm.get('email');
   }
 
   get passwordControl() {
     return this.loginForm.get('password');
   }
 
-  // role selection removed; roles managed via DevDock for demo
+  private chooseRedirect(redirect: string | null, roles: string[], home: string): string {
+    if (!redirect) {
+      return home;
+    }
+    const allowed = roles.some((r) => redirect.startsWith(`/${r}`)) || (roles.includes('admin') && redirect.startsWith('/admin'));
+    return allowed ? redirect : home;
+  }
 }
