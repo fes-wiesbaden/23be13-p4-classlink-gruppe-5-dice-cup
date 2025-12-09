@@ -38,10 +38,10 @@ public class GradeController {
      * @return ResponseEntity mit dem erstellten FinalGradeAssignmentDto
      */
     @PostMapping("/final")
-    public ResponseEntity<FinalGradeAssignmentDto> createFinalAssignment(@RequestBody @Valid SubjectAssignmentRequest request) {
+    public ResponseEntity<FinalGradeAssignmentDto> createFinalAssignment(@RequestBody @Valid FinalGradeAssignmentCreationRequest request) {
         FinalGradeAssignment assignment = assignmentManagementService.createAndSaveFinalAssignment(
                 request.name(),
-                request.classId(),
+                request.schoolClassId(),
                 request.termId(),
                 request.subjectId(),
                 request.teacherId()
@@ -53,7 +53,7 @@ public class GradeController {
 
     @Operation(
             summary = "Final-Assignment abschließen",
-            description = "Final-Assignment erstellen"
+            description = "Final-Assignment abschließen und Noten dafür berechnen"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Assignment wurde erfolgreich abgeschlossen."),

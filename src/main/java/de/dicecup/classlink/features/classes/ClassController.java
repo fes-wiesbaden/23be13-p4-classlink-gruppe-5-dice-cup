@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClassController {
 
-    private final ClassRepository classRepository;
+    private final SchoolClassRepository schoolClassRepository;
     private final AssignmentManagementService assignmentManagementService;
     private final ClassTermRepository classTermRepository;
 
@@ -44,7 +44,7 @@ public class ClassController {
      */
     @GetMapping
     public List<ClassDto> list() {
-        return classRepository.findAll().stream().map(ClassDto::from).collect(Collectors.toList());
+        return schoolClassRepository.findAll().stream().map(ClassDto::from).collect(Collectors.toList());
     }
 
     @Operation(
@@ -65,7 +65,7 @@ public class ClassController {
     public ResponseEntity<ClassDto> create(@RequestBody @Valid ClassCreateRequest request) {
         SchoolClass clazz = new SchoolClass();
         clazz.setName(request.name());
-        SchoolClass saved = classRepository.save(clazz);
+        SchoolClass saved = schoolClassRepository.save(clazz);
         return ResponseEntity.created(java.net.URI.create("/api/classes/" + saved.getId()))
                 .body(ClassDto.from(saved));
     }
@@ -87,9 +87,9 @@ public class ClassController {
      */
     @PutMapping("/{id}")
     public SchoolClass update(@PathVariable UUID id, @RequestBody ClassCreateRequest request) {
-        SchoolClass clazz = classRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+        SchoolClass clazz = schoolClassRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
         clazz.setName(request.name());
-        return classRepository.save(clazz);
+        return schoolClassRepository.save(clazz);
     }
 
     @Operation(
@@ -100,7 +100,7 @@ public class ClassController {
     /**
      * Listet alle Lehrkraft-Zuordnungen für eine Klasse und ein Halbjahr.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @param termId  ID des Halbjahres
      * @return Liste von ClassTeacherAssignmentDto
      */
@@ -119,7 +119,7 @@ public class ClassController {
     /**
      * Listet alle Halbjahreszuordnungen einer Klasse.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @return Liste von ClassTerm-Objekten
      */
     @GetMapping("/{classId}/terms")

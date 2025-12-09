@@ -1,7 +1,7 @@
 package de.dicecup.classlink.testdata;
 
 import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.classes.ClassTerm;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.classes.ClassTermStatus;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestDataFactory {
 
-    private final ClassRepository classRepository;
+    private final SchoolClassRepository schoolClassRepository;
     private final ClassTermRepository classTermRepository;
     private final ProjectRepository projectRepository;
     private final TermRepository termRepository;
@@ -41,7 +41,7 @@ public class TestDataFactory {
 
     public SchoolClass persistClass(String name, List<ClassTerm> classTerms) {
         SchoolClass clazz = TestFixtures.schoolClass(name, classTerms);
-        return classRepository.save(clazz);
+        return schoolClassRepository.save(clazz);
     }
 
     public Term persistOpenTerm(String name, SchoolYear year) {

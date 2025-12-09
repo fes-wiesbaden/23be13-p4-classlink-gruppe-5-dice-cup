@@ -25,7 +25,7 @@ CREATE TABLE audit_logs
     CONSTRAINT pk_audit_logs PRIMARY KEY (id)
 );
 
-CREATE TABLE class
+CREATE TABLE school_class
 (
     id   UUID         NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE class
 CREATE TABLE class_projects
 (
     id         UUID    NOT NULL,
-    class_id   UUID    NOT NULL,
+    school_class_id   UUID    NOT NULL,
     project_id UUID    NOT NULL,
     active     BOOLEAN NOT NULL,
     valid_from TIMESTAMP WITHOUT TIME ZONE,
@@ -80,7 +80,7 @@ CREATE TABLE password_reset
 CREATE TABLE project
 (
     id          UUID                        NOT NULL,
-    class_id    UUID,
+    school_class_id    UUID,
     name        VARCHAR(200),
     description VARCHAR(255),
     created_by  UUID,
@@ -103,7 +103,7 @@ CREATE TABLE registration_invites
     id           UUID                        NOT NULL,
     email        CITEXT                      NOT NULL,
     role         VARCHAR(255)                NOT NULL,
-    class_id     UUID,
+    school_class_id     UUID,
     public_token VARCHAR(255),
     token_hash   BYTEA                       NOT NULL,
     token_salt   BYTEA                       NOT NULL,
@@ -130,7 +130,7 @@ CREATE TABLE student_groups
 CREATE TABLE students
 (
     id       UUID NOT NULL,
-    class_id UUID,
+    school_class_id UUID,
     CONSTRAINT pk_students PRIMARY KEY (id)
 );
 
@@ -178,7 +178,7 @@ ALTER TABLE user_info
     ADD CONSTRAINT uc_user_info_email UNIQUE (email);
 
 ALTER TABLE class_projects
-    ADD CONSTRAINT ux_class_projects_class_project UNIQUE (class_id, project_id);
+    ADD CONSTRAINT ux_class_projects_class_project UNIQUE (school_class_id, project_id);
 
 ALTER TABLE grades
     ADD CONSTRAINT ux_grade_once_per_student_in_project_subject UNIQUE (project_subject_id, student_id);
@@ -201,9 +201,9 @@ ALTER TABLE audit_logs
 CREATE INDEX ix_audit_logs_actor ON audit_logs (actor_id);
 
 ALTER TABLE class_projects
-    ADD CONSTRAINT FK_CLASS_PROJECTS_ON_CLASS FOREIGN KEY (class_id) REFERENCES class (id);
+    ADD CONSTRAINT FK_CLASS_PROJECTS_ON_CLASS FOREIGN KEY (school_class_id) REFERENCES school_class (id);
 
-CREATE INDEX ix_class_projects_class ON class_projects (class_id);
+CREATE INDEX ix_class_projects_class ON class_projects (school_class_id);
 
 ALTER TABLE class_projects
     ADD CONSTRAINT FK_CLASS_PROJECTS_ON_PROJECT FOREIGN KEY (project_id) REFERENCES project (id);
@@ -234,7 +234,7 @@ ALTER TABLE group_members
 CREATE INDEX ix_group_members_user ON group_members (student_id);
 
 ALTER TABLE project
-    ADD CONSTRAINT FK_PROJECT_ON_CLASS FOREIGN KEY (class_id) REFERENCES class (id);
+    ADD CONSTRAINT FK_PROJECT_ON_CLASS FOREIGN KEY (school_class_id) REFERENCES school_class (id);
 
 ALTER TABLE project_subject
     ADD CONSTRAINT FK_PROJECT_SUBJECT_ON_PROJECT FOREIGN KEY (project_id) REFERENCES project (id);
@@ -243,7 +243,7 @@ ALTER TABLE project_subject
     ADD CONSTRAINT FK_PROJECT_SUBJECT_ON_SUBJECT FOREIGN KEY (subject_id) REFERENCES subject (id);
 
 ALTER TABLE students
-    ADD CONSTRAINT FK_STUDENTS_ON_CLASS FOREIGN KEY (class_id) REFERENCES class (id);
+    ADD CONSTRAINT FK_STUDENTS_ON_CLASS FOREIGN KEY (school_class_id) REFERENCES school_class (id);
 
 ALTER TABLE students
     ADD CONSTRAINT FK_STUDENTS_ON_ID FOREIGN KEY (id) REFERENCES users (id);

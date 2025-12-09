@@ -1,9 +1,11 @@
 package de.dicecup.classlink.features.grades;
 
-import de.dicecup.classlink.features.classes.ClassTerm;
-import de.dicecup.classlink.features.classes.ClassTermRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.subjects.SubjectRepository;
+import de.dicecup.classlink.features.terms.Term;
+import de.dicecup.classlink.features.terms.TermRepository;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import de.dicecup.classlink.features.users.domain.roles.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,11 +21,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AssignmentManagementService {
 
-    private final ClassTermRepository classTermRepository;
+    private final TermRepository termRepository;
     private final SubjectAssignmentRepository assignmentRepository;
     private final FinalGradeAssignmentRepository finalGradeAssignmentRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final SchoolClassRepository schoolClassRepository;
 
     @Transactional
     public SubjectAssignment createAndSaveAssignment(String name,
@@ -33,9 +36,12 @@ public class AssignmentManagementService {
                                                      UUID teacherId,
                                                      UUID finalGradeAssignmentId,
                                                      BigDecimal weighting) {
-        ClassTerm classTerm = classTermRepository
-                .findBySchoolClassIdAndTermId(classId, termId)
-                .orElseThrow(() -> new EntityNotFoundException("Class term not found"));
+        SchoolClass schoolClass = schoolClassRepository
+                .findById(classId)
+                .orElseThrow(() -> new EntityNotFoundException("Class not found"));
+        Term term = termRepository
+                .findById(termId)
+                .orElseThrow(() -> new EntityNotFoundException("term not found"));
         Subject subject = subjectRepository
                 .findById(subjectId)
                 .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
@@ -49,8 +55,8 @@ public class AssignmentManagementService {
         SubjectAssignment assignment = new SubjectAssignment();
 
         assignment.setName(name);
-        assignment.setSchoolClass(classTerm.getSchoolClass());
-        assignment.setTerm(classTerm.getTerm());
+        assignment.setSchoolClass(schoolClass);
+        assignment.setTerm(term);
         assignment.setSubject(subject);
         assignment.setTeacher(teacher);
         assignment.setWeighting(weighting);
@@ -73,18 +79,19 @@ public class AssignmentManagementService {
                                                           UUID termId,
                                                           UUID subjectId,
                                                           UUID teacherId) {
-        ClassTerm classTerm = classTermRepository.findBySchoolClassIdAndTermId(classId, termId)
-                .orElseThrow(() -> new EntityNotFoundException("Class term not found"));
+        SchoolClass schoolClass = schoolClassRepository.findById(classId)
+                .orElseThrow(() -> new EntityNotFoundException("Class not found"));
+        Term term = termRepository.findById(termId)
+                .orElseThrow(() -> new EntityNotFoundException("term not found"));
         Subject subject = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
 
         FinalGradeAssignment assignment = new FinalGradeAssignment();
-
         assignment.setName(name);
-        assignment.setSchoolClass(classTerm.getSchoolClass());
-        assignment.setTerm(classTerm.getTerm());
+        assignment.setSchoolClass(schoolClass);
+        assignment.setTerm(term);
         assignment.setSubject(subject);
         assignment.setTeacher(teacher);
 

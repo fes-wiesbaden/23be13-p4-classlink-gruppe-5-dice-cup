@@ -37,7 +37,7 @@ public class ProjectController {
     /**
      * Listet alle Projekte zu einer Klasse und einem Halbjahr auf.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @param termId  ID des Halbjahres
      * @return Liste von ProjectDto
      */
@@ -60,7 +60,7 @@ public class ProjectController {
     /**
      * Erstellt ein neues Projekt.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @param termId  ID des Halbjahres
      * @param request Anfrageobjekt mit Projektdaten
      * @return ResponseEntity mit dem erstellten ProjectDto

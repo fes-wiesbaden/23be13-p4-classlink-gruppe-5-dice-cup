@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassController;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -41,7 +39,7 @@ class SchoolClassControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    ClassRepository classRepository;
+    SchoolClassRepository schoolClassRepository;
     @MockBean
     AssignmentManagementService assignmentManagementService;
     @MockBean
@@ -54,7 +52,7 @@ class SchoolClassControllerTest {
         SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("Class A");
-        when(classRepository.save(any(SchoolClass.class))).thenReturn(clazz);
+        when(schoolClassRepository.save(any(SchoolClass.class))).thenReturn(clazz);
 
         var request = new ClassCreateRequest("Class A");
 
@@ -71,7 +69,7 @@ class SchoolClassControllerTest {
         SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("Class A");
-        when(classRepository.findAll()).thenReturn(List.of(clazz));
+        when(schoolClassRepository.findAll()).thenReturn(List.of(clazz));
 
         mockMvc.perform(get("/api/classes"))
                 .andExpect(status().isOk())

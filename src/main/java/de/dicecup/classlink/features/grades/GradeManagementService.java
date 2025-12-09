@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.grades;
 
 import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
@@ -26,7 +26,7 @@ public class GradeManagementService {
     private final StudentRepository studentRepository;
     private final SubjectAssignmentRepository assignmentRepository;
     private final FinalGradeAssignmentRepository finalGradeAssignmentRepository;
-    private final ClassRepository classRepository;
+    private final SchoolClassRepository schoolClassRepository;
     private final FinalGradeRepository finalGradeRepository;
 
     @Transactional

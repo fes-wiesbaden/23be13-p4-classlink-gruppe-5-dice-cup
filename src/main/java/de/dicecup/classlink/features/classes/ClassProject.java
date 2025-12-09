@@ -16,10 +16,10 @@ import java.util.UUID;
 @Table(
         name = "class_projects",
         uniqueConstraints = {
-                @UniqueConstraint(name = "ux_class_projects_class_project", columnNames = {"class_id", "project_id"})
+                @UniqueConstraint(name = "ux_class_projects_class_project", columnNames = {"school_class_id", "project_id"})
         },
         indexes = {
-                @Index(name = "ix_class_projects_class", columnList = "class_id"),
+                @Index(name = "ix_class_projects_class", columnList = "school_class_id"),
                 @Index(name = "ix_class_projects_project", columnList = "project_id")
         }
 )
@@ -29,8 +29,8 @@ public class ClassProject {
     private UUID id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
-    private SchoolClass clazz;
+    @JoinColumn(name = "school_class_id", nullable = false)
+    private SchoolClass schoolClass;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false)

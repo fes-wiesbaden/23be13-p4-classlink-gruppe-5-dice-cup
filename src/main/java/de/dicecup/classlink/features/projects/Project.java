@@ -45,7 +45,7 @@ public class Project {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
+    @JoinColumn(name = "school_class_id", nullable = false)
     private SchoolClass schoolClass;
 
     @NotNull

@@ -1,10 +1,7 @@
 package de.dicecup.classlink.features.grades.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.dicecup.classlink.features.classes.ClassRepository;
-import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentRequest;
 import de.dicecup.classlink.features.grades.*;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
 import de.dicecup.classlink.features.security.JwtService;

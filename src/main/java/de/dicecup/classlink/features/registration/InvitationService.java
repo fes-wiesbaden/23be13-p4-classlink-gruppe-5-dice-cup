@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.registration;
 
 import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.registration.domain.*;
 import de.dicecup.classlink.features.security.JwtService;
 import de.dicecup.classlink.features.security.PasswordService;
@@ -38,7 +38,7 @@ public class InvitationService {
     private final RegistrationInviteRepository inviteRepository;
     private final UserRepository userRepository;
     private final UserInfoRepository userInfoRepository;
-    private final ClassRepository classRepository;
+    private final SchoolClassRepository schoolClassRepository;
     private final PasswordService passwordService;
     private final JwtService jwtService;
     private final TokenService tokenService;
@@ -68,12 +68,12 @@ public class InvitationService {
         invite.setCreatedBy(currentUserId());
         invite.setUsesCount(0);
         invite.setMaxUses(request.maxUses() != null && request.maxUses() > 0 ? request.maxUses() : 1);
-        invite.setClassId(request.classId());
+        invite.setSchoolClassId(request.classId());
         invite.setNote(request.note());
 
-        if (invite.getClassId() != null) {
-            classRepository.findById(invite.getClassId())
-                    .orElseThrow(() -> new EntityNotFoundException("Class %s not found".formatted(invite.getClassId())));
+        if (invite.getSchoolClassId() != null) {
+            schoolClassRepository.findById(invite.getSchoolClassId())
+                    .orElseThrow(() -> new EntityNotFoundException("Class %s not found".formatted(invite.getSchoolClassId())));
         }
 
         inviteRepository.save(invite);
@@ -117,7 +117,7 @@ public class InvitationService {
         switch (invite.getRole()) {
             case ADMIN -> assignAdminRole(user);
             case TEACHER -> assignTeacherRole(user);
-            case STUDENT -> assignStudentRole(user, invite.getClassId());
+            case STUDENT -> assignStudentRole(user, invite.getSchoolClassId());
             default -> throw new IllegalStateException("Unsupported role " + invite.getRole());
         }
 
@@ -195,7 +195,7 @@ public class InvitationService {
         Student student = new Student();
         student.setUser(user);
         if (classId != null) {
-            SchoolClass clazz = classRepository.findById(classId)
+            SchoolClass clazz = schoolClassRepository.findById(classId)
                     .orElseThrow(() -> new EntityNotFoundException("Class %s not found".formatted(classId)));
             student.setSchoolClass(clazz);
         }

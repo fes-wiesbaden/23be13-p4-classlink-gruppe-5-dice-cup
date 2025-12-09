@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.registration.app;
 
 import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.registration.InvitationService;
 import de.dicecup.classlink.features.registration.domain.*;
 import de.dicecup.classlink.features.users.UserRepository;
@@ -25,7 +25,7 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ClassRepository classRepository;
+    SchoolClassRepository schoolClassRepository;
 
     @AfterEach
     void cleanupSecurity() {
@@ -68,7 +68,7 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
 
         SchoolClass clazz = new SchoolClass();
         clazz.setName("10A");
-        clazz = classRepository.save(clazz);
+        clazz = schoolClassRepository.save(clazz);
 
         CreateInviteRequestDto request = new CreateInviteRequestDto("student@example.com", RegistrationInviteRole.STUDENT, clazz.getId(), 1, "note");
         InviteCreatedResponseDto created = invitationService.createInvite(request);

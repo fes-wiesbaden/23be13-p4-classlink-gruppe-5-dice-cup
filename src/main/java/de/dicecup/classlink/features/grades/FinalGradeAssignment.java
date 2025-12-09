@@ -21,7 +21,7 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "final_grade_assignments",
-        uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"class_id", "term_id", "subject_id", "teacher_id"})
+        uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"school_class_id", "term_id", "subject_id", "teacher_id"})
 )
 public class FinalGradeAssignment {
 
@@ -35,7 +35,7 @@ public class FinalGradeAssignment {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
+    @JoinColumn(name = "school_class_id", nullable = false)
     private SchoolClass schoolClass;
 
     @NotNull
