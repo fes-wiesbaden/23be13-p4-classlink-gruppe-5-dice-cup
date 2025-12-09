@@ -66,8 +66,9 @@ export class StudentComponent implements OnInit {
   userLoadError = false;
 
   constructor() {
-    this.studentName = this.auth.getUsername() || 'Anna Schmidt';
-    this.studentEmail = this.makeEmail(this.studentName);
+    const rawUser = this.auth.getUsername();
+    this.studentName = this.extractDisplayName(rawUser);
+    this.studentEmail = this.makeEmail(rawUser ?? this.studentName);
     const cls = this.mock.getStudents().find((s) => s.id === this.studentId)?.class;
     if (cls) {
       this.studentClass = cls;
@@ -120,6 +121,13 @@ export class StudentComponent implements OnInit {
   }
 
   private makeEmail(name: string): string {
+    if (!name) {
+      return 'student@dicecup.local';
+    }
+    const trimmed = name.trim().toLowerCase();
+    if (trimmed.includes('@')) {
+      return trimmed;
+    }
     const sanitized = name
       .toLowerCase()
       .replace(/[^a-z0-9]+/gi, '.')
@@ -187,19 +195,28 @@ export class StudentComponent implements OnInit {
           const fullName =
             info?.firstName && info?.lastName
               ? `${info.firstName} ${info.lastName}`
-              : user.username;
-          if (fullName) {
-            this.studentName = fullName;
-          }
-          if (info?.email) {
-            this.studentEmail = info.email;
-          }
+              : this.extractDisplayName(user.username);
+          this.studentName = fullName || this.studentName;
+          this.studentEmail = info?.email
+            ? info.email
+            : this.makeEmail(user.username ?? this.studentName);
         },
         error: (error) => {
           console.error('Failed to load student from API', error);
           this.userLoadError = true;
         },
       });
+  }
+
+  private extractDisplayName(username?: string | null): string {
+    if (!username) {
+      return '';
+    }
+    const trimmed = username.trim();
+    if (trimmed.includes('@')) {
+      return trimmed.split('@')[0] || trimmed;
+    }
+    return trimmed;
   }
 
   private buildLernfelder(): Lernfeld[] {
