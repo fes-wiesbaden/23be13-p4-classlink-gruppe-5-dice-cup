@@ -36,7 +36,6 @@ public class GradeManagementService {
                              BigDecimal gradeValue
     ) {
 
-
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
         Student student = studentRepository.findById(studentId)
@@ -104,8 +103,18 @@ public class GradeManagementService {
                 .orElseThrow(() -> new EntityNotFoundException("Assignment not found"));
         Student student = studentRepository.findById(student_id)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found"));
-        List<Grade> subGrades = gradeRepository.findByStudentIdAndSubjectAssignmentId(student_id, assignment_id);
+        List<Grade> subGrades = finalGradeAssignment
+                .getSubGradeAssignments()
+                .stream()
+                .map(
+                        assignment ->
+                                gradeRepository
+                                        .findByStudentIdAndSubjectAssignmentId(student_id, assignment.getId())
+                                        .orElseThrow(() -> new EntityNotFoundException("Grade not found"))
+                )
+                .toList();
         List<SubjectAssignment> subGradeAssignments = finalGradeAssignment.getSubGradeAssignments();
+
         if(subGrades.size() != subGradeAssignments.size()){
             throw new IllegalStateException(
                     "Ungraded assignments found for: " +
@@ -113,6 +122,7 @@ public class GradeManagementService {
                             student.getUser().getUserInfo().getLastName()
             );
         }
+
         BigDecimal weightedTotal = subGrades.stream()
                 .map(Grade -> Grade.getGradeValue().multiply(
                         Grade.getSubjectAssignment().getWeighting()
@@ -126,6 +136,7 @@ public class GradeManagementService {
         List<FinalGrade> temp = finalGradeAssignment.getGrades();
         temp.add(calculatedGrade);
         finalGradeAssignment.setGrades(temp);
+        finalGradeAssignmentRepository.save(finalGradeAssignment);
 
         return finalGradeRepository.save(calculatedGrade);
     }
@@ -142,13 +153,31 @@ public class GradeManagementService {
         return gradeRepository.findBySubjectAssignmentId(assignmentId);
     }
 
-    public boolean checkIfGradeMatchesAssignment(UUID gradeId, String assignmentId) {
+    public List<Grade> GetAllGradesForStudentPerTerm(UUID studentId, UUID termId){
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
+        SchoolClass studentClass = student.getSchoolClass();
+        List<UUID> allAssignmentIdsForClassInTerm =
+                assignmentRepository
+                        .findBySchoolClassIdAndTermId(studentClass.getId(), termId)
+                        .stream()
+                        .map(SubjectAssignment::getId)
+                        .toList();
+
+        List<Grade> termGrades = gradeRepository.findByStudentIdAndSubjectAssignmentIdIn(studentId, allAssignmentIdsForClassInTerm);
+        if (termGrades.isEmpty()){
+            throw new EntityNotFoundException("No grades found for student");
+        }
+        return termGrades;
+    }
+
+    public boolean GradeDoesNotMatchAssignment(UUID gradeId, String assignmentId) {
         Grade grade = gradeRepository.findById(gradeId)
                 .orElseThrow(() -> new EntityNotFoundException("Grade not found"));
         SubjectAssignment assignment = assignmentRepository.findById(UUID.fromString(assignmentId))
                 .orElseThrow(() -> new EntityNotFoundException("Assignment not found"));
 
-        return grade.getSubjectAssignment().getId().equals(assignment.getId());
+        return !grade.getSubjectAssignment().getId().equals(assignment.getId());
     }
 
     public boolean userIsNotAdmin(){

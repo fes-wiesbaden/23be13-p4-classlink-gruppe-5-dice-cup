@@ -1,8 +1,6 @@
 package de.dicecup.classlink.features.grades;
 
 import de.dicecup.classlink.features.grades.web.*;
-import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
-import de.dicecup.classlink.features.users.domain.roles.TeacherRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -157,7 +155,7 @@ public class GradeController {
      */
     @PutMapping("/{assignmentId}/grade/{gradeId}")
     public ResponseEntity<GradeDto> updateGrade(@PathVariable UUID gradeId, @PathVariable String assignmentId, @RequestBody @Valid GradeCreateRequest request) {
-        if (!gradeManagementService.checkIfGradeMatchesAssignment(gradeId, assignmentId)) {
+        if (gradeManagementService.GradeDoesNotMatchAssignment(gradeId, assignmentId)) {
             throw new EntityNotFoundException("Invalid Path");
         }
         Grade gradeToUpdate = gradeManagementService.updateGrade(
@@ -204,7 +202,7 @@ public class GradeController {
      * Gibt alle Benotungen eines Assignments zurück.
      *
      * @param assignmentId      ID der zu bearbeitenden Note
-     * @return ResponseEntity mit dem erstellten ClassDto
+     * @return ResponseEntity mit einer Liste der GradeDtos
      */
     @GetMapping("{assignmentId}/grades")
     public ResponseEntity<List<GradeDto>> getGradesByAssignment(@PathVariable UUID assignmentId) {
@@ -217,17 +215,17 @@ public class GradeController {
 
     @Operation(
             summary = "Noten für Schüler auflisten",
-            description = "Gibt alle vorhandenen Noten für einen Schüler zurück."
+            description = "Gibt alle vorhandenen Noten für einen Schüler in einem Halbjahr zurück."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Liste aller Noten für eine Assignment"),
             @ApiResponse(responseCode = "404", description = "Schüler wurde nicht gefunden.")
     })
-    @GetMapping("/student/{id}")
-    public ResponseEntity<List<GradeDto>> list(@PathVariable UUID id, @RequestBody @Valid UUID assignmentId) {
-        return ResponseEntity.ok(gradeRepository
-                .findBySubjectAssignmentId(assignmentId)
-                .stream()
+    @GetMapping("/student/{studentId}/term/{termId}")
+    public ResponseEntity<List<GradeDto>> list(@PathVariable UUID studentId, @PathVariable UUID termId) {
+        List<Grade> grades = gradeManagementService.GetAllGradesForStudentPerTerm(studentId, termId);
+        return ResponseEntity.ok(
+                grades.stream()
                 .map(GradeDto::from)
                 .toList());
     }
@@ -242,7 +240,7 @@ public class GradeController {
     })
     @GetMapping("/{assignmentId}/grade/{gradeId}")
     public ResponseEntity<GradeDto> getGrade(@PathVariable UUID gradeId, @PathVariable String assignmentId) {
-        if (!gradeManagementService.checkIfGradeMatchesAssignment(gradeId, assignmentId)) {
+        if (gradeManagementService.GradeDoesNotMatchAssignment(gradeId, assignmentId)) {
             throw new EntityNotFoundException("Invalid Path");
         }
         return ResponseEntity.ok(gradeRepository
