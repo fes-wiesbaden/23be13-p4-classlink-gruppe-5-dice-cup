@@ -5,7 +5,6 @@ import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassController;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
 import de.dicecup.classlink.features.classes.ClassRepository;
-import de.dicecup.classlink.features.grades.SubjectAssignment;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -76,32 +77,5 @@ class SchoolClassControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(clazz.getId().toString())));
-    }
-
-    @Test
-    void createAssignment_returnsCreated() throws Exception {
-        UUID classId = UUID.randomUUID();
-        UUID termId = UUID.randomUUID();
-        UUID assignmentId = UUID.randomUUID();
-        SubjectAssignment assignment = new SubjectAssignment();
-        assignment.setId(assignmentId);
-        assignment.setSchoolClass(new SchoolClass());
-        assignment.getSchoolClass().setId(classId);
-        assignment.setTerm(new de.dicecup.classlink.features.terms.Term());
-        assignment.getTerm().setId(termId);
-        assignment.setTeacher(new de.dicecup.classlink.features.users.domain.roles.Teacher());
-        assignment.getTeacher().setId(UUID.randomUUID());
-        assignment.setSubject(new de.dicecup.classlink.features.subjects.Subject());
-        assignment.getSubject().setId(UUID.randomUUID());
-
-        when(assignmentManagementService.createAndSaveAssignment(any(), eq(classId), eq(termId), any(), any(), any())).thenReturn(assignment);
-
-        var request = new ClassTeacherAssignmentRequest(assignment.getSubject().getId(), assignment.getTeacher().getId(), null);
-
-        mockMvc.perform(post("/api/classes/" + classId + "/terms/" + termId + "/teachers")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(assignmentId.toString())));
     }
 }

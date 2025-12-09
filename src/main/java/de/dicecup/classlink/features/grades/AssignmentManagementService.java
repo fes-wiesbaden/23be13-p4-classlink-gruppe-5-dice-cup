@@ -57,8 +57,10 @@ public class AssignmentManagementService {
         assignment.setFinalGradeAssignment(finalGradeAssignment);
 
         List<SubjectAssignment> temp = finalGradeAssignment.getSubGradeAssignments();
-        temp.add(assignment);
-        finalGradeAssignment.setSubGradeAssignments(temp);
+        if (temp != null) {
+            temp.add(assignment);
+            finalGradeAssignment.setSubGradeAssignments(temp);
+        }
 
         finalGradeAssignmentRepository.save(finalGradeAssignment);
 
