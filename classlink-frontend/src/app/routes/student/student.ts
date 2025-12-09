@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
 import { Toast } from 'primeng/toast';
@@ -6,6 +6,8 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
 import { TeacherMockService } from '../../features/teacher/mock.service';
 import { Scores } from '../../features/teacher/models';
+import { UserControllerService, UserDto } from '../../api';
+import { finalize, take } from 'rxjs';
 
 interface Assessment {
   label: string;
@@ -43,10 +45,12 @@ interface StudentProject {
   providers: [MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentComponent {
+export class StudentComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly mock = inject(TeacherMockService);
   private readonly messages = inject(MessageService);
+  private readonly usersApi = inject(UserControllerService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly studentId = 1;
   studentName: string;
@@ -57,6 +61,9 @@ export class StudentComponent {
   averageGrade = 0;
   openProjects = 0;
   selectedLernfeld: Lernfeld | null = null;
+  apiUser: UserDto | null = null;
+  userLoading = false;
+  userLoadError = false;
 
   constructor() {
     this.studentName = this.auth.getUsername() || 'Anna Schmidt';
@@ -74,6 +81,10 @@ export class StudentComponent {
     this.projects = this.buildProjects();
     this.openProjects = this.projects.filter((p) => !p.peerDone).length;
     this.selectedLernfeld = this.lernfelder[0] ?? null;
+  }
+
+  ngOnInit(): void {
+    this.loadStudentFromApi();
   }
 
   trackByLernfeld(_: number, lf: Lernfeld) {
@@ -147,6 +158,48 @@ export class StudentComponent {
         color: palette[idx % palette.length],
       };
     });
+  }
+
+  /**
+   * Load student data from backend; show an error if it fails
+   */
+  private loadStudentFromApi(): void {
+    this.userLoading = true;
+    this.userLoadError = false;
+    this.usersApi
+      .getUsers()
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.userLoading = false;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: (users) => {
+          const user = users.find((u) => u.id) ?? users[0];
+          if (!user) {
+            this.userLoadError = true;
+            return;
+          }
+          this.apiUser = user;
+          const info = user.userInfo;
+          const fullName =
+            info?.firstName && info?.lastName
+              ? `${info.firstName} ${info.lastName}`
+              : user.username;
+          if (fullName) {
+            this.studentName = fullName;
+          }
+          if (info?.email) {
+            this.studentEmail = info.email;
+          }
+        },
+        error: (error) => {
+          console.error('Failed to load student from API', error);
+          this.userLoadError = true;
+        },
+      });
   }
 
   private buildLernfelder(): Lernfeld[] {

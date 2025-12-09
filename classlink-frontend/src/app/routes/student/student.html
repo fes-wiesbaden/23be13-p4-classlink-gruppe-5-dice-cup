@@ -3,6 +3,9 @@
 <div class="student-page">
   <div class="soft-glow" aria-hidden="true"></div>
 
+  <div *ngIf="userLoading" class="status status--info">Lade Schülerdaten...</div>
+  <div *ngIf="userLoadError" class="status status--error">Loading failed.</div>
+
   <section class="card header-card">
     <div class="identity">
       <div class="avatar">{{ studentName | slice: 0 : 1 }}</div>

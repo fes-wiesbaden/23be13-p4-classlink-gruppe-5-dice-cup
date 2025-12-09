@@ -16,6 +16,27 @@
   gap: 1rem;
 }
 
+.status {
+  align-self: flex-start;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.status--info {
+  color: #2563eb;
+  background: #e0e7ff;
+  border-color: #c7d2fe;
+}
+
+.status--error {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
 .soft-glow {
   position: absolute;
   inset: 0;
