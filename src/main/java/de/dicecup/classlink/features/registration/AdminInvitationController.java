@@ -3,6 +3,9 @@ package de.dicecup.classlink.features.registration;
 import de.dicecup.classlink.features.registration.domain.CreateInviteRequestDto;
 import de.dicecup.classlink.features.registration.domain.InviteCreatedResponseDto;
 import de.dicecup.classlink.features.registration.domain.RegistrationInvite;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -10,7 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -25,6 +34,21 @@ public class AdminInvitationController {
     private final QrCodeService qrCodeService;
     private final PdfExportService pdfExportService;
 
+    @Operation(
+            summary = "Einladung als Admin erstellen",
+            description = "Erstellt eine Einladung und liefert Informationen inklusive QR-Code-URL zurück."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Einladung wurde erfolgreich erstellt."),
+            @ApiResponse(responseCode = "400", description = "Ungültige Eingabedaten."),
+            @ApiResponse(responseCode = "403", description = "Zugriff verweigert.")
+    })
+    /**
+     * Erstellt eine Einladung als Admin oder Lehrer.
+     *
+     * @param request Anfrage mit Einladungsdaten
+     * @return ResponseEntity mit den Daten der erstellten Einladung
+     */
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<InviteCreatedResponseDto> create(@Valid @RequestBody CreateInviteRequestDto request) {
@@ -42,6 +66,22 @@ public class AdminInvitationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
+    @Operation(
+            summary = "QR-Code für Einladung abrufen",
+            description = "Liefert den QR-Code für eine Einladung als PNG oder PDF."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "QR-Code wurde erfolgreich erzeugt."),
+            @ApiResponse(responseCode = "403", description = "Zugriff verweigert."),
+            @ApiResponse(responseCode = "410", description = "Einladung ist nicht mehr gültig.")
+    })
+    /**
+     * Liefert den QR-Code zu einer Einladung.
+     *
+     * @param id     ID der Einladung
+     * @param format Ausgabeformat (png oder pdf)
+     * @return QR-Code als Byte-Array
+     */
     @GetMapping("/{id}/qrcode")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<byte[]> qrCode(@PathVariable UUID id,

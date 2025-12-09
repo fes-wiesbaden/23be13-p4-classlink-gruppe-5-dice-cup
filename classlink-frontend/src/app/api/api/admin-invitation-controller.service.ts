@@ -28,6 +28,7 @@ import {Configuration} from '../configuration';
 import {BaseService} from '../api.base.service';
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -38,32 +39,34 @@ export class AdminInvitationControllerService extends BaseService {
     }
 
     /**
-     * @param createInviteRequestDto
+     * Einladung als Admin erstellen
+     * Erstellt eine Einladung und liefert Informationen inklusive QR-Code-URL zurück.
+     * @param createInviteRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public create2(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'body', reportProgress?: boolean, options?: {
         httpHeaderAccept?: '*/*',
         context?: HttpContext,
         transferCache?: boolean
     }): Observable<InviteCreatedResponseDto>;
-    public create2(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'response', reportProgress?: boolean, options?: {
         httpHeaderAccept?: '*/*',
         context?: HttpContext,
         transferCache?: boolean
     }): Observable<HttpResponse<InviteCreatedResponseDto>>;
-    public create2(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe?: 'events', reportProgress?: boolean, options?: {
         httpHeaderAccept?: '*/*',
         context?: HttpContext,
         transferCache?: boolean
     }): Observable<HttpEvent<InviteCreatedResponseDto>>;
-    public create2(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
+    public create4(createInviteRequestDto: CreateInviteRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {
         httpHeaderAccept?: '*/*',
         context?: HttpContext,
         transferCache?: boolean
     }): Observable<any> {
         if (createInviteRequestDto === null || createInviteRequestDto === undefined) {
-            throw new Error('Required parameter createInviteRequestDto was null or undefined when calling create2.');
+            throw new Error('Required parameter createInviteRequestDto was null or undefined when calling create4.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -117,8 +120,10 @@ export class AdminInvitationControllerService extends BaseService {
     }
 
     /**
+     * QR-Code für Einladung abrufen
+     * Liefert den QR-Code für eine Einladung als PNG oder PDF.
      * @param id
-     * @param format
+     * @param format 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

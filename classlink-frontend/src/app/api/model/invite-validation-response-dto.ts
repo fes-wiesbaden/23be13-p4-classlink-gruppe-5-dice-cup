@@ -9,14 +9,13 @@
  */
 
 
-export interface InviteValidationResponseDto {
+export interface InviteValidationResponseDto { 
     inviteId?: string;
     email?: string;
     role?: InviteValidationResponseDtoRoleEnum;
     expiresAt?: string;
     remainingUses?: number;
 }
-
 export enum InviteValidationResponseDtoRoleEnum {
     Admin = 'ADMIN',
     Teacher = 'TEACHER',

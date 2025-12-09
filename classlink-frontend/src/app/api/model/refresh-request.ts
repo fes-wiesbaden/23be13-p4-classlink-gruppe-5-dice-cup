@@ -9,7 +9,7 @@
  */
 
 
-export interface RefreshRequest {
+export interface RefreshRequest { 
     refreshToken: string;
 }
 

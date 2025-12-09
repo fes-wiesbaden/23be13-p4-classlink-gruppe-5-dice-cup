@@ -9,7 +9,7 @@
  */
 
 
-export interface PasswordResetCommitRequestDto {
+export interface PasswordResetCommitRequestDto { 
     token: string;
     newPassword: string;
 }

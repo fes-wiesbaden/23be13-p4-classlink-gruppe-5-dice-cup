@@ -14,9 +14,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "user_info")
 public class UserInfo {
-    /**
-     * Shared primary-key: user_info.user_id is both PK and FK referencing users.id.
-     */
     @Id
     @Column(name = "user_id")
     private UUID id;
