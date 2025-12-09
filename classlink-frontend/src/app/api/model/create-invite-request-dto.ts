@@ -9,14 +9,13 @@
  */
 
 
-export interface CreateInviteRequestDto {
+export interface CreateInviteRequestDto { 
     email?: string;
     role: CreateInviteRequestDtoRoleEnum;
     classId?: string;
     maxUses?: number;
     note?: string;
 }
-
 export enum CreateInviteRequestDtoRoleEnum {
     Admin = 'ADMIN',
     Teacher = 'TEACHER',

@@ -36,8 +36,8 @@ export class UserControllerService extends BaseService {
     }
 
     /**
-     * Suche Nutzer nach ID
-     * Gibt einen Benutzer anhand mitgegebener ID zurück
+     * Benutzer nach ID abrufen
+     * Gibt einen Benutzer anhand der übergebenen ID zurück
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

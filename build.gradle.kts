@@ -8,7 +8,7 @@ plugins {
 }
 
 val gitSha = "git rev-parse --short HEAD".runCommand(project.rootDir) ?: "dev"
-val refName = getenv("GITHUB_REF_NAME") ?: ""            // z.B. "v1.2.3" bei Tag-Builds
+val refName = getenv("GITHUB_REF_NAME") ?: ""
 val isTag = getenv("GITHUB_REF")?.startsWith("refs/tags/") == true
 
 version = if (isTag) {
@@ -78,6 +78,8 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
+    testCompileOnly("org.projectlombok:lombok:1.18.32")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.springframework.security:spring-security-test")
@@ -90,8 +92,17 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    doFirst {
+        val agentJar = configurations.testRuntimeClasspath.get().files
+            .firstOrNull { it.name.startsWith("byte-buddy-agent") }
+        if (agentJar != null) {
+            jvmArgs("-javaagent:${agentJar.absolutePath}")
+        }
+    }
 }
 
 tasks.register("printVersion") {
     doLast { println("project.version=${project.version}") }
 }
+
+

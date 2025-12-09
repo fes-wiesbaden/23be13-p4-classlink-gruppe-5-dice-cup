@@ -3,6 +3,7 @@ package de.dicecup.classlink.features.security.admin;
 import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
+import de.dicecup.classlink.features.users.domain.roles.Admin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
@@ -20,6 +21,7 @@ import java.util.Base64;
 @Profile({"dev", "prod"})
 public class AdminUserBootstrapConfiguration {
 
+    private final AdminRepository adminRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -48,6 +50,9 @@ public class AdminUserBootstrapConfiguration {
 
             userInfo.setUser(admin);
             admin.setUserInfo(userInfo);
+            Admin adminRole = new Admin();
+            adminRole.setUser(admin);
+            admin.setAdmin(adminRole);
 
             userRepository.save(admin);
 

@@ -9,7 +9,7 @@
  */
 
 
-export interface InviteCreatedResponseDto {
+export interface InviteCreatedResponseDto { 
     inviteId?: string;
     token?: string;
     qrCodeUrl?: string;
