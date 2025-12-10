@@ -17,12 +17,13 @@
         [filter]="true"
         [showClear]="false"
         inputId="projectSelect"
-      >
-      </p-select>
-    </div>
-    <div class="current" *ngIf="projectName">
-      Aktuelles Projekt: <span class="chip">{{ projectName }}</span>
-    </div>
+  >
+  </p-select>
+</div>
+<div class="current" *ngIf="projectName">
+  <span class="field-label">Aktuelles Projekt</span>
+  <span class="chip chip--soft">{{ projectName }}</span>
+</div>
   </div>
 
   <div class="subhead">Im Projekt</div>

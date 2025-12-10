@@ -1,4 +1,4 @@
-﻿<!-- Von Lukas bearbeitet -->
+<!-- Von Lukas bearbeitet; Template dem Student-Layout angeglichen -->
 <p-toast></p-toast>
 <div class="teacher-page">
   <teacher-student-sidebar
@@ -17,44 +17,65 @@
   />
 
   <main class="content" *ngIf="selectedStudent as st">
-    <section class="grid">
-      <section class="panel grades" *ngIf="lernfelder.length">
-        <div class="panel__header grades__head">
-          <div>
-            <h2>Lernfelder &amp; Noten</h2>
-            <p class="muted">Aktuelle Bewertungen und Details</p>
+    <section class="card header-card">
+      <div class="identity">
+        <div class="avatar">{{ teacherName | slice: 0 : 1 }}</div>
+        <div>
+          <h1>{{ teacherName }}</h1>
+          <div class="chips-row">
+            <span class="chip chip--soft">{{ teacherSubject }}</span>
+            <span class="chip chip--soft">{{ teacherRole }}</span>
           </div>
         </div>
+      </div>
 
-        <div class="lf-scroll">
-          <button
-            class="lf-tile"
-            type="button"
-            *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
-            (click)="selectLernfeld(lf)"
-            [class.lf-tile--active]="isLernfeldSelected(lf.id)"
-          >
-            <span class="lf-chip">LF {{ lf.id }}</span>
-            <div class="lf-title">{{ lf.title }}</div>
-            <div class="lf-sub">{{ lf.focus }}</div>
-            <div class="lf-meta">
-              <span class="lf-grade" [style.backgroundColor]="gradeColor(lf.average)">
-                Ø {{ lf.average | number: '1.1-1' }}
-              </span>
-              <span class="lf-trend">{{ lf.trend }}</span>
-            </div>
-          </button>
+      <div class="dicecup-logo">
+        <div class="dicecup__logo" role="img" aria-label="DiceCup">
+          <img class="dicecup-logo-icon" src="/assets/DiceCupLogoFinal.svg" alt="DiceCup" />
         </div>
+      </div>
+      <div class="header-spacer" aria-hidden="true"></div>
+    </section>
 
-        <div class="lf-detail" *ngIf="selectedLernfeld as sel">
-          <div class="lf-detail__head">
+    <div class="main-grid">
+      <div class="grade-column">
+        <section class="card grades-card" *ngIf="lernfelder.length">
+          <div class="section-header">
+            <h2>Lernfelder &amp; Noten</h2>
+            <span class="eyebrow">Klasse {{ st.class }}</span>
+          </div>
+
+          <div class="grade-grid">
+            <button
+              class="grade-card"
+              type="button"
+              *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
+              (click)="selectLernfeld(lf)"
+              [class.grade-card--active]="isLernfeldSelected(lf.id)"
+            >
+              <div class="grade-card__top">
+                <span class="pill">LF {{ lf.id }}</span>
+                <span class="label">{{ lf.trend }}</span>
+              </div>
+              <div class="grade-card__title">{{ lf.focus }}</div>
+              <div class="grade-card__meta">
+                <div class="grade-card__value">{{ lf.average | number: '1.1-1' }}</div>
+                <span class="label">Note</span>
+              </div>
+              <div class="bar">
+                <span class="fill" [style.width.%]="gradeProgress(lf.average)"></span>
+              </div>
+            </button>
+          </div>
+        </section>
+        <section class="card details-card" *ngIf="selectedLernfeld as sel">
+          <div class="section-header">
             <div>
-              <p class="eyebrow">Details</p>
-              <h3>{{ sel.title }}</h3>
-              <p class="muted">{{ sel.focus }}</p>
+              <h2>Details</h2>
+              <p class="eyebrow">{{ sel.focus }}</p>
             </div>
-            <div class="lf-detail__avg" [style.backgroundColor]="gradeColor(sel.average)">
-              <span>Ø</span>
+            <div class="detail-score">
+              <span class="pill-label">Durchschnitt</span>
               <strong>{{ sel.average | number: '1.1-1' }}</strong>
               <small>{{ sel.trend }}</small>
             </div>
@@ -81,61 +102,73 @@
             </div>
           </div>
 
-          <div class="lf-detail__assessments">
-            <div class="assessment" *ngFor="let g of sel.assessments">
-              <div>
-                <div class="assessment__label">{{ g.label }}</div>
-                <div class="assessment__meta">
-                  {{ g.type }} ・ {{ g.weight * 100 | number: '1.0-0' }}%
+          <div class="assessment-grid">
+            <div class="assessment-card" *ngFor="let g of sel.assessments">
+              <div class="assessment-card__head">
+                <div>
+                  <div class="assessment-card__label">{{ g.label }}</div>
+                  <div class="assessment-card__meta">
+                    {{ g.type }} - {{ g.weight * 100 | number: '1.0-0' }}%
+                  </div>
                 </div>
+                <div class="badge">{{ g.grade | number: '1.1-1' }}</div>
               </div>
-              <div class="assessment__grade" [style.backgroundColor]="gradeColor(g.grade)">
-                {{ g.grade | number: '1.1-1' }}
+              <div class="bar thin">
+                <span class="fill" [style.width.%]="gradeProgress(g.grade)"></span>
+              </div>
+            </div>
+            </div>
+        </section>
+
+        <section class="card project-block" *ngIf="currentProjectName">
+          <div class="project-card__head">
+            <div>
+              <span class="chip chip--soft">Projekt</span>
+              <h3>{{ currentProjectName }}</h3>
+              <p class="muted">Team Delta &middot; Faellig 12.12.</p>
+            </div>
+            <div class="project-card__score">
+              <div>
+                <span>Lehrer</span>
+                <strong>{{ scoreSummary?.teacher || '-' }}</strong>
+              </div>
+              <div>
+                <span>Peer</span>
+                <strong>{{ scoreSummary?.peer || '-' }}</strong>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <teacher-project-assignment
-        class="panel assign"
-        [projectName]="currentProjectName || ''"
-        [students]="students"
-        [assignedIds]="assignedIds"
-        [projectOptions]="projectOptions"
-        [projectId]="selectedProjectId"
-        (projectChange)="onProjectChange($any($event))"
-        (studentToggle)="onToggleAssignment($event)"
-      />
-    </section>
+          <div class="progress-row wide">
+            <div class="progress-bar">
+              <span class="fill" [style.width.%]="projectProgress"></span>
+            </div>
+            <span class="muted">{{ projectProgress }}% Fortschritt</span>
+          </div>
+
+          <div class="project-card__actions">
+            <button type="button" class="btn ghost" (click)="onStartSelfEval()" [disabled]="evaluationStatus?.selfSubmitted">
+              <i class="pi pi-user"></i>&nbsp;Selbst-Evaluation
+            </button>
+            <button type="button" class="btn ghost" (click)="onStartPeerEval()" [disabled]="evaluationStatus?.peerSubmitted">
+              <i class="pi pi-users"></i>&nbsp;Peer-Evaluation
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <section class="card projects-card">
+        <teacher-project-assignment
+          class="assign modern"
+          [projectName]="currentProjectName || ''"
+          [students]="students"
+          [assignedIds]="assignedIds"
+          [projectOptions]="projectOptions"
+          [projectId]="selectedProjectId"
+          (projectChange)="onProjectChange($any($event))"
+          (studentToggle)="onToggleAssignment($event)"
+        />
+      </section>
+    </div>
   </main>
 </div>
-
-<p-dialog
-  header="Neue Klasse anlegen"
-  [(visible)]="showCreateClass"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [dismissableMask]="true"
-  [style]="{ width: '420px' }"
->
-  <div class="dialog-body">
-    <label for="newClassName" class="field-label">Klassenname</label>
-    <input
-      pInputText
-      id="newClassName"
-      type="text"
-      [(ngModel)]="newClassName"
-      placeholder="z. B. 10D"
-      autocomplete="off"
-    />
-    <small class="muted">Name muss einzigartig sein.</small>
-  </div>
-  <ng-template pTemplate="footer">
-    <button type="button" class="btn ghost" (click)="cancelCreateClass()">Abbrechen</button>
-    <button type="button" class="btn-accent" [disabled]="!isNewClassValid" (click)="confirmCreateClass()">
-      Speichern
-    </button>
-  </ng-template>
-</p-dialog>

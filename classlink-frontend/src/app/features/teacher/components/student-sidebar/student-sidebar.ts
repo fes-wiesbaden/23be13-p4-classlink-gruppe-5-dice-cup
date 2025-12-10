@@ -37,10 +37,7 @@ export class TeacherStudentSidebarComponent {
   }
 
   get classOptions() {
-    return [
-      { label: 'Alle Klassen', value: null },
-      ...this.classes.map((c) => ({ label: c, value: c })),
-    ];
+    return this.classes.map((c) => ({ label: c, value: c }));
   }
 
   get assignOptions() {

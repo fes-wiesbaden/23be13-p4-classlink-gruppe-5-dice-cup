@@ -56,6 +56,11 @@ export class TeacherComponent {
   private readonly mock = inject(TeacherMockService);
   private readonly messages = inject(MessageService);
 
+  // Teacher identity (displayed in header)
+  readonly teacherName = 'F. Bekkaoui';
+  readonly teacherSubject = 'Informatik';
+  readonly teacherRole = 'Klassenlehrer 23BE13';
+
   constructor() {
     // Daten aus dem Mock holen und Ansicht vorbereiten
     this.students = this.mock.getStudents();
@@ -92,21 +97,11 @@ export class TeacherComponent {
   lernfelder: Lernfeld[] = [];
   selectedLernfeld: Lernfeld | null = null;
   projectProgress = 65;
+  overallAverage = 0;
+  runningProjects = 0;
 
   get selectedStudent() {
     return this.students.find((s) => s.id === this.selectedStudentId);
-  }
-
-  get overallAverage(): number {
-    if (!this.lernfelder.length) return 0;
-    const sum = this.lernfelder.reduce((acc, lf) => acc + lf.average, 0);
-    return Number((sum / this.lernfelder.length).toFixed(1));
-  }
-
-  get runningProjects(): number {
-    return this.assignments.filter(
-      (a) => a.studentId === this.selectedStudentId && a.assigned,
-    ).length;
   }
 
   trackById(_: number, item: { id: number }) {
@@ -140,6 +135,7 @@ export class TeacherComponent {
     const st = this.students.find((s) => s.id === id);
     this.assignClassName = st?.class ?? null;
     this.refreshLernfelderForStudent(id);
+    this.refreshKpis();
   }
 
   isAssigned(studentId: number): boolean {
@@ -190,6 +186,7 @@ export class TeacherComponent {
     this.selectedProjectId = id;
     this.currentProjectName = this.projects.find((p) => p.id === id)?.name;
     this.recomputeAssignedIds();
+    this.refreshKpis();
   };
   onToggleAssignment = (id: number) => this.toggleAssignment(id);
   onCreateProject = () => console.info('create project clicked');
@@ -266,9 +263,22 @@ export class TeacherComponent {
     return Math.round(normalized * 100);
   }
 
+  private refreshKpis() {
+    if (!this.lernfelder.length) {
+      this.overallAverage = 0;
+    } else {
+      const sum = this.lernfelder.reduce((acc, lf) => acc + lf.average, 0);
+      this.overallAverage = Number((sum / this.lernfelder.length).toFixed(1));
+    }
+    this.runningProjects = this.assignments.filter(
+      (a) => a.studentId === this.selectedStudentId && a.assigned,
+    ).length;
+  }
+
   private refreshLernfelderForStudent(studentId: number) {
     this.lernfelder = this.buildLernfelder(studentId);
     this.selectedLernfeld = this.lernfelder[0] ?? null;
+    this.refreshKpis();
   }
 
   private buildLernfelder(seedOffset: number): Lernfeld[] {
