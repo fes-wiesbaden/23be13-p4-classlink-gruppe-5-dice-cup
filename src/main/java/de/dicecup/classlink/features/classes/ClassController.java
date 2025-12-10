@@ -3,7 +3,6 @@ package de.dicecup.classlink.features.classes;
 import de.dicecup.classlink.features.classes.web.ClassCreateRequest;
 import de.dicecup.classlink.features.classes.web.ClassDto;
 import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentDto;
-import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentRequest;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
 import de.dicecup.classlink.features.grades.SubjectAssignment;
 import de.dicecup.classlink.features.classes.SchoolClass;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClassController {
 
-    private final ClassRepository classRepository;
+    private final SchoolClassRepository schoolClassRepository;
     private final AssignmentManagementService assignmentManagementService;
     private final ClassTermRepository classTermRepository;
     private final ClassService classService;
@@ -50,7 +49,7 @@ public class ClassController {
      */
     @GetMapping
     public List<ClassDto> list() {
-        return classRepository.findAll().stream().map(ClassDto::from).collect(Collectors.toList());
+        return schoolClassRepository.findAll().stream().map(ClassDto::from).collect(Collectors.toList());
     }
 
     @Operation(
@@ -69,9 +68,9 @@ public class ClassController {
      */
     @PostMapping
     public ResponseEntity<ClassDto> create(@RequestBody @Valid ClassCreateRequest request) {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setName(request.name());
-        Class saved = classRepository.save(clazz);
+        SchoolClass saved = schoolClassRepository.save(clazz);
         return ResponseEntity.created(java.net.URI.create("/api/classes/" + saved.getId()))
                 .body(ClassDto.from(saved));
     }
@@ -92,35 +91,10 @@ public class ClassController {
      * @return Aktualisierte Klasse
      */
     @PutMapping("/{id}")
-    public Class update(@PathVariable UUID id, @RequestBody ClassCreateRequest request) {
-        Class clazz = classRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+    public SchoolClass update(@PathVariable UUID id, @RequestBody ClassCreateRequest request) {
+        SchoolClass clazz = schoolClassRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
         clazz.setName(request.name());
-        return classRepository.save(clazz);
-    }
-
-    @Operation(
-            summary = "Lehrkraft einer Klasse zuordnen",
-            description = "Ordnet einer Klasse und einem Halbjahr eine Lehrkraft und ein Fach zu."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Zuordnung wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "404", description = "Klasse, Halbjahr, Fach oder Lehrkraft wurde nicht gefunden.")
-    })
-    /**
-     * Ordnet einer Klasse in einem Halbjahr eine Lehrkraft und ein Fach zu.
-     *
-     * @param classId ID der Klasse
-     * @param termId  ID des Halbjahres
-     * @param request Anfrage mit Fach, Lehrkraft und optionaler Gewichtung
-     * @return ResponseEntity mit der erzeugten Zuordnung als DTO
-     */
-    @PostMapping("/{classId}/terms/{termId}/teachers")
-    public ResponseEntity<ClassTeacherAssignmentDto> assignTeacher(@PathVariable UUID classId,
-                                                                   @PathVariable UUID termId,
-                                                                   @RequestBody @Valid ClassTeacherAssignmentRequest request) {
-        SubjectAssignment assignment = assignmentManagementService.assignTeacher(classId, termId, request.subjectId(), request.teacherId(), request.weighting());
-        return ResponseEntity.created(java.net.URI.create("/api/classes/" + classId + "/terms/" + termId + "/teachers/" + assignment.getId()))
-                .body(ClassTeacherAssignmentDto.from(assignment));
+        return schoolClassRepository.save(clazz);
     }
 
     @Operation(
@@ -131,7 +105,7 @@ public class ClassController {
     /**
      * Listet alle Lehrkraft-Zuordnungen für eine Klasse und ein Halbjahr.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @param termId  ID des Halbjahres
      * @return Liste von ClassTeacherAssignmentDto
      */
@@ -150,7 +124,7 @@ public class ClassController {
     /**
      * Listet alle Halbjahreszuordnungen einer Klasse.
      *
-     * @param classId ID der Klasse
+     * @param schoolClassId ID der Klasse
      * @return Liste von ClassTerm-Objekten
      */
     @GetMapping("/{classId}/terms")

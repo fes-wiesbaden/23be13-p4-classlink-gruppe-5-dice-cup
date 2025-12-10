@@ -1,8 +1,7 @@
 package de.dicecup.classlink.features.projects;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.terms.Term;
-import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +45,8 @@ public class Project {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
-    private Class schoolClass;
+    @JoinColumn(name = "school_class_id", nullable = false)
+    private SchoolClass schoolClass;
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

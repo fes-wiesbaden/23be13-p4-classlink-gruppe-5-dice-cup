@@ -1,9 +1,9 @@
 package de.dicecup.classlink.features.assessments;
 
 import de.dicecup.classlink.features.assessments.dto.ProjectGroupStudentScoreOverviewDto;
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.assessments.Assessment;
 import de.dicecup.classlink.features.assessments.AssessmentAnswer;
 import de.dicecup.classlink.features.assessments.AssessmentType;
@@ -43,7 +43,7 @@ class ProjectGroupScoreServiceTest {
     @Mock
     private ProjectGroupMemberRepository memberRepository;
     @Mock
-    private ClassSubjectAssignmentRepository assignmentRepository;
+    private SubjectAssignmentRepository assignmentRepository;
     @Mock
     private QuestionnaireRepository questionnaireRepository;
     @Mock
@@ -80,7 +80,7 @@ class ProjectGroupScoreServiceTest {
         member.setStudent(student);
         when(projectGroupRepository.findById(groupId)).thenReturn(java.util.Optional.of(group));
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -119,7 +119,7 @@ class ProjectGroupScoreServiceTest {
         when(projectGroupRepository.findById(groupId)).thenReturn(java.util.Optional.of(group));
         when(authHelper.requireUserId()).thenReturn(teacherId);
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -218,7 +218,7 @@ class ProjectGroupScoreServiceTest {
     }
 
     private ProjectGroup buildGroup() {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("1A");
         Term term = new Term();
@@ -233,7 +233,7 @@ class ProjectGroupScoreServiceTest {
         return group;
     }
 
-    private Student buildStudent(String first, String last, Class clazz) {
+    private Student buildStudent(String first, String last, SchoolClass clazz) {
         User user = new User();
         user.setId(UUID.randomUUID());
         UserInfo info = new UserInfo();
@@ -244,7 +244,7 @@ class ProjectGroupScoreServiceTest {
         Student student = new Student();
         student.setId(user.getId());
         student.setUser(user);
-        student.setClazz(clazz);
+        student.setSchoolClass(clazz);
         return student;
     }
 }

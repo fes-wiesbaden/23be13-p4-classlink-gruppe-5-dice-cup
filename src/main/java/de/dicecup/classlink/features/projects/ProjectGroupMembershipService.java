@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.projects;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,13 +17,13 @@ public class ProjectGroupMembershipService {
     private final ProjectGroupRepository projectGroupRepository;
     private final ProjectGroupMemberRepository memberRepository;
     private final StudentRepository studentRepository;
-    private final ClassSubjectAssignmentRepository assignmentRepository;
+    private final SubjectAssignmentRepository assignmentRepository;
 
     public ProjectGroupMembershipService(AuthHelper authHelper,
                                          ProjectGroupRepository projectGroupRepository,
                                          ProjectGroupMemberRepository memberRepository,
                                          StudentRepository studentRepository,
-                                         ClassSubjectAssignmentRepository assignmentRepository) {
+                                         SubjectAssignmentRepository assignmentRepository) {
         this.authHelper = authHelper;
         this.projectGroupRepository = projectGroupRepository;
         this.memberRepository = memberRepository;
@@ -40,7 +40,7 @@ public class ProjectGroupMembershipService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Student not found"));
         UUID classId = group.getProject().getSchoolClass().getId();
-        if (!classId.equals(student.getClazz().getId())) {
+        if (!classId.equals(student.getSchoolClass().getId())) {
             throw new AccessDeniedException("Student not part of class");
         }
 
