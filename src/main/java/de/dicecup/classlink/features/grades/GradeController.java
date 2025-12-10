@@ -46,8 +46,9 @@ public class GradeController {
                 request.subjectId(),
                 request.teacherId()
         );
+        UUID assignmentId = assignment.getId();
         return ResponseEntity
-                .created(java.net.URI.create("/api/assignment/" + assignment.getId()))
+                .created(java.net.URI.create("/api/assignment/" + assignmentId))
                 .body(FinalGradeAssignmentDto.from(assignment));
     }
 

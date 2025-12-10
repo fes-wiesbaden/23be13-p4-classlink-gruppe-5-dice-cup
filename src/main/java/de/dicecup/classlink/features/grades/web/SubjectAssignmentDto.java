@@ -19,10 +19,10 @@ public record SubjectAssignmentDto(
         return new SubjectAssignmentDto(
                 assignment.getId(),
                 assignment.getName(),
-                assignment.getSchoolClass().getId(),
-                assignment.getTerm().getId(),
-                assignment.getSubject().getId(),
-                assignment.getTeacher().getId(),
+                assignment.getSchoolClass() != null ? assignment.getSchoolClass().getId() : null,
+                assignment.getTerm() != null ? assignment.getTerm().getId() : null,
+                assignment.getSubject() != null ? assignment.getSubject().getId() : null,
+                assignment.getTeacher() != null ? assignment.getTeacher().getId() : null,
                 assignment.getFinalGradeAssignment() != null ? assignment.getFinalGradeAssignment().getId() : null,
                 assignment.getWeighting()
         );

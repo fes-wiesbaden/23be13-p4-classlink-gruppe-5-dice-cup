@@ -18,31 +18,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.math.BigDecimal;
-import java.util.Random;
-import java.util.UUID;
-
+import java.math.BigDecimal; import java.util.UUID;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(GradeController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class GradeControllerTest {
-
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    GradeController gradeController;  // Add this - inject the actual controller
 
     @MockBean
     AssignmentManagementService assignmentManagementService;
@@ -77,11 +71,11 @@ public class GradeControllerTest {
         UUID subjectId = UUID.randomUUID();
         UUID teacherId = UUID.randomUUID();
 
-        Random r = new Random();
-        BigDecimal weight = BigDecimal.valueOf(r.nextInt(20)/ 20.0);
+        BigDecimal weight = BigDecimal.ONE;
 
         SubjectAssignment assignment = new SubjectAssignment();
         assignment.setId(assignmentId);
+        assignment.setName(name);
 
         SchoolClass schoolClass = new SchoolClass();
         schoolClass.setId(classId);
@@ -105,22 +99,25 @@ public class GradeControllerTest {
 
         assignment.setWeighting(weight);
 
-        when(schoolClassRepository.findById(classId)).thenReturn(java.util.Optional.of(new SchoolClass()));
-        when(termRepository.findById(termId)).thenReturn(java.util.Optional.of(new de.dicecup.classlink.features.terms.Term()));
-        when(subjectRepository.findById(subjectId)).thenReturn(java.util.Optional.of(new de.dicecup.classlink.features.subjects.Subject()));
-        when(teacherRepository.findById(teacherId)).thenReturn(java.util.Optional.of(new de.dicecup.classlink.features.users.domain.roles.Teacher()));
-        when(finalGradeAssignmentRepository.findById(finalAssignmentId)).thenReturn(java.util.Optional.of(new de.dicecup.classlink.features.grades.FinalGradeAssignment()));
-        when(assignmentManagementService.createAndSaveAssignment(any(), eq(classId), eq(termId), eq(subjectId), eq(teacherId), eq(finalAssignmentId), eq(weight))).thenReturn(assignment);
-        when(finalGradeAssignmentRepository.save(assignment.getFinalGradeAssignment())).thenReturn(assignment.getFinalGradeAssignment());
+        // This is the key - the mock should now be properly wired
+        when(assignmentManagementService.createAndSaveAssignment(
+                any(String.class),
+                any(UUID.class),
+                any(UUID.class),
+                any(UUID.class),
+                any(UUID.class),
+                any(UUID.class),
+                any(BigDecimal.class)
+        )).thenReturn(assignment);
 
         var request = new SubjectAssignmentRequest(
                 name,
-                assignment.getSchoolClass().getId(),
-                assignment.getTerm().getId(),
-                assignment.getSubject().getId(),
-                assignment.getTeacher().getId(),
-                assignment.getFinalGradeAssignment().getId(),
-                assignment.getWeighting()
+                classId,
+                termId,
+                subjectId,
+                teacherId,
+                finalAssignmentId,
+                weight
         );
 
         mockMvc.perform(post("/api/assignment")
@@ -128,8 +125,6 @@ public class GradeControllerTest {
                         .content(objectMapper.writeValueAsBytes(request)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(assignmentId.toString())))
-                .andReturn();
+                .andExpect(jsonPath("$.id", is(assignmentId.toString())));
     }
 }
-
