@@ -13,6 +13,30 @@
   gap: 8px;
   margin-bottom: 12px;
 }
+
+.add-project-btn {
+  margin-left: auto;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: linear-gradient(135deg, #7c3aed, #9f7aea);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 10px 20px rgba(124, 92, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.18s ease;
+}
+
+.add-project-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(124, 92, 255, 0.28);
+}
+
+.add-project-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 16px rgba(124, 92, 255, 0.18);
+}
 .assign__project .label {
   color: var(--text-secondary);
   font-size: 12px;
