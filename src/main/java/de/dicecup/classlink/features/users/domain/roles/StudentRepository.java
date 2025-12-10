@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface StudentRepository extends JpaRepository<Student, UUID> {
     Optional<Student> findByUserId(UUID userId);
 
-    @Query("select s from Student s where s.clazz.id = :classId")
+    @Query("select s from Student s where s.schoolClass.id = :classId")
     List<Student> findByClassId(@Param("classId") UUID classId);
     Optional<List<Student>> findBySchoolClassId(UUID classId);
 }

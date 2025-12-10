@@ -16,10 +16,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "grades",
+@Table(name = "final_grades",
         uniqueConstraints= {
-                @UniqueConstraint(name = "grade_once_per_assignment_and_student",
-                        columnNames = {"class_subject_assignment_id", "student_id"})
+                @UniqueConstraint(name = "final_grade_once_per_assignment_and_student",
+                        columnNames = {"final_grade_assignment_id", "student_id"})
         })
 public class FinalGrade {
     @Id
@@ -34,7 +34,7 @@ public class FinalGrade {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(name = "grade_value", nullable = false)
+    @Column(name = "grade_value", precision = 2, scale = 1, nullable = false)
     private BigDecimal gradeValue;
 
     @NotNull
