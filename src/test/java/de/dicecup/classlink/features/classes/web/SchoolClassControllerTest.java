@@ -1,12 +1,11 @@
 package de.dicecup.classlink.features.classes.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.dicecup.classlink.features.classes.SchoolClass;
-import de.dicecup.classlink.features.classes.ClassController;
+import de.dicecup.classlink.features.classes.*;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
-import de.dicecup.classlink.features.classes.SchoolClassRepository;
-import de.dicecup.classlink.features.classes.ClassTermRepository;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
 import de.dicecup.classlink.features.security.JwtAuthenticationFilter;
+import de.dicecup.classlink.features.terms.Term;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -44,6 +44,8 @@ class SchoolClassControllerTest {
     AssignmentManagementService assignmentManagementService;
     @MockBean
     ClassTermRepository classTermRepository;
+    @MockBean
+    ClassService classService;
     @MockBean
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -75,5 +77,19 @@ class SchoolClassControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(clazz.getId().toString())));
+    }
+
+    @Test
+    void listClassStudents_returnsDtos() throws Exception {
+        UUID classId = UUID.randomUUID();
+        StudentInClassDto student = new StudentInClassDto(UUID.randomUUID(), "Alice", "Anderson", classId, "Class A");
+        when(classService.loadStudentsOfClass(classId)).thenReturn(List.of(student));
+
+        mockMvc.perform(get("/api/classes/" + classId + "/students"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].studentId", is(student.studentId().toString())))
+                .andExpect(jsonPath("$[0].firstName", is("Alice")))
+                .andExpect(jsonPath("$[0].classId", is(classId.toString())));
     }
 }

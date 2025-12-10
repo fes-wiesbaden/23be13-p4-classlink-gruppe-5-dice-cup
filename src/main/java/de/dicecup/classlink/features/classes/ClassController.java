@@ -4,6 +4,10 @@ import de.dicecup.classlink.features.classes.web.ClassCreateRequest;
 import de.dicecup.classlink.features.classes.web.ClassDto;
 import de.dicecup.classlink.features.classes.web.ClassTeacherAssignmentDto;
 import de.dicecup.classlink.features.grades.AssignmentManagementService;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.classes.StudentInClassDto;
+import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,6 +35,7 @@ public class ClassController {
     private final SchoolClassRepository schoolClassRepository;
     private final AssignmentManagementService assignmentManagementService;
     private final ClassTermRepository classTermRepository;
+    private final ClassService classService;
 
     @Operation(
             summary = "Klassen auflisten",
@@ -125,5 +130,23 @@ public class ClassController {
     @GetMapping("/{classId}/terms")
     public List<ClassTerm> listClassTerms(@PathVariable UUID classId) {
         return classTermRepository.findBySchoolClassId(classId);
+    }
+
+    @Operation(
+            summary = "Schüler einer Klasse auflisten",
+            description = "Gibt alle Schüler aus derselben Klasse zurücl."
+    )
+    @ApiResponse(responseCode = "200", description = "Schülerliste wurde erfolgreich geladen.")
+    /**
+     * Listet alle Schüler einer Klasse.
+     *
+     * @param classId
+     * @return Liste von Usern
+     */
+    @GetMapping("/{classId}/students")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<List<StudentInClassDto>> listClassStudents(@PathVariable UUID classId) {
+        List<StudentInClassDto> students = classService.loadStudentsOfClass(classId);
+        return ResponseEntity.ok(students);
     }
 }

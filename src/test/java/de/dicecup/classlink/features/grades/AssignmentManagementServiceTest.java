@@ -3,9 +3,11 @@ package de.dicecup.classlink.features.grades;
 import de.dicecup.classlink.features.classes.ClassTerm;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.subjects.Subject;
 import de.dicecup.classlink.features.subjects.SubjectRepository;
 import de.dicecup.classlink.features.terms.Term;
+import de.dicecup.classlink.features.terms.TermRepository;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import de.dicecup.classlink.features.users.domain.roles.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,6 +34,8 @@ class AssignmentManagementServiceTest {
     @Mock
     private ClassTermRepository classTermRepository;
     @Mock
+    private TermRepository termRepository;
+    @Mock
     private SubjectAssignmentRepository assignmentRepository;
     @Mock
     private SubjectRepository subjectRepository;
@@ -39,7 +43,8 @@ class AssignmentManagementServiceTest {
     private TeacherRepository teacherRepository;
     @Mock
     private FinalGradeAssignmentRepository finalGradeAssignmentRepository;
-
+    @Mock
+    private SchoolClassRepository schoolClassRepository;
     @InjectMocks
     private AssignmentManagementService assignmentManagementService;
 
@@ -68,7 +73,7 @@ class AssignmentManagementServiceTest {
         finalGradeAssignment.setId(finalGradeAssignmentId);
 
 
-        when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
+        //when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
         when(subjectRepository.findById(subjectId)).thenReturn(Optional.of(subject));
         when(teacherRepository.findById(teacherId)).thenReturn(Optional.of(teacher));
         when(assignmentRepository.save(any(SubjectAssignment.class)))
@@ -76,6 +81,8 @@ class AssignmentManagementServiceTest {
         when(finalGradeAssignmentRepository.findById(finalGradeAssignmentId)).thenReturn(Optional.of(finalGradeAssignment));
         when(finalGradeAssignmentRepository.save(any(FinalGradeAssignment.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+        when(schoolClassRepository.findById(classId)).thenReturn(Optional.of(schoolClass));
+        when(termRepository.findById(termId)).thenReturn(Optional.of(term));
 
         SubjectAssignment assignment = assignmentManagementService.createAndSaveAssignment(
                 name, classId, termId, subjectId, teacherId, finalGradeAssignmentId, BigDecimal.ONE);
@@ -98,7 +105,7 @@ class AssignmentManagementServiceTest {
         UUID teacherId = UUID.randomUUID();
         UUID finalGradeAssignmentId = UUID.randomUUID();
 
-        when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.empty());
+        //when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, subjectId, teacherId, finalGradeAssignmentId, BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
@@ -121,8 +128,8 @@ class AssignmentManagementServiceTest {
         classTerm.setSchoolClass(new SchoolClass());
         classTerm.setTerm(new Term());
 
-        when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
-        when(subjectRepository.findById(subjectId)).thenReturn(Optional.empty());
+        //when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
+        //when(subjectRepository.findById(subjectId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, subjectId, teacherId, finalGradeAssignmentId, BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
@@ -146,9 +153,9 @@ class AssignmentManagementServiceTest {
 
         Subject subject = new Subject();
 
-        when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
-        when(subjectRepository.findById(any())).thenReturn(Optional.of(subject));
-        when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
+        //when(classTermRepository.findBySchoolClassIdAndTermId(classId, termId)).thenReturn(Optional.of(classTerm));
+        //when(subjectRepository.findById(any())).thenReturn(Optional.of(subject));
+        //when(teacherRepository.findById(teacherId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> assignmentManagementService.createAndSaveAssignment(name, classId, termId, subjectId, teacherId, finalGradeAssignmentId, BigDecimal.ONE))
                 .isInstanceOf(EntityNotFoundException.class);
