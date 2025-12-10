@@ -96,7 +96,6 @@ export class TeacherComponent {
   newClassName = '';
   lernfelder: Lernfeld[] = [];
   selectedLernfeld: Lernfeld | null = null;
-  projectProgress = 65;
   overallAverage = 0;
   runningProjects = 0;
 

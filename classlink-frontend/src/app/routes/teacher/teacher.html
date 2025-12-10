@@ -1,6 +1,25 @@
 <!-- Von Lukas bearbeitet; Template dem Student-Layout angeglichen -->
 <p-toast></p-toast>
 <div class="teacher-page">
+  <section class="card header-card">
+    <div class="identity">
+      <div class="avatar">{{ teacherName | slice: 0 : 1 }}</div>
+      <div>
+        <h1 class="teacher-heading">{{ teacherName }}</h1>
+        <div class="chips-row">
+          <span class="chip chip--soft" *ngIf="teacherSubject">{{ teacherSubject }}</span>
+          <span class="chip chip--outline" *ngIf="teacherRole">{{ teacherRole }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dicecup-logo">
+      <div class="dicecup__logo" role="img" aria-label="DiceCup">
+        <img class="dicecup-logo-icon" src="/assets/DiceCupLogoFinal.svg" alt="DiceCup" />
+      </div>
+    </div>
+  </section>
+
   <teacher-student-sidebar
     [students]="filteredStudents"
     [selectedStudentId]="selectedStudentId"
@@ -17,26 +36,6 @@
   />
 
   <main class="content" *ngIf="selectedStudent as st">
-    <section class="card header-card">
-      <div class="identity">
-        <div class="avatar">{{ teacherName | slice: 0 : 1 }}</div>
-        <div>
-          <h1>{{ teacherName }}</h1>
-          <div class="chips-row">
-            <span class="chip chip--soft">{{ teacherSubject }}</span>
-            <span class="chip chip--soft">{{ teacherRole }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="dicecup-logo">
-        <div class="dicecup__logo" role="img" aria-label="DiceCup">
-          <img class="dicecup-logo-icon" src="/assets/DiceCupLogoFinal.svg" alt="DiceCup" />
-        </div>
-      </div>
-      <div class="header-spacer" aria-hidden="true"></div>
-    </section>
-
     <div class="main-grid">
       <div class="grade-column">
         <section class="card grades-card" *ngIf="lernfelder.length">
@@ -118,42 +117,6 @@
               </div>
             </div>
             </div>
-        </section>
-
-        <section class="card project-block" *ngIf="currentProjectName">
-          <div class="project-card__head">
-            <div>
-              <span class="chip chip--soft">Projekt</span>
-              <h3>{{ currentProjectName }}</h3>
-              <p class="muted">Team Delta &middot; Faellig 12.12.</p>
-            </div>
-            <div class="project-card__score">
-              <div>
-                <span>Lehrer</span>
-                <strong>{{ scoreSummary?.teacher || '-' }}</strong>
-              </div>
-              <div>
-                <span>Peer</span>
-                <strong>{{ scoreSummary?.peer || '-' }}</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="progress-row wide">
-            <div class="progress-bar">
-              <span class="fill" [style.width.%]="projectProgress"></span>
-            </div>
-            <span class="muted">{{ projectProgress }}% Fortschritt</span>
-          </div>
-
-          <div class="project-card__actions">
-            <button type="button" class="btn ghost" (click)="onStartSelfEval()" [disabled]="evaluationStatus?.selfSubmitted">
-              <i class="pi pi-user"></i>&nbsp;Selbst-Evaluation
-            </button>
-            <button type="button" class="btn ghost" (click)="onStartPeerEval()" [disabled]="evaluationStatus?.peerSubmitted">
-              <i class="pi pi-users"></i>&nbsp;Peer-Evaluation
-            </button>
-          </div>
         </section>
       </div>
 

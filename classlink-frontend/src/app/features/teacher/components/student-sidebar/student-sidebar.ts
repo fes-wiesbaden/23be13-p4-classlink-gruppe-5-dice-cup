@@ -22,6 +22,9 @@ export class TeacherStudentSidebarComponent {
   @Input() search = '';
   @Input() classes: string[] = [];
   @Input() selectedClass: string | null = null;
+  @Input() teacherName = '';
+  @Input() teacherSubject = '';
+  @Input() teacherRole = '';
   // For assigning the currently selected student to a class
   @Input() assignClassName: string | null = null;
   @Output() selectStudent = new EventEmitter<number>();

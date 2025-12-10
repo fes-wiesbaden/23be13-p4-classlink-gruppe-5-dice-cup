@@ -1,4 +1,70 @@
 ﻿/* Von Lukas bearbeitet */
+.sidebar__title {
+  margin: 0 -16px 10px;
+  padding: 0 16px;
+}
+
+.teacher-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px 8px;
+  border: 1px solid #dfe3f1;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+}
+
+.teacher-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed, #9f7aea);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.28);
+}
+
+.teacher-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.teacher-name {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.teacher-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip--outline {
+  background: #ffffff;
+  color: #4338ca;
+  border: 1px dashed rgba(99, 102, 241, 0.5);
+}
+
+.sidebar__divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.08),
+    rgba(148, 163, 184, 0.4),
+    rgba(148, 163, 184, 0.08)
+  );
+  margin: 12px 0 10px;
+}
+
 .sidebar__search {
   position: relative;
 }
@@ -104,7 +170,7 @@
 }
 
 .class-filter-block {
-  margin: 28px 8px 10px;
+  margin: 16px 8px 10px;
   padding: 0;
 }
 
@@ -158,9 +224,13 @@
 }
 
 .field-label {
-  font-size: 14px;
-  color: #111827;
-  font-weight: 700;
+  display: block;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  font-weight: 800;
+  margin: 0 0 6px;
 }
 
 .class-chip {
