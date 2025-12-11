@@ -7,21 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {QuestionDto} from './question-dto';
-
+import { QuestionDto } from './question-dto';
 
 export interface QuestionnaireDto {
-    id?: string;
-    projectId?: string;
-    status?: QuestionnaireDtoStatusEnum;
-    questions?: Array<QuestionDto>;
+  id?: string;
+  projectId?: string;
+  status?: QuestionnaireDtoStatusEnum;
+  questions?: Array<QuestionDto>;
 }
 
 export enum QuestionnaireDtoStatusEnum {
-    Draft = 'DRAFT',
-    Open = 'OPEN',
-    Closed = 'CLOSED'
-};
-
-
-
+  Draft = 'DRAFT',
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+}

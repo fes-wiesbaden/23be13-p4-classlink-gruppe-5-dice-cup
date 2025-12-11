@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
 export interface Admin {
-    id?: string;
-    user?: any | null;
+  id?: string;
+  user?: any | null;
 }
-

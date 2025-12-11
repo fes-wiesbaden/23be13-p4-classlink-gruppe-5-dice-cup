@@ -7,15 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {SubjectScoreDto} from './subject-score-dto';
-
+import { SubjectScoreDto } from './subject-score-dto';
 
 export interface StudentSubjectAssessmentDto {
-    studentId?: string;
-    studentName?: string;
-    projectGroupId?: string;
-    projectName?: string;
-    questionnaireId?: string;
-    subjects?: Array<SubjectScoreDto>;
+  studentId?: string;
+  studentName?: string;
+  projectGroupId?: string;
+  projectName?: string;
+  questionnaireId?: string;
+  subjects?: Array<SubjectScoreDto>;
 }
-

@@ -9,198 +9,234 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import {Inject, Injectable, Optional} from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import {
-    HttpClient, HttpHeaders, HttpParams,
-    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+  HttpEvent,
+  HttpParameterCodec,
+  HttpContext,
 } from '@angular/common/http';
-import {CustomHttpParameterCodec} from '../encoder';
-import {Observable} from 'rxjs';
+import { CustomHttpParameterCodec } from '../encoder';
+import { Observable } from 'rxjs';
 
 // @ts-ignore
-import {LoginRequest} from '../model/login-request';
+import { LoginRequest } from '../model/login-request';
 // @ts-ignore
-import {RefreshRequest} from '../model/refresh-request';
+import { RefreshRequest } from '../model/refresh-request';
 // @ts-ignore
-import {TokenResponse} from '../model/token-response';
+import { TokenResponse } from '../model/token-response';
 
 // @ts-ignore
-import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
-import {Configuration} from '../configuration';
-import {BaseService} from '../api.base.service';
-
-
-
+import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { Configuration } from '../configuration';
+import { BaseService } from '../api.base.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthControllerService extends BaseService {
+  constructor(
+    protected httpClient: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string | string[],
+    @Optional() configuration?: Configuration,
+  ) {
+    super(basePath, configuration);
+  }
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
-        super(basePath, configuration);
+  /**
+   * Anmeldung durchführen
+   * Authentifiziert einen Benutzer und gibt Access- und Refresh-Token zurück.
+   * @param loginRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public login(
+    loginRequest: LoginRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<TokenResponse>;
+  public login(
+    loginRequest: LoginRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<TokenResponse>>;
+  public login(
+    loginRequest: LoginRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<TokenResponse>>;
+  public login(
+    loginRequest: LoginRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (loginRequest === null || loginRequest === undefined) {
+      throw new Error('Required parameter loginRequest was null or undefined when calling login.');
     }
 
-    /**
-     * Anmeldung durchführen
-     * Authentifiziert einen Benutzer und gibt Access- und Refresh-Token zurück.
-     * @param loginRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public login(loginRequest: LoginRequest, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<TokenResponse>;
-    public login(loginRequest: LoginRequest, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<TokenResponse>>;
-    public login(loginRequest: LoginRequest, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<TokenResponse>>;
-    public login(loginRequest: LoginRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (loginRequest === null || loginRequest === undefined) {
-            throw new Error('Required parameter loginRequest was null or undefined when calling login.');
-        }
+    let localVarHeaders = this.defaultHeaders;
 
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/auth/login`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<TokenResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: loginRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
     }
 
-    /**
-     * Tokens erneuern
-     * Erneuert den Access-Token mithilfe eines gültigen Refresh-Tokens.
-     * @param refreshRequest 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public refresh(refreshRequest: RefreshRequest, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<TokenResponse>;
-    public refresh(refreshRequest: RefreshRequest, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<TokenResponse>>;
-    public refresh(refreshRequest: RefreshRequest, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<TokenResponse>>;
-    public refresh(refreshRequest: RefreshRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (refreshRequest === null || refreshRequest === undefined) {
-            throw new Error('Required parameter refreshRequest was null or undefined when calling refresh.');
-        }
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
 
-        let localVarHeaders = this.defaultHeaders;
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/auth/refresh`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<TokenResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: refreshRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
     }
 
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/auth/login`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<TokenResponse>('post', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      body: loginRequest,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Tokens erneuern
+   * Erneuert den Access-Token mithilfe eines gültigen Refresh-Tokens.
+   * @param refreshRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public refresh(
+    refreshRequest: RefreshRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<TokenResponse>;
+  public refresh(
+    refreshRequest: RefreshRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<TokenResponse>>;
+  public refresh(
+    refreshRequest: RefreshRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<TokenResponse>>;
+  public refresh(
+    refreshRequest: RefreshRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (refreshRequest === null || refreshRequest === undefined) {
+      throw new Error(
+        'Required parameter refreshRequest was null or undefined when calling refresh.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/auth/refresh`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<TokenResponse>('post', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      body: refreshRequest,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
 }

@@ -5,7 +5,12 @@ import { Card } from 'primeng/card';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 
-export interface TeacherStudent { id: number; name: string; class: string; avatarUrl?: string }
+export interface TeacherStudent {
+  id: number;
+  name: string;
+  class: string;
+  avatarUrl?: string;
+}
 
 @Component({
   standalone: true,
@@ -25,7 +30,7 @@ export class TeacherProjectAssignmentComponent {
   // Wenn ich das Projekt im Select ändere
   @Output() projectChange = new EventEmitter<number>();
   // Klick auf den Toggle pro Schüler
-    @Output() studentToggle = new EventEmitter<number>();
+  @Output() studentToggle = new EventEmitter<number>();
 
   // Hilfsfunktionen für Anzeige und Performance
   isAssigned(id: number) {

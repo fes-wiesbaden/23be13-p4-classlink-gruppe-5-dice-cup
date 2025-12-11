@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
 export interface ClassTeacherAssignmentRequest {
-    subjectId: string;
-    teacherId: string;
-    weighting?: number;
+  subjectId: string;
+  teacherId: string;
+  weighting?: number;
 }
-

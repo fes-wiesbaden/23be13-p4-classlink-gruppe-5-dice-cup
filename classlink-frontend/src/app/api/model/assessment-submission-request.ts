@@ -7,10 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {AssessmentAnswerDto} from './assessment-answer-dto';
-
+import { AssessmentAnswerDto } from './assessment-answer-dto';
 
 export interface AssessmentSubmissionRequest {
-    answers?: Array<AssessmentAnswerDto>;
+  answers?: Array<AssessmentAnswerDto>;
 }
-

@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
 export interface AssessmentAnswerDto {
-    questionId?: string;
-    score?: number;
+  questionId?: string;
+  score?: number;
 }
-

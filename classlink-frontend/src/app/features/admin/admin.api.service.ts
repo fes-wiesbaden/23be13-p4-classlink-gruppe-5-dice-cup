@@ -11,7 +11,6 @@ export class AdminApiService implements AdminService {
   private http = inject(HttpClient);
   private base = inject(API_BASE_URL);
 
-
   // Holt alle Nutzer (vom echten API-Backend)
   getUsers(): Observable<AdminUser[]> {
     return this.http.get<AdminUser[]>(`${this.base}/users`);

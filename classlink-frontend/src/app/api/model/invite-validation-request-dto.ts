@@ -8,8 +8,6 @@
  * Do not edit the class manually.
  */
 
-
-export interface InviteValidationRequestDto { 
-    token: string;
+export interface InviteValidationRequestDto {
+  token: string;
 }
-

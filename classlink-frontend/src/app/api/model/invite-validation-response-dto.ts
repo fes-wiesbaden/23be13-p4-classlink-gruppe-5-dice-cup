@@ -8,19 +8,15 @@
  * Do not edit the class manually.
  */
 
-
-export interface InviteValidationResponseDto { 
-    inviteId?: string;
-    email?: string;
-    role?: InviteValidationResponseDtoRoleEnum;
-    expiresAt?: string;
-    remainingUses?: number;
+export interface InviteValidationResponseDto {
+  inviteId?: string;
+  email?: string;
+  role?: InviteValidationResponseDtoRoleEnum;
+  expiresAt?: string;
+  remainingUses?: number;
 }
 export enum InviteValidationResponseDtoRoleEnum {
-    Admin = 'ADMIN',
-    Teacher = 'TEACHER',
-    Student = 'STUDENT'
-};
-
-
-
+  Admin = 'ADMIN',
+  Teacher = 'TEACHER',
+  Student = 'STUDENT',
+}

@@ -8,27 +8,23 @@
  * Do not edit the class manually.
  */
 
-
 export interface ProjectGroupStudentScoreOverviewDto {
-    studentId?: string;
-    studentName?: string;
-    classId?: string;
-    className?: string;
-    projectGroupId?: string;
-    projectName?: string;
-    teacherScore?: number;
-    selfScore?: number;
-    peerScore?: number;
-    tendency?: ProjectGroupStudentScoreOverviewDtoTendencyEnum;
+  studentId?: string;
+  studentName?: string;
+  classId?: string;
+  className?: string;
+  projectGroupId?: string;
+  projectName?: string;
+  teacherScore?: number;
+  selfScore?: number;
+  peerScore?: number;
+  tendency?: ProjectGroupStudentScoreOverviewDtoTendencyEnum;
 }
 
 export enum ProjectGroupStudentScoreOverviewDtoTendencyEnum {
-    Aligned = 'ALIGNED',
-    SelfHigherThanTeacher = 'SELF_HIGHER_THAN_TEACHER',
-    SelfLowerThanTeacher = 'SELF_LOWER_THAN_TEACHER',
-    PeerHigherThanTeacher = 'PEER_HIGHER_THAN_TEACHER',
-    PeerLowerThanTeacher = 'PEER_LOWER_THAN_TEACHER'
-};
-
-
-
+  Aligned = 'ALIGNED',
+  SelfHigherThanTeacher = 'SELF_HIGHER_THAN_TEACHER',
+  SelfLowerThanTeacher = 'SELF_LOWER_THAN_TEACHER',
+  PeerHigherThanTeacher = 'PEER_HIGHER_THAN_TEACHER',
+  PeerLowerThanTeacher = 'PEER_LOWER_THAN_TEACHER',
+}

@@ -8,11 +8,9 @@
  * Do not edit the class manually.
  */
 
-
 export interface TermCreateWebRequest {
-    name: string;
-    sequenceNumber: number;
-    startDate: string;
-    endDate: string;
+  name: string;
+  sequenceNumber: number;
+  startDate: string;
+  endDate: string;
 }
-

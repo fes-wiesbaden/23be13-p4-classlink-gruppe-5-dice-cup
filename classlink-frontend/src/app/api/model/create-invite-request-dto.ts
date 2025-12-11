@@ -8,19 +8,15 @@
  * Do not edit the class manually.
  */
 
-
-export interface CreateInviteRequestDto { 
-    email?: string;
-    role: CreateInviteRequestDtoRoleEnum;
-    classId?: string;
-    maxUses?: number;
-    note?: string;
+export interface CreateInviteRequestDto {
+  email?: string;
+  role: CreateInviteRequestDtoRoleEnum;
+  classId?: string;
+  maxUses?: number;
+  note?: string;
 }
 export enum CreateInviteRequestDtoRoleEnum {
-    Admin = 'ADMIN',
-    Teacher = 'TEACHER',
-    Student = 'STUDENT'
-};
-
-
-
+  Admin = 'ADMIN',
+  Teacher = 'TEACHER',
+  Student = 'STUDENT',
+}

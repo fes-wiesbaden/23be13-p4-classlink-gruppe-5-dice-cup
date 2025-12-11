@@ -8,18 +8,14 @@
  * Do not edit the class manually.
  */
 
-
 export interface ProjectGroupMemberDto {
-    id?: string;
-    groupId?: string;
-    studentId?: string;
-    role?: ProjectGroupMemberDtoRoleEnum;
+  id?: string;
+  groupId?: string;
+  studentId?: string;
+  role?: ProjectGroupMemberDtoRoleEnum;
 }
 
 export enum ProjectGroupMemberDtoRoleEnum {
-    Leader = 'LEADER',
-    Member = 'MEMBER'
-};
-
-
-
+  Leader = 'LEADER',
+  Member = 'MEMBER',
+}
