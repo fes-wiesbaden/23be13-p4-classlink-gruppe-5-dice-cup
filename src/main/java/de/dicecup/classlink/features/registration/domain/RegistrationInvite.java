@@ -24,8 +24,8 @@ public class RegistrationInvite {
     @Column(nullable = false)
     private RegistrationInviteRole role;
 
-    @Column(name = "class_id")
-    private UUID classId;
+    @Column(name = "school_class_id")
+    private UUID schoolClassId;
 
     @Column(name = "public_token")
     private String publicToken;

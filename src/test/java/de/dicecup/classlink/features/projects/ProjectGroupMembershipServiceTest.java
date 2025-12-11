@@ -1,9 +1,9 @@
 package de.dicecup.classlink.features.projects;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
@@ -36,7 +36,7 @@ class ProjectGroupMembershipServiceTest {
     @Mock
     private StudentRepository studentRepository;
     @Mock
-    private ClassSubjectAssignmentRepository assignmentRepository;
+    private SubjectAssignmentRepository assignmentRepository;
 
     @InjectMocks
     private ProjectGroupMembershipService service;
@@ -61,7 +61,7 @@ class ProjectGroupMembershipServiceTest {
         Student student = buildStudent(group.getProject().getSchoolClass());
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -78,12 +78,12 @@ class ProjectGroupMembershipServiceTest {
         UUID groupId = UUID.randomUUID();
         UUID teacherId = UUID.randomUUID();
         ProjectGroup group = buildGroup();
-        Class otherClass = new Class();
+        SchoolClass otherClass = new SchoolClass();
         otherClass.setId(UUID.randomUUID());
         Student student = buildStudent(otherClass);
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -101,7 +101,7 @@ class ProjectGroupMembershipServiceTest {
         Student student = buildStudent(group.getProject().getSchoolClass());
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -132,7 +132,7 @@ class ProjectGroupMembershipServiceTest {
         ProjectGroup group = buildGroup();
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -151,7 +151,7 @@ class ProjectGroupMembershipServiceTest {
         UUID studentId = UUID.randomUUID();
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(group.getProject().getSchoolClass());
         assignment.setTerm(group.getProject().getTerm());
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -163,7 +163,7 @@ class ProjectGroupMembershipServiceTest {
     }
 
     private ProjectGroup buildGroup() {
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         Term term = new Term();
         term.setId(UUID.randomUUID());
@@ -176,10 +176,10 @@ class ProjectGroupMembershipServiceTest {
         return group;
     }
 
-    private Student buildStudent(Class clazz) {
+    private Student buildStudent(SchoolClass clazz) {
         Student student = new Student();
         student.setId(UUID.randomUUID());
-        student.setClazz(clazz);
+        student.setSchoolClass(clazz);
         return student;
     }
 }

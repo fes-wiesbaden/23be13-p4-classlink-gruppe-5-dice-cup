@@ -1,6 +1,8 @@
 package de.dicecup.classlink.features.classes;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.features.users.domain.roles.Student;
@@ -25,7 +27,7 @@ class ClassServiceTest {
     @Mock
     private StudentRepository studentRepository;
     @Mock
-    private ClassSubjectAssignmentRepository assignmentRepository;
+    private SubjectAssignmentRepository assignmentRepository;
     @Mock
     private AuthHelper authHelper;
 
@@ -37,16 +39,16 @@ class ClassServiceTest {
         UUID classId = UUID.randomUUID();
         UUID teacherId = UUID.randomUUID();
 
-        Class schoolClass = new Class();
+        SchoolClass schoolClass = new SchoolClass();
         schoolClass.setId(classId);
         schoolClass.setName("1A");
 
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(schoolClass);
 
         Student student = new Student();
         student.setId(UUID.randomUUID());
-        student.setClazz(schoolClass);
+        student.setSchoolClass(schoolClass);
 
         User user = new User();
         UserInfo info = new UserInfo();

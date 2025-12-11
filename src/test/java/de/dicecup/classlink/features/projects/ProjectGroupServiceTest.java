@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.projects;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
 import de.dicecup.classlink.features.users.domain.roles.Teacher;
@@ -65,17 +65,17 @@ class ProjectGroupServiceTest {
         UUID groupId = UUID.randomUUID();
         ProjectGroup group = new ProjectGroup();
         Project project = new Project();
-        Class classA = new Class();
-        classA.setId(UUID.randomUUID());
-        Class classB = new Class();
-        classB.setId(UUID.randomUUID());
-        project.setSchoolClass(classA);
+        SchoolClass schoolClassA = new SchoolClass();
+        schoolClassA.setId(UUID.randomUUID());
+        SchoolClass schoolClassB = new SchoolClass();
+        schoolClassB.setId(UUID.randomUUID());
+        project.setSchoolClass(schoolClassA);
         group.setProject(project);
 
         UUID studentId = UUID.randomUUID();
         Student student = new Student();
         student.setId(studentId);
-        student.setClazz(classB);
+        student.setSchoolClass(schoolClassB);
 
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
         when(studentRepository.findById(studentId)).thenReturn(Optional.of(student));
@@ -93,19 +93,19 @@ class ProjectGroupServiceTest {
         UUID groupId = UUID.randomUUID();
         ProjectGroup group = new ProjectGroup();
         Project project = new Project();
-        Class classA = new Class();
-        classA.setId(UUID.randomUUID());
-        project.setSchoolClass(classA);
+        SchoolClass schoolClassA = new SchoolClass();
+        schoolClassA.setId(UUID.randomUUID());
+        project.setSchoolClass(schoolClassA);
         group.setProject(project);
 
         UUID studentId1 = UUID.randomUUID();
         UUID studentId2 = UUID.randomUUID();
         Student student1 = new Student();
         student1.setId(studentId1);
-        student1.setClazz(classA);
+        student1.setSchoolClass(schoolClassA);
         Student student2 = new Student();
         student2.setId(studentId2);
-        student2.setClazz(classA);
+        student2.setSchoolClass(schoolClassA);
 
         when(projectGroupRepository.findById(groupId)).thenReturn(Optional.of(group));
         when(studentRepository.findById(studentId1)).thenReturn(Optional.of(student1));
