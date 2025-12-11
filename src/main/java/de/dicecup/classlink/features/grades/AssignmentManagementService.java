@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+// Author: Marcel Plenert
+// Management Service for assignments and final assignments, handles more complex operations used by the Controller
 @Service
 @RequiredArgsConstructor
 public class AssignmentManagementService {
