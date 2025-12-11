@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+//Author: Marcel Plenert
+//Handles logic for Grades, makes changes to the database
 @Service
 @RequiredArgsConstructor
 public class GradeManagementService {
