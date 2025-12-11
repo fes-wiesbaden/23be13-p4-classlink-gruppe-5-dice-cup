@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
 export interface TeacherProjectGroupContextDto {
-    projectGroupId?: string;
-    projectName?: string;
-    studentCount?: number;
+  projectGroupId?: string;
+  projectName?: string;
+  studentCount?: number;
 }
-

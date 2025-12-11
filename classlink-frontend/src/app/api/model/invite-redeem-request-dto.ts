@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
-export interface InviteRedeemRequestDto { 
-    token: string;
-    username: string;
-    password: string;
+export interface InviteRedeemRequestDto {
+  token: string;
+  username: string;
+  password: string;
 }
-

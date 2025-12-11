@@ -7,11 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {StudentAssessmentDetailDTO} from './student-assessment-detail-dto';
-
+import { StudentAssessmentDetailDTO } from './student-assessment-detail-dto';
 
 export interface ProjectAssessmentOverviewDTO {
-    projectId?: string;
-    students?: Array<StudentAssessmentDetailDTO>;
+  projectId?: string;
+  students?: Array<StudentAssessmentDetailDTO>;
 }
-

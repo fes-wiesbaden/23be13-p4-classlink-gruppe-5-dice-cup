@@ -7,11 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {TeacherClassContextDto} from './teacher-class-context-dto';
-
+import { TeacherClassContextDto } from './teacher-class-context-dto';
 
 export interface TeacherContextDto {
-    teacherId?: string;
-    classes?: Array<TeacherClassContextDto>;
+  teacherId?: string;
+  classes?: Array<TeacherClassContextDto>;
 }
-

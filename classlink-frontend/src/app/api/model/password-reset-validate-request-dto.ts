@@ -8,8 +8,6 @@
  * Do not edit the class manually.
  */
 
-
-export interface PasswordResetValidateRequestDto { 
-    token: string;
+export interface PasswordResetValidateRequestDto {
+  token: string;
 }
-

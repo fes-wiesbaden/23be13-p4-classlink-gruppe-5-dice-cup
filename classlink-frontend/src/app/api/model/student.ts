@@ -7,13 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {User} from './user';
-import {Class} from './class';
-
+import { User } from './user';
+import { Class } from './class';
 
 export interface Student {
-    id?: string;
-    user?: User;
-    clazz?: Class;
+  id?: string;
+  user?: User;
+  clazz?: Class;
 }
-

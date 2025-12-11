@@ -8,8 +8,6 @@
  * Do not edit the class manually.
  */
 
-
-export interface RefreshRequest { 
-    refreshToken: string;
+export interface RefreshRequest {
+  refreshToken: string;
 }
-
