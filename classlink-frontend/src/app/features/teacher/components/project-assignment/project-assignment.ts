@@ -1,4 +1,4 @@
-﻿// Von Lukas bearbeitet
+// Von Lukas bearbeitet
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Card } from 'primeng/card';
@@ -31,6 +31,8 @@ export class TeacherProjectAssignmentComponent {
   @Output() projectChange = new EventEmitter<number>();
   // Klick auf den Toggle pro Schüler
   @Output() studentToggle = new EventEmitter<number>();
+  // Neues Projekt anlegen
+  @Output() createProject = new EventEmitter<void>();
 
   // Hilfsfunktionen für Anzeige und Performance
   isAssigned(id: number) {

@@ -27,6 +27,9 @@ export class TeacherStudentSidebarComponent {
   @Input() search = '';
   @Input() classes: string[] = [];
   @Input() selectedClass: string | null = null;
+  @Input() teacherName = '';
+  @Input() teacherSubject = '';
+  @Input() teacherRole = '';
   // For assigning the currently selected student to a class
   @Input() assignClassName: string | null = null;
   @Output() selectStudent = new EventEmitter<number>();
@@ -42,10 +45,7 @@ export class TeacherStudentSidebarComponent {
   }
 
   get classOptions() {
-    return [
-      { label: 'Alle Klassen', value: null },
-      ...this.classes.map((c) => ({ label: c, value: c })),
-    ];
+    return this.classes.map((c) => ({ label: c, value: c }));
   }
 
   get assignOptions() {
