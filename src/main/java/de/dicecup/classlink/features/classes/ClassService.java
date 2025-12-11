@@ -1,7 +1,8 @@
 package de.dicecup.classlink.features.classes;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.users.domain.UserInfo;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
@@ -16,11 +17,11 @@ import java.util.UUID;
 public class ClassService {
 
     private final StudentRepository studentRepository;
-    private final ClassSubjectAssignmentRepository assignmentRepository;
+    private final SubjectAssignmentRepository assignmentRepository;
     private final AuthHelper authHelper;
 
     public ClassService(StudentRepository studentRepository,
-                        ClassSubjectAssignmentRepository assignmentRepository,
+                        SubjectAssignmentRepository assignmentRepository,
                         AuthHelper authHelper) {
         this.studentRepository = studentRepository;
         this.assignmentRepository = assignmentRepository;
@@ -48,7 +49,7 @@ public class ClassService {
     }
 
     private StudentInClassDto toDto(Student student) {
-        Class clazz = student.getClazz();
+        SchoolClass clazz = student.getSchoolClass();
         if (clazz == null) {
             throw new IllegalStateException("Student is not assigned to a class");
         }

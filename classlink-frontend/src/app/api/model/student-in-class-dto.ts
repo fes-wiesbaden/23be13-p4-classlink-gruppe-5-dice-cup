@@ -8,12 +8,10 @@
  * Do not edit the class manually.
  */
 
-
 export interface StudentInClassDto {
-    studentId?: string;
-    firstName?: string;
-    lastName?: string;
-    classId?: string;
-    className?: string;
+  studentId?: string;
+  firstName?: string;
+  lastName?: string;
+  classId?: string;
+  className?: string;
 }
-

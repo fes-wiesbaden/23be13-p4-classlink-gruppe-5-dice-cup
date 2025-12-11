@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
-export interface TokenResponse { 
-    accessToken?: string;
-    refreshToken?: string;
+export interface TokenResponse {
+  accessToken?: string;
+  refreshToken?: string;
 }
-

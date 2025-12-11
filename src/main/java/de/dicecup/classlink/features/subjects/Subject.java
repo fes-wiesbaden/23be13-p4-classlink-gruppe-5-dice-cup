@@ -18,8 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Subject {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Size(max = 100)
     private String name;

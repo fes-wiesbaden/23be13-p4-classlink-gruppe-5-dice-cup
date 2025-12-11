@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.registration.app;
 
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.registration.InvitationService;
 import de.dicecup.classlink.features.registration.domain.*;
 import de.dicecup.classlink.features.users.UserRepository;
@@ -25,7 +25,7 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ClassRepository classRepository;
+    SchoolClassRepository schoolClassRepository;
 
     @AfterEach
     void cleanupSecurity() {
@@ -66,9 +66,9 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
         User admin = persistAdminUser("admin2@example.com");
         authenticate(admin);
 
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setName("10A");
-        clazz = classRepository.save(clazz);
+        clazz = schoolClassRepository.save(clazz);
 
         CreateInviteRequestDto request = new CreateInviteRequestDto("student@example.com", RegistrationInviteRole.STUDENT, clazz.getId(), 1, "note");
         InviteCreatedResponseDto created = invitationService.createInvite(request);
@@ -79,8 +79,8 @@ class InvitationServiceIntegrationTest extends IntegrationTestBase {
         User studentUser = userRepository.findByUserInfoEmail("student@example.com").orElseThrow();
         Student student = studentUser.getStudent();
         assertThat(student).isNotNull();
-        assertThat(student.getClazz()).isNotNull();
-        assertThat(student.getClazz().getId()).isEqualTo(clazz.getId());
+        assertThat(student.getSchoolClass()).isNotNull();
+        assertThat(student.getSchoolClass().getId()).isEqualTo(clazz.getId());
     }
 
     private User persistAdminUser(String email) {

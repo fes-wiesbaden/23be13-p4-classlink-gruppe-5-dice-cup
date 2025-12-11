@@ -8,11 +8,9 @@
  * Do not edit the class manually.
  */
 
-
 export interface ProjectGroupDto {
-    id?: string;
-    groupNumber?: number;
-    projectId?: string;
-    supervisingTeacherId?: string;
+  id?: string;
+  groupNumber?: number;
+  projectId?: string;
+  supervisingTeacherId?: string;
 }
-

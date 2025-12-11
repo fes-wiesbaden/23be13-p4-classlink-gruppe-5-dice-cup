@@ -6,8 +6,15 @@ import { NotificationService } from '../../../../core/notifications/notification
 import { AppNotification } from '../../../../core/notifications/notification.model';
 import { FormsModule } from '@angular/forms';
 
-export interface ProjectOption { label: string; value: number }
-export interface SimpleStudent { name: string; class: string; avatarUrl?: string }
+export interface ProjectOption {
+  label: string;
+  value: number;
+}
+export interface SimpleStudent {
+  name: string;
+  class: string;
+  avatarUrl?: string;
+}
 
 @Component({
   standalone: true,

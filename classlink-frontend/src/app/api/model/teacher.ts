@@ -7,11 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {User} from './user';
-
+import { User } from './user';
 
 export interface Teacher {
-    id?: string;
-    user?: User;
+  id?: string;
+  user?: User;
 }
-

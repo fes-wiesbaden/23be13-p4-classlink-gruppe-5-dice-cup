@@ -8,11 +8,9 @@
  * Do not edit the class manually.
  */
 
-
 export interface QuestionDto {
-    id?: string;
-    position?: number;
-    text?: string;
-    active?: boolean;
+  id?: string;
+  position?: number;
+  text?: string;
+  active?: boolean;
 }
-

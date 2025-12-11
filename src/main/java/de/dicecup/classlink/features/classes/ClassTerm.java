@@ -29,7 +29,7 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "class_terms",
-        uniqueConstraints = @UniqueConstraint(name = "uk_class_term_class_term", columnNames = {"class_id", "term_id"})
+        uniqueConstraints = @UniqueConstraint(name = "uk_class_term_class_term", columnNames = {"school_class_id", "term_id"})
 )
 public class ClassTerm {
 
@@ -39,8 +39,8 @@ public class ClassTerm {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", nullable = false)
-    private Class schoolClass;
+    @JoinColumn(name = "school_class_id", nullable = false)
+    private SchoolClass schoolClass;
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

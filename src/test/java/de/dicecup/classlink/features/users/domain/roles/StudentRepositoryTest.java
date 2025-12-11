@@ -1,7 +1,7 @@
 package de.dicecup.classlink.features.users.domain.roles;
 
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.domain.User;
 import de.dicecup.classlink.features.users.domain.roles.Student;
@@ -24,31 +24,31 @@ class StudentRepositoryTest extends DbSliceTestBase {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ClassRepository classRepository;
+    private SchoolClassRepository classRepository;
     @Autowired
     private UserTestData userTestData;
 
     @Test
     void findByClassId_returnsOnlyStudentsOfClass() {
-        Class classA = new Class();
+        SchoolClass classA = new SchoolClass();
         classA.setName("Class A");
         classA = classRepository.save(classA);
 
-        Class classB = new Class();
+        SchoolClass classB = new SchoolClass();
         classB.setName("Class B");
         classB = classRepository.save(classB);
 
         User userA = userRepository.save(userTestData.userWithInfo());
         Student studentA = new Student();
         studentA.setUser(userA);
-        studentA.setClazz(classA);
+        studentA.setSchoolClass(classA);
         userA.setStudent(studentA);
         studentRepository.save(studentA);
 
         User userB = userRepository.save(userTestData.userWithInfo());
         Student studentB = new Student();
         studentB.setUser(userB);
-        studentB.setClazz(classB);
+        studentB.setSchoolClass(classB);
         userB.setStudent(studentB);
         studentRepository.save(studentB);
 

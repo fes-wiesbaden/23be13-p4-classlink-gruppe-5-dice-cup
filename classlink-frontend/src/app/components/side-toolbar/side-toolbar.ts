@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 
-interface Item { icon: string; route: string; tooltip: string }
+interface Item {
+  icon: string;
+  route: string;
+  tooltip: string;
+}
 
 @Component({
   standalone: true,

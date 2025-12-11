@@ -7,10 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {ProjectDto} from './project-dto';
-
+import { ProjectDto } from './project-dto';
 
 export interface ProjectDetailsDto {
-    project?: ProjectDto;
+  project?: ProjectDto;
 }
-
