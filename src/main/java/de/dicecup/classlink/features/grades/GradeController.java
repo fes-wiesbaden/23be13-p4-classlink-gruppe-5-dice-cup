@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+//Author: Marcel Plenert
+// Creates API Endpoint for Grade and Assignment functionality
 @RestController
 @RequestMapping("/api/assignment")
 @RequiredArgsConstructor
