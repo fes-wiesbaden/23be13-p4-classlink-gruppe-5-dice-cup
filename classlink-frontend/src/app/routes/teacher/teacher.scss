@@ -126,17 +126,19 @@ h3 {
 
 .grade-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
 }
 
 .grade-card {
   border: 1px solid #e8eaf2;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff, #f9fbff);
   border-radius: 16px;
-  padding: 0.9rem;
+  padding: 1rem 1.05rem;
   text-align: left;
-  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 18px 32px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 #ffffff;
   cursor: pointer;
   transition:
     transform 0.15s ease,
@@ -179,6 +181,7 @@ h3 {
   color: #14172b;
   line-height: 1.2;
   min-height: 2.3em;
+  letter-spacing: -0.01em;
 }
 
 .grade-card__meta {
@@ -193,6 +196,37 @@ h3 {
   font-size: 1.5rem;
   font-weight: 800;
   color: #2d1f6e;
+}
+
+.summary-row {
+  margin-top: 0.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.mini-card {
+  border: 1px solid #e5e8f1;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  background: linear-gradient(180deg, #ffffff, #f7f9ff);
+  box-shadow:
+    0 12px 22px rgba(15, 23, 42, 0.05),
+    inset 0 1px 0 #ffffff;
+}
+
+.mini-label {
+  margin: 0 0 4px;
+  color: #6b7280;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.mini-value {
+  margin: 0;
+  color: #1f2937;
+  font-weight: 800;
+  font-size: 1.35rem;
 }
 
 .bar {
@@ -284,6 +318,12 @@ h3 {
   color: #5a3bea;
   border: 1px solid rgba(99, 102, 241, 0.25);
   box-shadow: inset 0 1px 0 #ffffff;
+}
+
+.subject-btn {
+  font-size: 0.9rem;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
 }
 
 .teacher-heading {
@@ -501,4 +541,27 @@ h3 {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.subject-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subject-dialog textarea {
+  width: 100%;
+  border: 1px solid #e5e8f1;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 90px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
 }

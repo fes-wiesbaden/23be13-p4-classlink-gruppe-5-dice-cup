@@ -7,24 +7,20 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {Term} from './term';
-
+import { Term } from './term';
 
 export interface SchoolYear {
-    id?: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-    status: SchoolYearStatusEnum;
-    createdAt: string;
-    updatedAt: string;
-    terms?: Array<Term>;
+  id?: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  status: SchoolYearStatusEnum;
+  createdAt: string;
+  updatedAt: string;
+  terms?: Array<Term>;
 }
 
 export enum SchoolYearStatusEnum {
-    Active = 'ACTIVE',
-    Closed = 'CLOSED'
-};
-
-
-
+  Active = 'ACTIVE',
+  Closed = 'CLOSED',
+}

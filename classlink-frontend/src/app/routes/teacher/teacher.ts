@@ -56,13 +56,13 @@ export class TeacherComponent {
   private readonly mock = inject(TeacherMockService);
   private readonly messages = inject(MessageService);
 
-  // Teacher identity (displayed in header)
+
   readonly teacherName = 'F. Bekkaoui';
   readonly teacherSubject = 'Informatik';
   readonly teacherRole = 'Klassenlehrer 23BE13';
 
   constructor() {
-    // Daten aus dem Mock holen und Ansicht vorbereiten
+
     this.students = this.mock.getStudents();
     this.projects = this.mock.getProjects();
     this.classes = this.mock.getClasses();
@@ -71,13 +71,13 @@ export class TeacherComponent {
     this.selectedProjectId = this.projects[0]?.id ?? 0;
     this.currentProjectName = this.projects.find((p) => p.id === this.selectedProjectId)?.name;
     this.recomputeAssignedIds();
-    // Ausgewaehlte Klasse im kleinen Zuweisungsfeld (links in der Sidebar)
+    
     const st = this.students.find((s) => s.id === this.selectedStudentId);
     this.assignClassName = st?.class ?? null;
     this.refreshLernfelderForStudent(this.selectedStudentId);
   }
 
-  // Daten (kommen aus dem Mock)
+
   students: Student[] = [];
   projects: Project[] = [];
   assignments: Assignment[] = [];
@@ -90,10 +90,13 @@ export class TeacherComponent {
   currentProjectName?: string;
   selectedClass: string | null = null;
   search = '';
-  // Ausgewaehlte Klasse im kleinen Zuweisungsfeld (links in der Sidebar)
+
   assignClassName: string | null = null;
   showCreateClass = false;
   newClassName = '';
+  showSubjectDialog = false;
+  subjectName = '';
+  subjectDescription = '';
   lernfelder: Lernfeld[] = [];
   selectedLernfeld: Lernfeld | null = null;
   overallAverage = 0;
@@ -127,10 +130,10 @@ export class TeacherComponent {
     if (!st) return null;
     return this.mock.getEvaluationStatus(st.id, this.selectedProjectId);
   }
-  // Wenn links ein Schüler angeklickt wird: merken und Klasse vorbelegen
+  
   selectStudent(id: number) {
     this.selectedStudentId = id;
-    // Preselect current class for assignment control
+
     const st = this.students.find((s) => s.id === id);
     this.assignClassName = st?.class ?? null;
     this.refreshLernfelderForStudent(id);
@@ -144,7 +147,6 @@ export class TeacherComponent {
     return !!a?.assigned;
   }
 
-  // Zuweisung umschalten und kurze Rückmeldung anzeigen
   toggleAssignment(studentId: number) {
     this.mock.toggleAssignment(studentId, this.selectedProjectId);
     this.assignments = this.mock.getAssignments();
@@ -158,29 +160,29 @@ export class TeacherComponent {
     });
   }
 
-  // Noten aus dem Mock holen
+
   getScores(studentId: number, projectId: number) {
     return this.mock.getScores(studentId, projectId);
   }
 
-  // Derived data for presentational components
+
   private _assignedIds: number[] = [];
   get assignedIds(): number[] {
     return this._assignedIds;
   }
 
-  // Daten fuer die KPI-Karten oben
+
   get scoreSummary() {
     const st = this.selectedStudent;
     if (!st) return null;
     return this.getScores(st.id, this.selectedProjectId);
   }
 
-  // Ereignisse aus den Kind-Komponenten
+
   onSelectStudent = (id: number) => this.selectStudent(id);
   onSearchChange = (v: string) => (this.search = v);
   onClassChange = (cls: string | null) => (this.selectedClass = cls);
-  // Beim Projektwechsel Namen und Zuweisungen aktualisieren
+
   onProjectChange = (id: number) => {
     this.selectedProjectId = id;
     this.currentProjectName = this.projects.find((p) => p.id === id)?.name;
@@ -189,21 +191,21 @@ export class TeacherComponent {
   };
   onToggleAssignment = (id: number) => this.toggleAssignment(id);
   onCreateProject = () => console.info('create project clicked');
-  // Ã–ffnet den Dialog zum Anlegen einer neuen Klasse
+
   onCreateClass = () => {
-    // Dialog statt prompt öffnen
+
     this.newClassName = '';
     this.showCreateClass = true;
   };
 
-  // Kleine Validierung: leer oder schon vorhanden -> nicht erlauben
+
   get isNewClassValid(): boolean {
     const n = (this.newClassName || '').trim();
     if (!n) return false;
     if (this.classes.includes(n)) return false;
     return true;
   }
-  // Bestätigt den Dialog und legt die Klasse an
+
   confirmCreateClass() {
     const n = (this.newClassName || '').trim();
     if (!n || this.classes.includes(n)) return;
@@ -214,23 +216,44 @@ export class TeacherComponent {
     this.showCreateClass = false;
     this.messages.add({ severity: 'success', summary: 'Klasse erstellt', detail: n });
   }
-  // Dialog einfach schließen ohne zu speichern
+
   cancelCreateClass() {
     this.showCreateClass = false;
     this.newClassName = '';
   }
 
-  // Weist den aktuell ausgewÃ¤hlten SchÃ¼ler der im Dropdown gewÃ¤hlten Klasse zu
-  // Weist den aktuell ausgewaehlten Schueler der gewaehlten Klasse zu
+  openSubjectDialog() {
+    this.showSubjectDialog = true;
+    this.subjectName = '';
+    this.subjectDescription = '';
+  }
+
+  closeSubjectDialog() {
+    this.showSubjectDialog = false;
+  }
+
+  saveSubject() {
+    const name = this.subjectName.trim();
+    const desc = this.subjectDescription.trim();
+    if (!name || !desc) return;
+    this.messages.add({
+      severity: 'success',
+      summary: 'Fach hinzugefügt',
+      detail: `${name}: ${desc}`,
+    });
+    this.closeSubjectDialog();
+  }
+
+
   onAssignSelectedToClass = () => {
     const st = this.selectedStudent;
     const cls = (this.assignClassName || '').trim();
     if (!st || !cls) return;
     this.mock.setStudentClass(st.id, cls);
-    // lokale Kopien aktualisieren
+
     this.students = this.mock.getStudents();
     this.classes = this.mock.getClasses();
-    // Filter anpassen, falls notwendig
+
     if (this.selectedClass && this.selectedClass !== cls) {
       this.selectedClass = cls;
     }
@@ -300,7 +323,7 @@ export class TeacherComponent {
     ];
 
     const items: Lernfeld[] = [];
-    for (let i = 1; i <= 15; i++) {
+    for (let i = 1; i <= 12; i++) {
       const assessments = this.createAssessments(i + seedOffset);
       const avg = this.weightedAverage(assessments);
       items.push({

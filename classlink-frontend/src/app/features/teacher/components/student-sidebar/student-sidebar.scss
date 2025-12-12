@@ -79,26 +79,60 @@
   padding-left: 34px;
 }
 
+.sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .sidebar__list li {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e8f1;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
 }
+
 .sidebar__list .active-indicator {
   position: absolute;
   left: 0;
-  top: 6px;
-  bottom: 6px;
+  top: 8px;
+  bottom: 8px;
   width: 4px;
-  background: var(--accent);
-  border-radius: 4px;
+  background: linear-gradient(180deg, #7c3aed, #9f7aea);
+  border-radius: 6px;
 }
 
-/* Enhance spacing for active indicator */
-.sidebar__list li {
-  padding-left: 18px;
+.sidebar__list li:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(124, 92, 255, 0.15);
+  border-color: rgba(124, 92, 255, 0.35);
 }
+
 .sidebar__list li.is-active {
-  border: 1px solid var(--accent);
-  box-shadow: 0 8px 16px rgba(124, 92, 255, 0.12);
+  border: 1px solid #8b5cf6;
+  box-shadow:
+    0 14px 30px rgba(124, 92, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, #f4f1ff 0%, #ffffff 100%);
+}
+
+.sidebar__list li .meta .name {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.sidebar__list li .meta .class {
+  color: #636a7b;
+  font-weight: 600;
 }
 /* Input height to match mock */
 .sidebar__search input {
@@ -152,6 +186,9 @@
   display: block;
   object-fit: cover;
   background: none;
+  box-shadow: 0 6px 14px rgba(124, 92, 255, 0.18);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
 }
 
 .sidebar__header {
@@ -225,7 +262,7 @@
 
 .field-label {
   display: block;
-  font-size: 16px;
+  font-size: 1.25rem;
   line-height: 1.4;
   letter-spacing: -0.01em;
   color: #0f172a;
@@ -266,9 +303,9 @@
 }
 
 .chip-label {
-  font-size: 12px;
+  font-size: 0.95rem;
   color: #6b7280;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .sidebar__list-wrapper {
@@ -278,12 +315,7 @@
 
 .sidebar__list {
   margin: 0;
-  padding: 0;
-}
-
-.sidebar__list li {
-  border-radius: 12px;
-  padding-left: 16px;
+  padding: 0 2px 8px;
 }
 
 .list-fade {

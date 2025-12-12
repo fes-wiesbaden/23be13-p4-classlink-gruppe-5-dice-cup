@@ -4,11 +4,7 @@ import de.dicecup.classlink.features.assessments.dto.ProjectGroupStudentScoreOve
 import de.dicecup.classlink.features.assessments.dto.StudentSubjectAssessmentDto;
 import de.dicecup.classlink.features.assessments.dto.SubjectScoreDto;
 import de.dicecup.classlink.features.assessments.dto.SubjectScoreDto.Tendency;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
-import de.dicecup.classlink.features.assessments.AssessmentAnswer;
-import de.dicecup.classlink.features.assessments.AssessmentType;
-import de.dicecup.classlink.features.assessments.Question;
-import de.dicecup.classlink.features.assessments.Questionnaire;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.projects.ProjectGroup;
 import de.dicecup.classlink.features.projects.ProjectGroupMember;
 import de.dicecup.classlink.features.projects.ProjectGroupMemberRepository;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +29,7 @@ public class ProjectGroupScoreService {
     private final AuthHelper authHelper;
     private final ProjectGroupRepository projectGroupRepository;
     private final ProjectGroupMemberRepository memberRepository;
-    private final ClassSubjectAssignmentRepository assignmentRepository;
+    private final SubjectAssignmentRepository assignmentRepository;
     private final QuestionnaireRepository questionnaireRepository;
     private final QuestionRepository questionRepository;
     private final AssessmentAnswerRepository assessmentAnswerRepository;
@@ -43,7 +38,7 @@ public class ProjectGroupScoreService {
     public ProjectGroupScoreService(AuthHelper authHelper,
                                     ProjectGroupRepository projectGroupRepository,
                                     ProjectGroupMemberRepository memberRepository,
-                                    ClassSubjectAssignmentRepository assignmentRepository,
+                                    SubjectAssignmentRepository assignmentRepository,
                                     QuestionnaireRepository questionnaireRepository,
                                     QuestionRepository questionRepository,
                                     AssessmentAnswerRepository assessmentAnswerRepository,
@@ -105,7 +100,7 @@ public class ProjectGroupScoreService {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Student not found"));
-        if (!group.getProject().getSchoolClass().getId().equals(student.getClazz().getId())) {
+        if (!group.getProject().getSchoolClass().getId().equals(student.getSchoolClass().getId())) {
             throw new AccessDeniedException("Student not in project class");
         }
 
@@ -207,8 +202,8 @@ public class ProjectGroupScoreService {
         return new ProjectGroupStudentScoreOverviewDto(
                 student.getId(),
                 extractName(student),
-                student.getClazz() != null ? student.getClazz().getId() : null,
-                student.getClazz() != null ? student.getClazz().getName() : null,
+                student.getSchoolClass() != null ? student.getSchoolClass().getId() : null,
+                student.getSchoolClass() != null ? student.getSchoolClass().getName() : null,
                 group.getId(),
                 group.getProject().getName(),
                 teacherScore,

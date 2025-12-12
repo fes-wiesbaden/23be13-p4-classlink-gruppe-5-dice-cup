@@ -1,6 +1,6 @@
 package de.dicecup.classlink.features.projects;
 
-import de.dicecup.classlink.features.classes.Class;
+import de.dicecup.classlink.features.classes.SchoolClass;
 import de.dicecup.classlink.features.classes.ClassTerm;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
 import de.dicecup.classlink.features.classes.ClassTermStatus;
@@ -76,7 +76,7 @@ class ProjectServiceTest {
     void createProject_succeedsWhenClassTermActive() {
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
-        Class schoolClass = new Class();
+        SchoolClass schoolClass = new SchoolClass();
         schoolClass.setId(classId);
         Term term = new Term();
         term.setId(termId);

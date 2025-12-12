@@ -37,12 +37,12 @@
   transform: translateY(0);
   box-shadow: 0 8px 16px rgba(124, 92, 255, 0.18);
 }
-.assign__project .label {
-  color: var(--text-secondary);
-  font-size: 12px;
-}
+.assign__project .label,
 .assign__project .value {
-  color: var(--text-primary);
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .subhead {
@@ -182,16 +182,17 @@
   margin-bottom: 12px;
 }
 .modern .panel__title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 .modern .assign__project {
   gap: 6px;
   margin-bottom: 16px;
 }
 .modern .assign__project .current {
-  font-size: 12px;
+  font-size: 1rem;
   color: var(--text-secondary);
 }
 .modern .assign__project .chip {

@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
 export interface SchoolYearCreateRequest {
-    name: string;
-    startDate: string;
-    endDate: string;
+  name: string;
+  startDate: string;
+  endDate: string;
 }
-

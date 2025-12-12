@@ -7,26 +7,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {StudentQuestionAssessmentDTO} from './student-question-assessment-dto';
-
+import { StudentQuestionAssessmentDTO } from './student-question-assessment-dto';
 
 export interface StudentAssessmentDetailDTO {
-    studentId?: string;
-    studentName?: string;
-    selfAvg?: number;
-    peerAvg?: number;
-    combinedAvg?: number;
-    teacherGrade?: number;
-    delta?: number;
-    tendencyLabel?: StudentAssessmentDetailDTOTendencyLabelEnum;
-    questions?: Array<StudentQuestionAssessmentDTO>;
+  studentId?: string;
+  studentName?: string;
+  selfAvg?: number;
+  peerAvg?: number;
+  combinedAvg?: number;
+  teacherGrade?: number;
+  delta?: number;
+  tendencyLabel?: StudentAssessmentDetailDTOTendencyLabelEnum;
+  questions?: Array<StudentQuestionAssessmentDTO>;
 }
 
 export enum StudentAssessmentDetailDTOTendencyLabelEnum {
-    Overestimates = 'OVERESTIMATES',
-    Underestimates = 'UNDERESTIMATES',
-    Aligned = 'ALIGNED'
-};
-
-
-
+  Overestimates = 'OVERESTIMATES',
+  Underestimates = 'UNDERESTIMATES',
+  Aligned = 'ALIGNED',
+}

@@ -1,9 +1,9 @@
 package de.dicecup.classlink.features.teachers;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
 import de.dicecup.classlink.features.classes.ClassTermRepository;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.projects.ProjectGroupRepository;
 import de.dicecup.classlink.features.projects.ProjectRepository;
 import de.dicecup.classlink.features.projects.ProjectGroupMemberRepository;
@@ -24,14 +24,14 @@ import java.util.stream.Collectors;
 public class TeacherContextService {
 
     private final AuthHelper authHelper;
-    private final ClassSubjectAssignmentRepository assignmentRepository;
+    private final SubjectAssignmentRepository assignmentRepository;
     private final TermRepository termRepository;
     private final ProjectRepository projectRepository;
     private final ProjectGroupRepository projectGroupRepository;
     private final ProjectGroupMemberRepository memberRepository;
 
     public TeacherContextService(AuthHelper authHelper,
-                                 ClassSubjectAssignmentRepository assignmentRepository,
+                                 SubjectAssignmentRepository assignmentRepository,
                                  TermRepository termRepository,
                                  ProjectRepository projectRepository,
                                  ProjectGroupRepository projectGroupRepository,
@@ -47,17 +47,17 @@ public class TeacherContextService {
     @Transactional(readOnly = true)
     public TeacherContextDto loadContext() {
         UUID teacherId = authHelper.requireTeacherId();
-        List<ClassSubjectAssignment> assignments = assignmentRepository.findByTeacherId(teacherId);
+        List<SubjectAssignment> assignments = assignmentRepository.findByTeacherId(teacherId);
         if (assignments.isEmpty()) {
             return new TeacherContextDto(teacherId, List.of());
         }
 
-        Map<UUID, List<ClassSubjectAssignment>> byClass = assignments.stream()
+        Map<UUID, List<SubjectAssignment>> byClass = assignments.stream()
                 .filter(a -> a.getSchoolClass() != null)
                 .collect(Collectors.groupingBy(a -> a.getSchoolClass().getId()));
 
         List<TeacherClassContextDto> classes = new ArrayList<>();
-        for (Map.Entry<UUID, List<ClassSubjectAssignment>> entry : byClass.entrySet()) {
+        for (Map.Entry<UUID, List<SubjectAssignment>> entry : byClass.entrySet()) {
             UUID classId = entry.getKey();
             String className = entry.getValue().stream()
                     .map(a -> a.getSchoolClass().getName())

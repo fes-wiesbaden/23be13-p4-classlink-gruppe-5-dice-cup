@@ -7,7 +7,12 @@ import { Tooltip } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 
-export interface TeacherStudent { id: number; name: string; class: string; avatarUrl?: string }
+export interface TeacherStudent {
+  id: number;
+  name: string;
+  class: string;
+  avatarUrl?: string;
+}
 
 @Component({
   standalone: true,
@@ -25,7 +30,7 @@ export class TeacherStudentSidebarComponent {
   @Input() teacherName = '';
   @Input() teacherSubject = '';
   @Input() teacherRole = '';
-  // For assigning the currently selected student to a class
+
   @Input() assignClassName: string | null = null;
   @Output() selectStudent = new EventEmitter<number>();
   @Output() searchChange = new EventEmitter<string>();
@@ -34,7 +39,7 @@ export class TeacherStudentSidebarComponent {
   @Output() assignClassChange = new EventEmitter<string | null>();
   @Output() assignSelected = new EventEmitter<void>();
 
-  // Das brauche ich für ngFor, damit Angular effizienter rendert
+  
   trackById(_: number, item: TeacherStudent) {
     return item.id;
   }
@@ -47,13 +52,13 @@ export class TeacherStudentSidebarComponent {
     return this.classes.map((c) => ({ label: c, value: c }));
   }
 
-  // Fallback when an avatar image fails to load
+  
   private failed = new Set<number>();
-  // Wenn ein Bild nicht lädt, merke ich mir die ID
+  
   isFailed(id: number) {
     return this.failed.has(id);
   }
-  // Dann zeige ich stattdessen den Anfangsbuchstaben an
+  
   markFailed(id: number) {
     this.failed.add(id);
   }

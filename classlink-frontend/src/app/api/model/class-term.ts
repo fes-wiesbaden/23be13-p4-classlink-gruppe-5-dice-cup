@@ -7,23 +7,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {Class} from './class';
-import {Term} from './term';
-
+import { Class } from './class';
+import { Term } from './term';
 
 export interface ClassTerm {
-    id?: string;
-    schoolClass: Class;
-    term: Term;
-    status: ClassTermStatusEnum;
-    createdAt: string;
-    updatedAt: string;
+  id?: string;
+  schoolClass: Class;
+  term: Term;
+  status: ClassTermStatusEnum;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum ClassTermStatusEnum {
-    Active = 'ACTIVE',
-    Inactive = 'INACTIVE'
-};
-
-
-
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+}

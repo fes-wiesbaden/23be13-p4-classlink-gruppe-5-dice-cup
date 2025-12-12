@@ -8,11 +8,9 @@
  * Do not edit the class manually.
  */
 
-
-export interface InviteCreatedResponseDto { 
-    inviteId?: string;
-    token?: string;
-    qrCodeUrl?: string;
-    expiresAt?: string;
+export interface InviteCreatedResponseDto {
+  inviteId?: string;
+  token?: string;
+  qrCodeUrl?: string;
+  expiresAt?: string;
 }
-

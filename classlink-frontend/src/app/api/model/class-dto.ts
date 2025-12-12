@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
 export interface ClassDto {
-    id?: string;
-    name?: string;
+  id?: string;
+  name?: string;
 }
-

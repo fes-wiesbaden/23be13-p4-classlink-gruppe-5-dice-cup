@@ -8,13 +8,11 @@
  * Do not edit the class manually.
  */
 
-
 export interface ProjectDto {
-    id?: string;
-    name?: string;
-    description?: string;
-    active?: boolean;
-    classId?: string;
-    termId?: string;
+  id?: string;
+  name?: string;
+  description?: string;
+  active?: boolean;
+  classId?: string;
+  termId?: string;
 }
-

@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
-export interface PasswordResetValidateResponseDto { 
-    tokenId?: string;
-    userId?: string;
-    expiresAt?: string;
+export interface PasswordResetValidateResponseDto {
+  tokenId?: string;
+  userId?: string;
+  expiresAt?: string;
 }
-
