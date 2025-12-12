@@ -1,3 +1,4 @@
+// Author: Emil
 import {
   ChangeDetectionStrategy,
   Component,
