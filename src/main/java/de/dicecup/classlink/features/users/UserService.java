@@ -23,7 +23,7 @@ public class UserService {
     @Audited(action = "USERS_LIST", resource = "USERS")
     @Transactional(readOnly = true)
     public List<UserDto> list() {
-        return userRepository.findAll()
+        return userRepository.findAllWithRolesAndInfo()
                 .stream()
                 .map(userMapper::toDto)
                 .toList();

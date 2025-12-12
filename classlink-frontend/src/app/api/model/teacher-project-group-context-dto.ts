@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface TeacherProjectGroupContextDto {
+export interface TeacherProjectGroupContextDto { 
   projectGroupId?: string;
   projectName?: string;
   studentCount?: number;

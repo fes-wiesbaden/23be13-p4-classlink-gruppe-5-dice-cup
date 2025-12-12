@@ -9,11 +9,13 @@
  */
 import { SubjectScoreDto } from './subject-score-dto';
 
-export interface StudentSubjectAssessmentDto {
-  studentId?: string;
-  studentName?: string;
-  projectGroupId?: string;
-  projectName?: string;
-  questionnaireId?: string;
-  subjects?: Array<SubjectScoreDto>;
+
+export interface StudentSubjectAssessmentDto { 
+    studentId?: string;
+    studentName?: string;
+    projectGroupId?: string;
+    projectName?: string;
+    questionnaireId?: string;
+    subjects?: Array<SubjectScoreDto>;
 }
+

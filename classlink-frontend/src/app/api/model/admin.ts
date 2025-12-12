@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface Admin {
+export interface Admin { 
   id?: string;
   user?: any | null;
 }

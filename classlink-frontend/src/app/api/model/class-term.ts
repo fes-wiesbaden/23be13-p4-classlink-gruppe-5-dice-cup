@@ -10,16 +10,19 @@
 import { Class } from './class';
 import { Term } from './term';
 
-export interface ClassTerm {
-  id?: string;
-  schoolClass: Class;
-  term: Term;
-  status: ClassTermStatusEnum;
-  createdAt: string;
-  updatedAt: string;
-}
 
-export enum ClassTermStatusEnum {
-  Active = 'ACTIVE',
-  Inactive = 'INACTIVE',
+export interface ClassTerm { 
+    id?: string;
+    schoolClass: Class;
+    term: Term;
+    status: ClassTermStatusEnum;
+    createdAt: string;
+    updatedAt: string;
 }
+export enum ClassTermStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE'
+};
+
+
+

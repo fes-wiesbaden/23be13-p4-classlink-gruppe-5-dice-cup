@@ -17,5 +17,7 @@ export const roleGuard: CanMatchFn = (route: Route, segs: UrlSegment[]) => {
 
   // Aus den Routendaten hole ich mir die benötigten Rollen
   const need = (route.data?.['roles'] as string[]) ?? [];
+  const have = auth.getRoles();
+  console.log('[roleGuard] required:', need, 'have:', have);
   return need.length === 0 || auth.hasRole(need) ? true : router.createUrlTree(['/forbidden']);
 };

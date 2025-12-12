@@ -52,6 +52,7 @@
           class="square-btn danger"
           aria-label="Aus Projekt entfernen"
           (click)="studentToggle.emit(s.id)"
+          [disabled]="!projectId"
         ></button>
       </div>
     </li>
@@ -80,6 +81,7 @@
           class="square-btn success"
           aria-label="Zum Projekt hinzufügen"
           (click)="studentToggle.emit(s.id)"
+          [disabled]="!projectId"
         ></button>
       </div>
     </li>

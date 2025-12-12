@@ -20,119 +20,87 @@
     </div>
   </section>
 
-  <teacher-student-sidebar
-    [students]="filteredStudents"
-    [selectedStudentId]="selectedStudentId"
-    [search]="search"
-    [classes]="classes"
-    [selectedClass]="selectedClass"
-    [assignClassName]="assignClassName"
-    (selectStudent)="onSelectStudent($event)"
-    (searchChange)="onSearchChange($event)"
-    (classChange)="onClassChange($event)"
-    (createClass)="onCreateClass()"
-    (assignClassChange)="assignClassName = $event"
-    (assignSelected)="onAssignSelectedToClass()"
+<div class="card panel u-mt-2" *ngIf="apiError()">
+  <div class="p-card-body u-text-danger">
+    {{ apiError() }}
+  </div>
+</div>
+
+<teacher-student-sidebar
+  [students]="filteredStudents()"
+  [selectedStudentId]="selectedStudentId()"
+  [search]="search()"
+  [classes]="classes()"
+  [selectedClass]="selectedClassId()"
+  [assignClassName]="assignClassName()"
+  (selectStudent)="onSelectStudent($event)"
+  (searchChange)="onSearchChange($event)"
+  (classChange)="onClassChange($event)"
+  (createClass)="onCreateClass()"
+  (assignClassChange)="assignClassName.set($event)"
+  (assignSelected)="onAssignSelectedToClass()"
+/>
+
+<div class="card panel u-mt-4" *ngIf="classes().length === 0">
+  <div class="p-card-body">
+    <h3>Dir sind noch keine Klassen zugewiesen.</h3>
+  </div>
+</div>
+
+<div class="card panel u-mt-4" *ngIf="classes().length > 0 && !selectedClassId()">
+  <div class="p-card-body">
+    <h3>Bitte Klasse auswählen</h3>
+    <p>Wähle eine Klasse, um Schüler und Projekte zu laden.</p>
+  </div>
+</div>
+
+<div class="card panel u-mt-4" *ngIf="selectedClassId() && students().length === 0">
+  <div class="p-card-body">
+    <h3>Keine Schüler verfügbar</h3>
+    <p *ngIf="!selectedStudentId()">Wähle eine Klasse oder lade den Kontext neu.</p>
+    <p *ngIf="students().length === 0">Für diese Klasse wurden keine Schüler gefunden.</p>
+  </div>
+</div>
+
+<main class="content" *ngIf="selectedStudentId() as sid">
+  <teacher-header-bar
+    [student]="selectedStudentView()"
+    [average]="overallAverage()"
+    [trend]="null"
+    (createProject)="onCreateProject()"
   />
 
-  <main class="content" *ngIf="selectedStudent as st">
-    <div class="main-grid">
-      <div class="grade-column">
-        <section class="card grades-card" *ngIf="lernfelder.length">
-          <div class="section-header">
-            <h2>Lernfelder &amp; Noten</h2>
-            <span class="eyebrow">Klasse {{ st.class }}</span>
-          </div>
-
-          <div class="grade-grid">
-            <button
-              class="grade-card"
-              type="button"
-              *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
-              (click)="selectLernfeld(lf)"
-              [class.grade-card--active]="isLernfeldSelected(lf.id)"
-            >
-              <div class="grade-card__top">
-                <span class="pill">LF {{ lf.id }}</span>
-                <span class="label">{{ lf.trend }}</span>
-              </div>
-              <div class="grade-card__title">{{ lf.focus }}</div>
-              <div class="grade-card__meta">
-                <div class="grade-card__value">{{ lf.average | number: '1.1-1' }}</div>
-                <span class="label">Note</span>
-              </div>
-              <div class="bar">
-                <span class="fill" [style.width.%]="gradeProgress(lf.average)"></span>
-              </div>
-            </button>
-          </div>
-        </section>
-        <section class="card details-card" *ngIf="selectedLernfeld as sel">
-          <div class="section-header">
-            <div>
-              <h2>Details</h2>
-              <p class="eyebrow">{{ sel.focus }}</p>
-            </div>
-            <div class="detail-score">
-              <span class="pill-label">Durchschnitt</span>
-              <strong>{{ sel.average | number: '1.1-1' }}</strong>
-              <small>{{ sel.trend }}</small>
-            </div>
-          </div>
-
-          <div class="eval-status" *ngIf="evaluationStatus as es">
-            <div class="eval-card" [class.done]="es.selfSubmitted">
-              <div class="eval-label">Selbstbewertung</div>
-              <div class="eval-grade" *ngIf="es.selfSubmitted && es.selfGrade !== null; else selfOpen">
-                {{ es.selfGrade | number: '1.1-1' }}
-              </div>
-              <ng-template #selfOpen>
-                <div class="eval-open">offen</div>
-              </ng-template>
-            </div>
-            <div class="eval-card" [class.done]="es.peerSubmitted">
-              <div class="eval-label">Peer-Bewertung</div>
-              <div class="eval-grade" *ngIf="es.peerSubmitted && es.peerGrade !== null; else peerOpen">
-                {{ es.peerGrade | number: '1.1-1' }}
-              </div>
-              <ng-template #peerOpen>
-                <div class="eval-open">offen</div>
-              </ng-template>
-            </div>
-          </div>
-
-          <div class="assessment-grid">
-            <div class="assessment-card" *ngFor="let g of sel.assessments">
-              <div class="assessment-card__head">
-                <div>
-                  <div class="assessment-card__label">{{ g.label }}</div>
-                  <div class="assessment-card__meta">
-                    {{ g.type }} - {{ g.weight * 100 | number: '1.0-0' }}%
-                  </div>
-                </div>
-                <div class="badge">{{ g.grade | number: '1.1-1' }}</div>
-              </div>
-              <div class="bar thin">
-                <span class="fill" [style.width.%]="gradeProgress(g.grade)"></span>
-              </div>
-            </div>
-            </div>
-        </section>
+  <ng-container *ngIf="scoreSummary(); else noScores">
+    <teacher-kpi-cards [scores]="scoreSummary()!" />
+  </ng-container>
+  <ng-template #noScores>
+    <div class="card panel u-mt-2">
+      <div class="p-card-body">
+        Für diesen Schüler/dieses Projekt liegen noch keine Bewertungen vor.
       </div>
-
-      <section class="card projects-card">
-        <teacher-project-assignment
-          class="assign modern"
-          [projectName]="currentProjectName || ''"
-          [students]="students"
-          [assignedIds]="assignedIds"
-          [projectOptions]="projectOptions"
-          [projectId]="selectedProjectId"
-          (projectChange)="onProjectChange($any($event))"
-          (studentToggle)="onToggleAssignment($event)"
-          (createProject)="onCreateProject()"
-        />
-      </section>
     </div>
-  </main>
+  </ng-template>
+
+  <section class="card projects-card">
+    <ng-container *ngIf="projects().length > 0; else noProjects">
+      <teacher-project-assignment
+        class="assign modern"
+        [projectName]="currentProjectName() || ''"
+        [students]="filteredStudents()"
+        [assignedIds]="assignedIds()"
+        [projectOptions]="projectOptions()"
+        [projectId]="selectedProjectId() || ''"
+        (projectChange)="onProjectChange($any($event))"
+        (studentToggle)="onToggleAssignment($event)"
+        (createProject)="onCreateProject()"
+      />
+    </ng-container>
+    <ng-template #noProjects>
+      <div class="p-card-body">
+        <h3>Für diese Klasse gibt es noch keine Projekte.</h3>
+        <p *ngIf="!selectedClassId()">Bitte zuerst eine Klasse auswählen.</p>
+      </div>
+    </ng-template>
+  </section>
+</main>
 </div>

@@ -9,18 +9,12 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpResponse,
-  HttpEvent,
-  HttpParameterCodec,
-  HttpContext,
-} from '@angular/common/http';
-import { CustomHttpParameterCodec } from '../encoder';
-import { Observable } from 'rxjs';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent, HttpParameterCodec, HttpContext 
+        }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
+import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { AssessmentSubmissionRequest } from '../model/assessment-submission-request';
@@ -28,591 +22,336 @@ import { AssessmentSubmissionRequest } from '../model/assessment-submission-requ
 import { ProjectAssessmentOverviewDTO } from '../model/project-assessment-overview-dto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
-import { Configuration } from '../configuration';
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
 import { BaseService } from '../api.base.service';
 
+
+
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AssessmentControllerService extends BaseService {
-  constructor(
-    protected httpClient: HttpClient,
-    @Optional() @Inject(BASE_PATH) basePath: string | string[],
-    @Optional() configuration?: Configuration,
-  ) {
-    super(basePath, configuration);
-  }
 
-  /**
-   * Peer-Assessment abrufen
-   * @param projectId
-   * @param assesseeStudentId
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<{ [key: string]: any }>;
-  public getPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<{ [key: string]: any }>>;
-  public getPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<{ [key: string]: any }>>;
-  public getPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (projectId === null || projectId === undefined) {
-      throw new Error('Required parameter projectId was null or undefined when calling getPeer.');
-    }
-    if (assesseeStudentId === null || assesseeStudentId === undefined) {
-      throw new Error(
-        'Required parameter assesseeStudentId was null or undefined when calling getPeer.',
-      );
+    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
+        super(basePath, configuration);
     }
 
-    let localVarHeaders = this.defaultHeaders;
+    /**
+     * Peer-Assessment abrufen
+     * @param projectId 
+     * @param assesseeStudentId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getPeer(projectId: string, assesseeStudentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
+    public getPeer(projectId: string, assesseeStudentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public getPeer(projectId: string, assesseeStudentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public getPeer(projectId: string, assesseeStudentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling getPeer.');
+        }
+        if (assesseeStudentId === null || assesseeStudentId === undefined) {
+            throw new Error('Required parameter assesseeStudentId was null or undefined when calling getPeer.');
+        }
 
-    const localVarHttpHeaderAcceptSelected: string | undefined =
-      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
+        let localVarHeaders = this.defaultHeaders;
 
-    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
 
-    const localVarTransferCache: boolean = options?.transferCache ?? true;
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
 
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-    let localVarPath = `/api/projects/${this.configuration.encodeParam({
-      name: 'projectId',
-      value: projectId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}/assessments/peer/${this.configuration.encodeParam({
-      name: 'assesseeStudentId',
-      value: assesseeStudentId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}`;
-    const { basePath, withCredentials } = this.configuration;
-    return this.httpClient.request<{ [key: string]: any }>('get', `${basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      responseType: <any>responseType_,
-      ...(withCredentials ? { withCredentials } : {}),
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
 
-  /**
-   * Eigene Self-Assessment abrufen
-   * @param projectId
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getSelf(
-    projectId: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<{ [key: string]: any }>;
-  public getSelf(
-    projectId: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<{ [key: string]: any }>>;
-  public getSelf(
-    projectId: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<{ [key: string]: any }>>;
-  public getSelf(
-    projectId: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (projectId === null || projectId === undefined) {
-      throw new Error('Required parameter projectId was null or undefined when calling getSelf.');
-    }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
 
-    let localVarHeaders = this.defaultHeaders;
-
-    const localVarHttpHeaderAcceptSelected: string | undefined =
-      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-    const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/projects/${this.configuration.encodeParam({
-      name: 'projectId',
-      value: projectId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}/assessments/self`;
-    const { basePath, withCredentials } = this.configuration;
-    return this.httpClient.request<{ [key: string]: any }>('get', `${basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      responseType: <any>responseType_,
-      ...(withCredentials ? { withCredentials } : {}),
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
-   * Assessment-Übersicht für Projekt abrufen
-   * @param projectId
-   * @param studentIds
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public overview(
-    projectId: string,
-    studentIds: Array<string>,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<ProjectAssessmentOverviewDTO>;
-  public overview(
-    projectId: string,
-    studentIds: Array<string>,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<ProjectAssessmentOverviewDTO>>;
-  public overview(
-    projectId: string,
-    studentIds: Array<string>,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<ProjectAssessmentOverviewDTO>>;
-  public overview(
-    projectId: string,
-    studentIds: Array<string>,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: '*/*';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (projectId === null || projectId === undefined) {
-      throw new Error('Required parameter projectId was null or undefined when calling overview.');
-    }
-    if (studentIds === null || studentIds === undefined) {
-      throw new Error('Required parameter studentIds was null or undefined when calling overview.');
-    }
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (studentIds) {
-      studentIds.forEach((element) => {
-        localVarQueryParameters = this.addToHttpParams(
-          localVarQueryParameters,
-          <any>element,
-          'studentIds',
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/assessments/peer/${this.configuration.encodeParam({name: "assesseeStudentId", value: assesseeStudentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<{ [key: string]: any; }>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
         );
-      });
     }
 
-    let localVarHeaders = this.defaultHeaders;
+    /**
+     * Eigene Self-Assessment abrufen
+     * @param projectId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSelf(projectId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<{ [key: string]: any; }>;
+    public getSelf(projectId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<{ [key: string]: any; }>>;
+    public getSelf(projectId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<{ [key: string]: any; }>>;
+    public getSelf(projectId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling getSelf.');
+        }
 
-    const localVarHttpHeaderAcceptSelected: string | undefined =
-      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/assessments/self`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<{ [key: string]: any; }>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+    /**
+     * Assessment-Übersicht für Projekt abrufen
+     * @param projectId 
+     * @param studentIds 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public overview(projectId: string, studentIds: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<ProjectAssessmentOverviewDTO>;
+    public overview(projectId: string, studentIds: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProjectAssessmentOverviewDTO>>;
+    public overview(projectId: string, studentIds: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProjectAssessmentOverviewDTO>>;
+    public overview(projectId: string, studentIds: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling overview.');
+        }
+        if (studentIds === null || studentIds === undefined) {
+            throw new Error('Required parameter studentIds was null or undefined when calling overview.');
+        }
 
-    const localVarTransferCache: boolean = options?.transferCache ?? true;
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (studentIds) {
+            studentIds.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'studentIds');
+            })
+        }
 
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            '*/*'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/assessment-overview`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProjectAssessmentOverviewDTO>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarPath = `/api/projects/${this.configuration.encodeParam({
-      name: 'projectId',
-      value: projectId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}/assessment-overview`;
-    const { basePath, withCredentials } = this.configuration;
-    return this.httpClient.request<ProjectAssessmentOverviewDTO>(
-      'get',
-      `${basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        params: localVarQueryParameters,
-        responseType: <any>responseType_,
-        ...(withCredentials ? { withCredentials } : {}),
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
+    /**
+     * Peer-Assessment speichern
+     * @param projectId 
+     * @param assesseeStudentId 
+     * @param assessmentSubmissionRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public submitPeer(projectId: string, assesseeStudentId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public submitPeer(projectId: string, assesseeStudentId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public submitPeer(projectId: string, assesseeStudentId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public submitPeer(projectId: string, assesseeStudentId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling submitPeer.');
+        }
+        if (assesseeStudentId === null || assesseeStudentId === undefined) {
+            throw new Error('Required parameter assesseeStudentId was null or undefined when calling submitPeer.');
+        }
+        if (assessmentSubmissionRequest === null || assessmentSubmissionRequest === undefined) {
+            throw new Error('Required parameter assessmentSubmissionRequest was null or undefined when calling submitPeer.');
+        }
 
-  /**
-   * Peer-Assessment speichern
-   * @param projectId
-   * @param assesseeStudentId
-   * @param assessmentSubmissionRequest
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public submitPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any>;
-  public submitPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<any>>;
-  public submitPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<any>>;
-  public submitPeer(
-    projectId: string,
-    assesseeStudentId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (projectId === null || projectId === undefined) {
-      throw new Error(
-        'Required parameter projectId was null or undefined when calling submitPeer.',
-      );
-    }
-    if (assesseeStudentId === null || assesseeStudentId === undefined) {
-      throw new Error(
-        'Required parameter assesseeStudentId was null or undefined when calling submitPeer.',
-      );
-    }
-    if (assessmentSubmissionRequest === null || assessmentSubmissionRequest === undefined) {
-      throw new Error(
-        'Required parameter assessmentSubmissionRequest was null or undefined when calling submitPeer.',
-      );
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/assessments/peer/${this.configuration.encodeParam({name: "assesseeStudentId", value: assesseeStudentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: assessmentSubmissionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarHeaders = this.defaultHeaders;
+    /**
+     * Self-Assessment speichern
+     * @param projectId 
+     * @param assessmentSubmissionRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public submitSelf(projectId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public submitSelf(projectId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public submitSelf(projectId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public submitSelf(projectId: string, assessmentSubmissionRequest: AssessmentSubmissionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (projectId === null || projectId === undefined) {
+            throw new Error('Required parameter projectId was null or undefined when calling submitSelf.');
+        }
+        if (assessmentSubmissionRequest === null || assessmentSubmissionRequest === undefined) {
+            throw new Error('Required parameter assessmentSubmissionRequest was null or undefined when calling submitSelf.');
+        }
 
-    const localVarHttpHeaderAcceptSelected: string | undefined =
-      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/projects/${this.configuration.encodeParam({name: "projectId", value: projectId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/assessments/self`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: assessmentSubmissionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-    const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/projects/${this.configuration.encodeParam({
-      name: 'projectId',
-      value: projectId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}/assessments/peer/${this.configuration.encodeParam({
-      name: 'assesseeStudentId',
-      value: assesseeStudentId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}`;
-    const { basePath, withCredentials } = this.configuration;
-    return this.httpClient.request<any>('post', `${basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      body: assessmentSubmissionRequest,
-      responseType: <any>responseType_,
-      ...(withCredentials ? { withCredentials } : {}),
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
-   * Self-Assessment speichern
-   * @param projectId
-   * @param assessmentSubmissionRequest
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public submitSelf(
-    projectId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any>;
-  public submitSelf(
-    projectId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<any>>;
-  public submitSelf(
-    projectId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<any>>;
-  public submitSelf(
-    projectId: string,
-    assessmentSubmissionRequest: AssessmentSubmissionRequest,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: undefined;
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (projectId === null || projectId === undefined) {
-      throw new Error(
-        'Required parameter projectId was null or undefined when calling submitSelf.',
-      );
-    }
-    if (assessmentSubmissionRequest === null || assessmentSubmissionRequest === undefined) {
-      throw new Error(
-        'Required parameter assessmentSubmissionRequest was null or undefined when calling submitSelf.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    const localVarHttpHeaderAcceptSelected: string | undefined =
-      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([]);
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-    const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/projects/${this.configuration.encodeParam({
-      name: 'projectId',
-      value: projectId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'string',
-      dataFormat: 'uuid',
-    })}/assessments/self`;
-    const { basePath, withCredentials } = this.configuration;
-    return this.httpClient.request<any>('post', `${basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      body: assessmentSubmissionRequest,
-      responseType: <any>responseType_,
-      ...(withCredentials ? { withCredentials } : {}),
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
 }

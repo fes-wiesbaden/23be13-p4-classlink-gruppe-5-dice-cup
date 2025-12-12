@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface ClassDto {
+export interface ClassDto { 
   id?: string;
   name?: string;
 }

@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface TermDto {
+export interface TermDto { 
   id?: string;
   name?: string;
   sequenceNumber?: number;
@@ -17,7 +17,6 @@ export interface TermDto {
   status?: TermDtoStatusEnum;
   schoolYearId?: string;
 }
-
 export enum TermDtoStatusEnum {
   Open = 'OPEN',
   Closed = 'CLOSED',

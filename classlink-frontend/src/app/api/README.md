@@ -1,10 +1,6 @@
 # @
 
-Dicecup is a modern school management platform designed to streamline grading, user administration, and classroom
-workflows. This API provides secure, role-based access to all core functions, including: - Authentication &
-Authorization (JWT-based) - User & Role Management - Class, Grade, and Invitation Management - Reporting and Audit-Ready
-Data Operations All endpoints follow REST principles and require proper authentication unless explicitly stated
-otherwise.
+Dicecup is a modern school management platform designed to streamline grading, user administration, and classroom workflows.  This API provides secure, role-based access to all core functions, including: - Authentication & Authorization (JWT-based) - User & Role Management - Class, Grade, and Invitation Management - Reporting and Audit-Ready Data Operations  All endpoints follow REST principles and require proper authentication unless explicitly stated otherwise. 
 
 The version of the OpenAPI document: 1.0.0
 

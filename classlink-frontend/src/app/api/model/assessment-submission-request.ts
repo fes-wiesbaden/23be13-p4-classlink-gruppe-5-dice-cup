@@ -9,6 +9,8 @@
  */
 import { AssessmentAnswerDto } from './assessment-answer-dto';
 
-export interface AssessmentSubmissionRequest {
-  answers?: Array<AssessmentAnswerDto>;
+
+export interface AssessmentSubmissionRequest { 
+    answers?: Array<AssessmentAnswerDto>;
 }
+

@@ -9,7 +9,9 @@
  */
 import { StudentAssessmentDetailDTO } from './student-assessment-detail-dto';
 
-export interface ProjectAssessmentOverviewDTO {
-  projectId?: string;
-  students?: Array<StudentAssessmentDetailDTO>;
+
+export interface ProjectAssessmentOverviewDTO { 
+    projectId?: string;
+    students?: Array<StudentAssessmentDetailDTO>;
 }
+

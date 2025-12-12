@@ -9,9 +9,19 @@
  */
 import { UserInfoDto } from './user-info-dto';
 
-export interface UserDto {
-  id?: string;
-  username?: string;
-  enabled?: boolean;
-  userInfo?: UserInfoDto;
+
+export interface UserDto { 
+    id?: string;
+    username?: string;
+    enabled?: boolean;
+    userInfo?: UserInfoDto;
+    role?: UserDtoRoleEnum;
 }
+export enum UserDtoRoleEnum {
+    Admin = 'ADMIN',
+    Teacher = 'TEACHER',
+    Student = 'STUDENT'
+};
+
+
+

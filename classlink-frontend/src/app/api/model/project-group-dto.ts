@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface ProjectGroupDto {
+export interface ProjectGroupDto { 
   id?: string;
   groupNumber?: number;
   projectId?: string;

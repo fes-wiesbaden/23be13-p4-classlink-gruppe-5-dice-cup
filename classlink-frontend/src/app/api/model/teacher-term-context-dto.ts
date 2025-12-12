@@ -9,9 +9,11 @@
  */
 import { TeacherProjectGroupContextDto } from './teacher-project-group-context-dto';
 
-export interface TeacherTermContextDto {
-  termId?: string;
-  termName?: string;
-  isCurrent?: boolean;
-  projectGroups?: Array<TeacherProjectGroupContextDto>;
+
+export interface TeacherTermContextDto { 
+    termId?: string;
+    termName?: string;
+    isCurrent?: boolean;
+    projectGroups?: Array<TeacherProjectGroupContextDto>;
 }
+

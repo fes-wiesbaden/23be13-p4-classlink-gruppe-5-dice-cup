@@ -2,23 +2,41 @@
 <p-confirmDialog></p-confirmDialog>
 
 <div class="admin-page">
-  <admin-sidebar [search]="search" (searchChange)="onSearchChange($event)" />
+    <admin-sidebar [search]="search()" (searchChange)="onSearchChange($event)"/>
 
   <main class="content">
-    <admin-header-bar (createUser)="onCreateUser($event)" [busy]="busy" />
+      <admin-header-bar (createUser)="onCreateUser($event)" [busy]="busy()"/>
 
-    <admin-kpi-cards [kpis]="kpis" />
+      <admin-kpi-cards [kpis]="kpis()"/>
 
     <section class="grid">
       <admin-user-table
         class="panel"
-        [users]="filteredUsers"
-        [busy]="busy"
-        (createUser)="onCreateUser($event)"
+        [users]="filteredUsers()"
+        [busy]="busy()"
         (deleteUser)="onDeleteUser($event)"
         (resetPassword)="onResetPassword($event)"
-        (updateRoles)="onUpdateRoles($event.id, $event.roles)"
       />
+
+        <p *ngIf="apiError() as err" class="u-text-danger">{{ err }}</p>
+
+        <div class="panel u-mt-4" *ngIf="showInviteDialog()">
+            <div class="p-card-body">
+                <h3>Einladung erstellt</h3>
+                <p *ngIf="lastInviteUrl() as inviteUrl">
+                    Einladung-URL: <a [href]="inviteUrl" target="_blank" rel="noreferrer noopener">{{ inviteUrl }}</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="panel u-mt-4" *ngIf="showResetDialog()">
+            <div class="p-card-body">
+                <h3>Passwortlink erstellt</h3>
+                <p *ngIf="lastResetUrl() as resetUrl">
+                    Reset-URL: <a [href]="resetUrl" target="_blank" rel="noreferrer noopener">{{ resetUrl }}</a>
+                </p>
+            </div>
+        </div>
     </section>
   </main>
 </div>

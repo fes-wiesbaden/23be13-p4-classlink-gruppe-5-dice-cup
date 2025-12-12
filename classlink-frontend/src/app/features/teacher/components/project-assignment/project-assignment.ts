@@ -6,9 +6,9 @@ import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 
 export interface TeacherStudent {
-  id: number;
+  id: string;
   name: string;
-  class: string;
+  className: string;
   avatarUrl?: string;
 }
 
@@ -24,18 +24,18 @@ export class TeacherProjectAssignmentComponent {
   @Input() projectName = '';
   @Input() students: TeacherStudent[] = [];
   // Diese IDs sind aktuell dem Projekt zugeordnet
-  @Input() assignedIds: number[] = [];
-  @Input() projectOptions: { label: string; value: number }[] = [];
-  @Input() projectId!: number;
+  @Input() assignedIds: string[] = [];
+  @Input() projectOptions: { label: string; value: string }[] = [];
+  @Input() projectId!: string;
   // Wenn ich das Projekt im Select ändere
-  @Output() projectChange = new EventEmitter<number>();
+  @Output() projectChange = new EventEmitter<string>();
   // Klick auf den Toggle pro Schüler
-  @Output() studentToggle = new EventEmitter<number>();
+  @Output() studentToggle = new EventEmitter<string>();
   // Neues Projekt anlegen
   @Output() createProject = new EventEmitter<void>();
 
   // Hilfsfunktionen für Anzeige und Performance
-  isAssigned(id: number) {
+  isAssigned(id: string) {
     return this.assignedIds.includes(id);
   }
   trackById(_: number, item: TeacherStudent) {
@@ -43,11 +43,11 @@ export class TeacherProjectAssignmentComponent {
   }
 
   // Fallback when an avatar image fails to load
-  private failed = new Set<number>();
-  isFailed(id: number) {
+  private failed = new Set<string>();
+  isFailed(id: string) {
     return this.failed.has(id);
   }
-  markFailed(id: number) {
+  markFailed(id: string) {
     this.failed.add(id);
   }
 }

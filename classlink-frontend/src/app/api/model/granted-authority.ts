@@ -8,6 +8,6 @@
  * Do not edit the class manually.
  */
 
-export interface GrantedAuthority {
+export interface GrantedAuthority { 
   authority?: string;
 }

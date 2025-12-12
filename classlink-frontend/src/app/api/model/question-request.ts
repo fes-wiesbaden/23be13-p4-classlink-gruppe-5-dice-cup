@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface QuestionRequest {
+export interface QuestionRequest { 
   text?: string;
   position?: number;
   active?: boolean;

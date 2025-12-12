@@ -8,14 +8,13 @@
  * Do not edit the class manually.
  */
 
-export interface SchoolYearDto {
+export interface SchoolYearDto { 
   id?: string;
   name?: string;
   startDate?: string;
   endDate?: string;
   status?: SchoolYearDtoStatusEnum;
 }
-
 export enum SchoolYearDtoStatusEnum {
   Active = 'ACTIVE',
   Closed = 'CLOSED',

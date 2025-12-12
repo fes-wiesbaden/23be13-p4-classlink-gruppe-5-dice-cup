@@ -9,8 +9,10 @@
  */
 import { ClassTerm } from './class-term';
 
-export interface Class {
-  id?: string;
-  name?: string;
-  terms?: Array<ClassTerm>;
+
+export interface Class { 
+    id?: string;
+    name?: string;
+    terms?: Array<ClassTerm>;
 }
+

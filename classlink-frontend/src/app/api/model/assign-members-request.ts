@@ -9,6 +9,8 @@
  */
 import { MemberAssignment } from './member-assignment';
 
-export interface AssignMembersRequest {
-  members: Array<MemberAssignment>;
+
+export interface AssignMembersRequest { 
+    members: Array<MemberAssignment>;
 }
+

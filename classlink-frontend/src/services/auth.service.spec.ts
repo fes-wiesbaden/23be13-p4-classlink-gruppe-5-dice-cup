@@ -94,6 +94,8 @@ describe('AuthService', () => {
   });
 
   it('refreshTokens logs out when refresh fails', (done) => {
+    const logSpy = spyOn(console, 'log').and.stub();
+    const errSpy = spyOn(console, 'error').and.stub();
     localStorage.setItem('app_refresh_token', 'refresh-1');
     authApi.refresh.and.returnValue(throwError(() => new Error('invalid refresh')) as any);
 
@@ -105,5 +107,7 @@ describe('AuthService', () => {
         done();
       },
     });
+    logSpy.calls.reset();
+    errSpy.calls.reset();
   });
 });

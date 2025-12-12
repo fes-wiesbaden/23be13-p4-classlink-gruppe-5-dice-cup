@@ -1,11 +1,6 @@
 package de.dicecup.classlink.features.users;
 
-import de.dicecup.classlink.features.users.domain.User;
-import de.dicecup.classlink.features.users.domain.UserInfo;
-import de.dicecup.classlink.features.users.domain.CreateUserDto;
-import de.dicecup.classlink.features.users.domain.CreateUserInfoDto;
-import de.dicecup.classlink.features.users.domain.UserDto;
-import de.dicecup.classlink.features.users.domain.UserInfoDto;
+import de.dicecup.classlink.features.users.domain.*;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,6 +12,7 @@ public interface UserMapper {
     @Mapping(target = "username", source = "accountUsername")
     @Mapping(target = "enabled", source = "enabled")
     @Mapping(target = "userInfo", source = "userInfo")
+    @Mapping(target = "role", expression = "java(resolveRole(user))")
     UserDto toDto(User user);
 
     @BeanMapping(ignoreByDefault = true)
@@ -30,4 +26,18 @@ public interface UserMapper {
 
     @BeanMapping(ignoreByDefault = true)
     UserInfo toEntity(CreateUserInfoDto dto);
+
+    default UserRoleDto resolveRole(User user) {
+        if (user.getAdmin() != null) {
+            return UserRoleDto.ADMIN;
+        }
+        if (user.getTeacher() != null) {
+            return UserRoleDto.TEACHER;
+        }
+        if (user.getStudent() != null) {
+            return UserRoleDto.STUDENT;
+        }
+        //TODO: maybe use a exception
+        return null;
+    }
 }

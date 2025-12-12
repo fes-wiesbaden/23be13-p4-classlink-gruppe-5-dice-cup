@@ -8,6 +8,6 @@
  * Do not edit the class manually.
  */
 
-export interface ClassCreateRequest {
+export interface ClassCreateRequest { 
   name: string;
 }

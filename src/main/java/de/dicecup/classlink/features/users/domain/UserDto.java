@@ -7,6 +7,7 @@ public record UserDto(
         UUID id,
         String username,
         boolean enabled,
-        UserInfoDto userInfo
+        UserInfoDto userInfo,
+        UserRoleDto role
 ) {
 }

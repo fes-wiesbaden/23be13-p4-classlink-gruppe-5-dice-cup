@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +27,8 @@ public class UserController {
      * @return ResponseEntity mit einer Liste von UserDto-Objekten
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getUsers() {
-        return ResponseEntity.ok(userService.list());
+    public List<UserDto> getUsers() {
+        return userService.list();
     }
 
     @Operation(
@@ -52,4 +50,23 @@ public class UserController {
         return userService.get(id);
     }
 
+
+    //TODO: implement update and delete endpoint expand DTO
+    @Operation(
+            summary = "Benutzer löschen",
+            description = "Gibt einen Benutzer zur Löschung in zwei Wochen frei."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Benutzer erfolgreich geladen"),
+            @ApiResponse(responseCode = "404", description = "Benutzer wurde nicht gefunden")
+    })
+    /**
+     * Gibt einen Benutzer zur Löschung innerhalb von 2 Wochen frei
+     *
+     * @param id Eindeutige ID des Benutzers
+     */
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable UUID id) {
+        userService.delete(id);
+    }
 }

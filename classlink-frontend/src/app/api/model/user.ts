@@ -13,24 +13,26 @@ import { UserInfo } from './user-info';
 import { Admin } from './admin';
 import { Student } from './student';
 
-export interface User {
-  createdAt?: string;
-  updatedAt?: string;
-  createdBy?: string;
-  updatedBy?: string;
-  id?: string;
-  username: string;
-  passwordHash: string;
-  enabled?: boolean;
-  disabledAt?: string;
-  userInfo?: UserInfo;
-  admin?: Admin;
-  student?: Student;
-  teacher?: Teacher;
-  password?: string;
-  authorities?: Array<GrantedAuthority>;
-  accountNonExpired?: boolean;
-  accountNonLocked?: boolean;
-  accountUsername?: string;
-  credentialsNonExpired?: boolean;
+
+export interface User { 
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: string;
+    updatedBy?: string;
+    id?: string;
+    username: string;
+    passwordHash: string;
+    enabled?: boolean;
+    disabledAt?: string;
+    userInfo?: UserInfo;
+    admin?: Admin;
+    student?: Student;
+    teacher?: Teacher;
+    password?: string;
+    credentialsNonExpired?: boolean;
+    accountUsername?: string;
+    accountNonExpired?: boolean;
+    accountNonLocked?: boolean;
+    authorities?: Array<GrantedAuthority>;
 }
+

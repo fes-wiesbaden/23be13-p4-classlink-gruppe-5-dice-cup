@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface QuestionDto {
+export interface QuestionDto { 
   id?: string;
   position?: number;
   text?: string;

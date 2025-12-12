@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface StudentQuestionAssessmentDTO {
+export interface StudentQuestionAssessmentDTO { 
   questionId?: string;
   questionText?: string;
   selfScore?: number;

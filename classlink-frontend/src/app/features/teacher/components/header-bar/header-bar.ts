@@ -8,11 +8,11 @@ import { FormsModule } from '@angular/forms';
 
 export interface ProjectOption {
   label: string;
-  value: number;
+  value: string;
 }
 export interface SimpleStudent {
   name: string;
-  class: string;
+  className: string;
   avatarUrl?: string;
 }
 

@@ -1,11 +1,9 @@
 export * from './admin-invitation-controller.service';
 import { AdminInvitationControllerService } from './admin-invitation-controller.service';
-
 export * from './assessment-controller.service';
 import { AssessmentControllerService } from './assessment-controller.service';
 export * from './auth-controller.service';
 import { AuthControllerService } from './auth-controller.service';
-
 export * from './class-controller.service';
 import { ClassControllerService } from './class-controller.service';
 export * from './dev-token-controller.service';
@@ -14,48 +12,22 @@ export * from './invitation-controller.service';
 import { InvitationControllerService } from './invitation-controller.service';
 export * from './password-reset-controller.service';
 import { PasswordResetControllerService } from './password-reset-controller.service';
-
 export * from './project-controller.service';
 import { ProjectControllerService } from './project-controller.service';
-
 export * from './project-group-controller.service';
 import { ProjectGroupControllerService } from './project-group-controller.service';
-
 export * from './project-group-membership-controller.service';
 import { ProjectGroupMembershipControllerService } from './project-group-membership-controller.service';
-
 export * from './project-group-score-controller.service';
 import { ProjectGroupScoreControllerService } from './project-group-score-controller.service';
-
 export * from './questionnaire-controller.service';
 import { QuestionnaireControllerService } from './questionnaire-controller.service';
-
 export * from './school-year-controller.service';
 import { SchoolYearControllerService } from './school-year-controller.service';
-
 export * from './teacher-context-controller.service';
 import { TeacherContextControllerService } from './teacher-context-controller.service';
-
 export * from './term-controller.service';
 import { TermControllerService } from './term-controller.service';
 export * from './user-controller.service';
 import { UserControllerService } from './user-controller.service';
-
-export const APIS = [
-  AdminInvitationControllerService,
-  AssessmentControllerService,
-  AuthControllerService,
-  ClassControllerService,
-  DevTokenControllerService,
-  InvitationControllerService,
-  PasswordResetControllerService,
-  ProjectControllerService,
-  ProjectGroupControllerService,
-  ProjectGroupMembershipControllerService,
-  ProjectGroupScoreControllerService,
-  QuestionnaireControllerService,
-  SchoolYearControllerService,
-  TeacherContextControllerService,
-  TermControllerService,
-  UserControllerService,
-];
+export const APIS = [AdminInvitationControllerService, AssessmentControllerService, AuthControllerService, ClassControllerService, DevTokenControllerService, InvitationControllerService, PasswordResetControllerService, ProjectControllerService, ProjectGroupControllerService, ProjectGroupMembershipControllerService, ProjectGroupScoreControllerService, QuestionnaireControllerService, SchoolYearControllerService, TeacherContextControllerService, TermControllerService, UserControllerService];
