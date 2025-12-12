@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+// Author: Marcel Plenert
 public interface GradeRepository extends JpaRepository<Grade, UUID> {
     List<Grade> findByStudentId(UUID studentId);
     List<Grade> findBySubjectAssignmentId(UUID assignmentId);

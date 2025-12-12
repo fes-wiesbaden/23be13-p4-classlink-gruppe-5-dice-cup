@@ -15,6 +15,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+// Author: Marcel Plenert
+// Entity for Final Grade Assignment
 @Getter
 @Setter
 @NoArgsConstructor

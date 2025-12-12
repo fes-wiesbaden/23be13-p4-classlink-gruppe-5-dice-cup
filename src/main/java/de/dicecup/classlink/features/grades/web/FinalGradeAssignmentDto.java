@@ -4,6 +4,8 @@ import de.dicecup.classlink.features.grades.FinalGradeAssignment;
 
 import java.util.UUID;
 
+// Author: Marcel Plenert
+// DTO for Final Grade Assignment
 public record FinalGradeAssignmentDto(
         UUID id,
         String name,

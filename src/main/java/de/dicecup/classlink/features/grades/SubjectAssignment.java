@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+// Author: Sleither Reyes + Marcel Plenert
+// Defines our table for Subject Assignments
 @Getter
 @Setter
 @NoArgsConstructor
