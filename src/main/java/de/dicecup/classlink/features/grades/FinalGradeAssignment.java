@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "final_grade_assignments",
-        uniqueConstraints = @UniqueConstraint(name = "uk_final_grade_assignment", columnNames = {"school_class_id", "term_id", "subject_id", "teacher_id"})
+        uniqueConstraints = @UniqueConstraint(name = "uk_final_grade_assignment", columnNames = {"assignment_name","school_class_id", "term_id", "subject_id", "teacher_id"})
 )
 public class FinalGradeAssignment {
 
@@ -56,10 +57,10 @@ public class FinalGradeAssignment {
     private Teacher teacher;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "finalGradeAssignment")
-    private List<SubjectAssignment> subGradeAssignments;
+    private List<SubjectAssignment> subGradeAssignments = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "classFinalGradeAssignment")
-    private List<FinalGrade> grades;
+    private List<FinalGrade> grades = new ArrayList<>();
 
     @NotNull
     @Column(name = "created_at", nullable = false)

@@ -62,15 +62,9 @@ public class AssignmentManagementService {
         assignment.setSubject(subject);
         assignment.setTeacher(teacher);
         assignment.setWeighting(weighting);
+        finalGradeAssignment.getSubGradeAssignments().add(assignment);
         assignment.setFinalGradeAssignment(finalGradeAssignment);
-
-        List<SubjectAssignment> temp = finalGradeAssignment.getSubGradeAssignments();
-        if (temp != null) {
-            temp.add(assignment);
-            finalGradeAssignment.setSubGradeAssignments(temp);
-        }
-
-        finalGradeAssignmentRepository.save(finalGradeAssignment);
+        assignment.setFinalGradeAssignment(finalGradeAssignment);
 
         return assignmentRepository.save(assignment);
     }

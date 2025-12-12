@@ -115,9 +115,9 @@ public class GradeManagementService {
                                         .orElseThrow(() -> new EntityNotFoundException("Grade not found"))
                 )
                 .toList();
-        List<SubjectAssignment> subGradeAssignments = finalGradeAssignment.getSubGradeAssignments();
+        int subGradeAssignmentSize = finalGradeAssignment.getSubGradeAssignments().size();
 
-        if(subGrades.size() != subGradeAssignments.size()){
+        if(subGrades.size() != subGradeAssignmentSize){
             throw new IllegalStateException(
                     "Ungraded assignments found for: " +
                             student.getUser().getUserInfo().getFirstName() +
@@ -134,11 +134,10 @@ public class GradeManagementService {
         FinalGrade calculatedGrade = new FinalGrade();
         calculatedGrade.setStudent(student);
         calculatedGrade.setGradeValue(weightedTotal);
+        calculatedGrade.setClassFinalGradeAssignment(finalGradeAssignment);
+        calculatedGrade.setChangedBy(finalGradeAssignment.getTeacher());
 
-        List<FinalGrade> temp = finalGradeAssignment.getGrades();
-        temp.add(calculatedGrade);
-        finalGradeAssignment.setGrades(temp);
-        finalGradeAssignmentRepository.save(finalGradeAssignment);
+        finalGradeAssignment.getGrades().add(calculatedGrade);
 
         return finalGradeRepository.save(calculatedGrade);
     }

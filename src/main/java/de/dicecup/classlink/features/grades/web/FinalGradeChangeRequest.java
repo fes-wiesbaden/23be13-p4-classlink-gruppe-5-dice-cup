@@ -9,9 +9,9 @@ import java.util.UUID;
 // Author: Marcel Plenert
 // DTO for Final Grade Change Request
 public record FinalGradeChangeRequest(
-        @NotBlank UUID parentAssignmentId,
-        @NotBlank UUID studentId,
+        @NotNull UUID parentAssignmentId,
+        @NotNull UUID studentId,
         @NotNull BigDecimal gradeValue,
-        @NotBlank UUID requestingTeacherId
+        @NotNull UUID requestingTeacherId
         ) {
 }

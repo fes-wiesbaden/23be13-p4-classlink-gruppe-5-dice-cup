@@ -25,7 +25,8 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "class_subject_assignments",
-        uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment", columnNames = {"school_class_id", "term_id", "subject_id", "teacher_id"})
+        uniqueConstraints = @UniqueConstraint(name = "uk_class_subject_assignment",
+                columnNames = {"assignment_name", "school_class_id", "term_id", "subject_id", "teacher_id"})
 )
 public class SubjectAssignment {
 
@@ -65,7 +66,7 @@ public class SubjectAssignment {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "subjectAssignment")
     private List<Grade> grades = new ArrayList<>();
 
-    @Column(name = "weighting")
+    @Column(name = "weighting", precision = 3, scale = 1, nullable = false)
     private BigDecimal weighting;
 
     @NotNull

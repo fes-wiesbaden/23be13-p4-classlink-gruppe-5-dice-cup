@@ -79,8 +79,6 @@ class AssignmentManagementServiceTest {
         when(assignmentRepository.save(any(SubjectAssignment.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
         when(finalGradeAssignmentRepository.findById(finalGradeAssignmentId)).thenReturn(Optional.of(finalGradeAssignment));
-        when(finalGradeAssignmentRepository.save(any(FinalGradeAssignment.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
         when(schoolClassRepository.findById(classId)).thenReturn(Optional.of(schoolClass));
         when(termRepository.findById(termId)).thenReturn(Optional.of(term));
 
