@@ -1,74 +1,75 @@
-# 🎓 Classlink – Die digitale Schulplattform
+# DiceCup
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/fes-wiesbaden/23be13-p4-classlink-gruppe-5-dice-cup/ci.yml?branch=master&logo=github&style=flat-square)
-![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fes-wiesbaden_23be13-p4-classlink-gruppe-5-dice-cup&metric=alert_status)
-![GitHub last commit](https://img.shields.io/github/last-commit/fes-wiesbaden/23be13-p4-classlink-gruppe-5-dice-cup?style=flat-square&logo=git)
-![License](https://img.shields.io/badge/Lizenz-Proprietär-blue?style=flat-square)
+Vollständiger Stack mit Angular-Frontend und Spring-Boot-Backend. Nutzt PostgreSQL (über Docker) für die Entwicklung.
 
----
+## Voraussetzungen
 
-## ✨ Überblick
-**Classlink** ist eine moderne, modulare Schulplattform, entwickelt von **DiceCup**.  
-Sie unterstützt Lehrkräfte und Schulen dabei, Verwaltungs- und Unterrichtsprozesse digital, sicher und effizient abzubilden.
+- Git
+- Docker und Docker Compose (empfohlen für lokale DB)
+- PostgreSQL (latest), falls kein Docker genutzt wird
+- Java JDK 21/23/24
+- Node.js (LTS) + Yarn
+- Gradle Wrapper (enthalten)
 
-Unsere Lösung basiert auf **aktueller Enterprise-Technologie** (Spring Boot + Angular + PostgreSQL) und ist so ausgelegt, dass sie langfristig wartbar und erweiterbar bleibt.
+## Projektstruktur
 
----
+- `classlink-frontend/` – Angular-Client
+- `src/main/java/...` – Spring-Boot-Backend
+- `docker-compose.yml` – lokale PostgreSQL
 
-## 💡 Vorteile für Schulen und Lehrkräfte
-- 🎯 **Einfach**: Intuitive Bedienung für Lehrkräfte und Schüler
-- 🔐 **Sicher**: Rollenbasiertes Zugriffsmodell, verschlüsselte Kommunikation
-- ⚙️ **Flexibel**: Module für Verwaltung, Unterricht und Kommunikation
-- 🚀 **Zukunftssicher**: Moderne Architektur, regelmäßige Updates
-- 🛠️ **Individuell**: Anpassbar an Anforderungen einzelner Schulen oder Träger
+## Schnellstart
 
----
-
-## 📊 Qualität & Transparenz
-Wir legen höchsten Wert auf Qualität:
-- Kontinuierliche **Build- und Test-Pipelines**
-- **Code-Qualität** geprüft über SonarCloud
-- **Automatisierte Sicherheitsprüfungen**
-- Stabile Releases, die für den produktiven Schulbetrieb geeignet sind
-
-![Repobeats analytics image](https://repobeats.axiom.co/api/embed/34f6a6fdfc1c7a23a64b44f3c896e1962349d270.svg)
-
----
-
-## 🚀 Installation & Inbetriebnahme
-Die Software wird als **Docker-basierte Lösung** ausgeliefert und kann sowohl **On-Premise** in der Schule als auch auf **dedizierten Servern** betrieben werden.
-
-### Voraussetzungen
-- Aktuelle Docker & Docker Compose Installation
-- Server mit mind. 4 GB RAM
-- Datenbank: PostgreSQL (wird automatisch per Compose mitgeliefert)
-
-### Erste Schritte
+### Datenbank (Docker)
 ```bash
-git clone https://github.com/fes-wiesbaden/23be13-p4-classlink-gruppe-5-dice-cup.git
-cd classlink
 docker compose up -d
 ```
 
-Danach sind erreichbar:
-- Backend (Spring Boot): http://localhost:4000
-- Frontend (Angular): http://localhost:4200
-- API-Dokumentation (Scalar UI): http://localhost:4200/scalar
+### Backend
 
----
+```bash
+# Unix/macOS
+./gradlew bootRun
 
-## 🗂️ Funktionsübersicht
-- 👩‍🏫 Benutzer- und Rollenverwaltung (Lehrer, Schüler, Administratoren)
-- 📝 Kurs- und Klassenorganisation
-- 📢 Kommunikationsmodul für Nachrichten & Ankündigungen
-- 📊 Übersichten und Berichte
-- 🔧 Erweiterbar um weitere Module
+# Windows (PowerShell)
+.\gradlew.bat bootRun
+```
 
----
+### Frontend
 
-## 📅 Roadmap
-- [x] Basisplattform (Monorepo, DB, API-Doku)
-- [] Authentifizierung & Autorisierung (JWT-basiert)
-- [ ] Erste produktive Pilotschule
-- [ ] Module für Stundenpläne & Leistungsbewertung
-- [ ] Mobile App (iOS/Android)  
+```bash
+cd classlink-frontend
+yarn install
+yarn start
+```
+
+## Tests ausführen
+
+### Backend-Tests
+
+```bash
+# Unix/macOS
+./gradlew test
+
+# Windows (PowerShell)
+.\gradlew.bat test
+```
+
+### Frontend-Tests
+
+```bash
+cd classlink-frontend
+yarn test
+```
+
+## Typischer Entwicklungsablauf
+
+1. Datenbank starten: `docker compose up -d`
+2. Backend starten: `./gradlew bootRun` (oder `.\gradlew.bat bootRun`)
+3. Frontend starten: `yarn start` (aus `classlink-frontend`)
+4. Tests nach Bedarf: `./gradlew test` und `yarn test`
+
+## Hinweise
+
+- Frontend kommuniziert ausschließlich per REST mit dem Backend.
+- Rollenbasierte Views (Admin/Lehrer/Schüler) sind vorhanden und erweiterbar.
+- Docker wird für eine konsistente Entwicklungsumgebung empfohlen.
