@@ -23,7 +23,7 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "final_grade_assignments",
-        uniqueConstraints = @UniqueConstraint(name = "uk_final_grade_assignment", columnNames = {"school_class_id", "term_id", "subject_id", "teacher_id"})
+        uniqueConstraints = @UniqueConstraint(name = "uk_final_grade_assignment", columnNames = {"assignment_name","school_class_id", "term_id", "subject_id", "teacher_id"})
 )
 public class FinalGradeAssignment {
 

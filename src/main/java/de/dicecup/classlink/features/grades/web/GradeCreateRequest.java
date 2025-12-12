@@ -9,9 +9,9 @@ import java.util.UUID;
 // Author: Marcel Plenert+
 // DTO for Grade Creation
 public record GradeCreateRequest(
-        @NotBlank UUID parentAssignmentId,
-        @NotBlank UUID studentId,
+        @NotNull UUID parentAssignmentId,
+        @NotNull UUID studentId,
         @NotNull BigDecimal gradeValue,
-        @NotBlank UUID requestingTeacherId
+        @NotNull UUID requestingTeacherId
         ) {
 }
