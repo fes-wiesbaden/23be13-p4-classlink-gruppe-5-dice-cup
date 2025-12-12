@@ -2,13 +2,8 @@ package de.dicecup.classlink.features.users.app;
 
 import de.dicecup.classlink.features.users.UserRepository;
 import de.dicecup.classlink.features.users.UserService;
-import de.dicecup.classlink.features.users.domain.User;
+import de.dicecup.classlink.features.users.domain.*;
 import de.dicecup.classlink.common.audit.AuditPublisher;
-import de.dicecup.classlink.features.users.domain.UserInfo;
-import de.dicecup.classlink.features.users.domain.CreateUserInfoDto;
-import de.dicecup.classlink.features.users.domain.UpdateUserDto;
-import de.dicecup.classlink.features.users.domain.UserDto;
-import de.dicecup.classlink.features.users.domain.UserInfoDto;
 import de.dicecup.classlink.features.users.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -54,13 +49,13 @@ class UserServiceTest {
         UserInfo uf1 = new UserInfo(u1.getId(), u1, "Luke", "Moore", "foo@bar.com");
         UserInfo uf2 = new UserInfo(u2.getId(), u2, "Moritz", "Bartius", "bar@foo.com");
 
-        when(userRepository.findAll()).thenReturn(List.of(u1, u2));
+        when(userRepository.findAllWithRolesAndInfo()).thenReturn(List.of(u1, u2));
 
         UserInfoDto infoDto1 = new UserInfoDto(uf1.getFirstName(), uf1.getLastName(), uf1.getEmail());
         UserInfoDto infoDto2 = new UserInfoDto(uf2.getFirstName(), uf2.getLastName(), uf2.getEmail());
 
-        UserDto dto1 = new UserDto(u1.getId(), "l.moore", true, infoDto1);
-        UserDto dto2 = new UserDto(u2.getId(), "m.bartius", true, infoDto2);
+        UserDto dto1 = new UserDto(u1.getId(), "l.moore", true, infoDto1, UserRoleDto.TEACHER);
+        UserDto dto2 = new UserDto(u2.getId(), "m.bartius", true, infoDto2, UserRoleDto.STUDENT);
         when(userMapper.toDto(u1)).thenReturn(dto1);
         when(userMapper.toDto(u2)).thenReturn(dto2);
 
@@ -71,7 +66,7 @@ class UserServiceTest {
         assertThat(result).hasSize(2)
                 .containsExactlyInAnyOrder(dto1, dto2);
 
-        verify(userRepository).findAll();
+        verify(userRepository).findAllWithRolesAndInfo();
         verify(userMapper).toDto(u1);
         verify(userMapper).toDto(u2);
 
@@ -96,7 +91,7 @@ class UserServiceTest {
                 uf.getEmail()
         );
 
-        UserDto dto = new UserDto(u.getId(), "winkler", true, infoDto);
+        UserDto dto = new UserDto(u.getId(), "winkler", true, infoDto, UserRoleDto.STUDENT);
 
         when(userMapper.toDto(u)).thenReturn(dto);
 
@@ -141,7 +136,7 @@ class UserServiceTest {
         when(userMapper.toEntity(infoDto)).thenReturn(mappedInfo);
 
         UserInfoDto expectedInfoDto = new UserInfoDto(infoDto.firstName(), infoDto.lastName(), infoDto.email());
-        UserDto expectedDto = new UserDto(id, "jane.doe", true, expectedInfoDto);
+        UserDto expectedDto = new UserDto(id, "jane.doe", true, expectedInfoDto, UserRoleDto.STUDENT);
         when(userMapper.toDto(user)).thenReturn(expectedDto);
 
         // act
@@ -176,7 +171,7 @@ class UserServiceTest {
         UpdateUserDto updateDto = new UpdateUserDto("new.name", false, infoDto);
 
         UserInfoDto mappedInfoDto = new UserInfoDto("New", "Name", "new@classlink.local");
-        UserDto expectedDto = new UserDto(id, "new.name", false, mappedInfoDto);
+        UserDto expectedDto = new UserDto(id, "new.name", false, mappedInfoDto, UserRoleDto.STUDENT);
         when(userMapper.toDto(user)).thenReturn(expectedDto);
 
         // act
