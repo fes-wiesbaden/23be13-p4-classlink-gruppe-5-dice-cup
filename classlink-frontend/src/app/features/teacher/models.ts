@@ -2,20 +2,21 @@
 // Feature models for the Teacher view (frontend-only mocks)
 
 export interface Student {
-  id: number;
+  id: string;
   name: string;
-  class: string;
+  classId?: string;
+  className: string;
   avatarUrl?: string;
 }
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Assignment {
-  studentId: number;
-  projectId: number;
+  studentId: string;
+  projectId: string;
   assigned: boolean;
 }
 
@@ -30,22 +31,27 @@ export interface Scores {
 
 export interface ProjectOption {
   label: string;
-  value: number;
+  value: string;
+}
+
+export interface ClassOption {
+  id: string;
+  name: string;
 }
 
 // Notes sent by teachers to students
 export interface Note {
-  toStudentId: number;
-  projectId: number;
+  toStudentId: string;
+  projectId: string;
   text: string;
   createdAt: string; // ISO timestamp
 }
 
 // Peer evaluation submitted by a student about another student
 export interface PeerEvaluation {
-  fromStudentId: number;
-  toStudentId: number;
-  projectId: number;
+  fromStudentId: string;
+  toStudentId: string;
+  projectId: string;
   grade: number; // numeric grade like 1.0 .. 6.0
   createdAt: string; // ISO timestamp
 }

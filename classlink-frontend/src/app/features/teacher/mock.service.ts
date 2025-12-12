@@ -7,34 +7,34 @@ export class TeacherMockService {
   // Simple class storage for teacher-managed classes
   private classesData: string[] = ['10A', '10B', '10C'];
   private readonly studentsData: Student[] = [
-    { id: 1, name: 'Anna Schmidt', class: '10A', avatarUrl: 'assets/bear.png' },
-    { id: 2, name: 'Lukas Weber', class: '10A', avatarUrl: 'assets/chicken.png' },
-    { id: 3, name: 'Sophia Klein', class: '10B', avatarUrl: 'assets/dog.png' },
-    { id: 4, name: 'Max Fischer', class: '10B', avatarUrl: 'assets/gorilla.png' },
-    { id: 5, name: 'Mara Fuchs', class: '10C', avatarUrl: 'assets/meerkat.png' },
-    { id: 6, name: 'Felix Braun', class: '10C', avatarUrl: 'assets/rabbit.png' },
+    { id: '1', name: 'Anna Schmidt', classId: '10A', className: '10A', avatarUrl: 'assets/bear.png' },
+    { id: '2', name: 'Lukas Weber', classId: '10A', className: '10A', avatarUrl: 'assets/chicken.png' },
+    { id: '3', name: 'Sophia Klein', classId: '10B', className: '10B', avatarUrl: 'assets/dog.png' },
+    { id: '4', name: 'Max Fischer', classId: '10B', className: '10B', avatarUrl: 'assets/gorilla.png' },
+    { id: '5', name: 'Mara Fuchs', classId: '10C', className: '10C', avatarUrl: 'assets/meerkat.png' },
+    { id: '6', name: 'Felix Braun', classId: '10C', className: '10C', avatarUrl: 'assets/rabbit.png' },
   ];
 
   private readonly projectsData: Project[] = [
-    { id: 101, name: 'Robotik' },
-    { id: 102, name: 'Digitale Medien' },
-    { id: 103, name: 'Energie der Zukunft' },
+    { id: '101', name: 'Robotik' },
+    { id: '102', name: 'Digitale Medien' },
+    { id: '103', name: 'Energie der Zukunft' },
   ];
 
   private assignmentsData: Assignment[] = [
-    { studentId: 1, projectId: 101, assigned: true },
-    { studentId: 2, projectId: 101, assigned: false },
-    { studentId: 3, projectId: 101, assigned: true },
-    { studentId: 4, projectId: 101, assigned: false },
+    { studentId: '1', projectId: '101', assigned: true },
+    { studentId: '2', projectId: '101', assigned: false },
+    { studentId: '3', projectId: '101', assigned: true },
+    { studentId: '4', projectId: '101', assigned: false },
   ];
 
   private notesData: Note[] = [];
   private peerEvaluations: PeerEvaluation[] = [];
-  private selfEvaluations: { studentId: number; projectId: number; grade: number; submitted: boolean }[] =
+  private selfEvaluations: { studentId: string; projectId: string; grade: number; submitted: boolean }[] =
     [
-      { studentId: 1, projectId: 101, grade: 2.1, submitted: true },
-      { studentId: 1, projectId: 102, grade: 2.4, submitted: false },
-      { studentId: 2, projectId: 101, grade: 1.9, submitted: true },
+      { studentId: '1', projectId: '101', grade: 2.1, submitted: true },
+      { studentId: '1', projectId: '102', grade: 2.4, submitted: false },
+      { studentId: '2', projectId: '101', grade: 1.9, submitted: true },
     ];
 
   // Synthetic history cache per student+project
@@ -67,7 +67,7 @@ export class TeacherMockService {
   }
 
   // Weist einem Schüler eine Klasse zu (Klasse wird bei Bedarf angelegt)
-  setStudentClass(studentId: number, className: string): void {
+  setStudentClass(studentId: string, className: string): void {
     const n = (className || '').trim();
     const st = this.studentsData.find((s) => s.id === studentId);
     if (!st || !n) return;
@@ -75,11 +75,12 @@ export class TeacherMockService {
     if (!this.classesData.includes(n)) {
       this.classesData = [...this.classesData, n];
     }
-    st.class = n;
+    st.classId = n;
+    st.className = n;
   }
 
   // Schaltet die Projektzuweisung für einen Schüler um
-  toggleAssignment(studentId: number, projectId: number): void {
+  toggleAssignment(studentId: string, projectId: string): void {
     const found = this.assignmentsData.find(
       (a) => a.studentId === studentId && a.projectId === projectId,
     );
@@ -92,29 +93,29 @@ export class TeacherMockService {
 
   // Teacher -> Student notes
   // Speichert eine kurze Notiz vom Lehrer an den Schüler
-  addNote(toStudentId: number, projectId: number, text: string): void {
+  addNote(toStudentId: string, projectId: string, text: string): void {
     const createdAt = new Date().toISOString();
     this.notesData.unshift({ toStudentId, projectId, text, createdAt });
   }
 
   // Liest alle Notizen zu einem Schüler/Projekt
-  getNotesFor(studentId: number, projectId: number): Note[] {
+  getNotesFor(studentId: string, projectId: string): Note[] {
     return this.notesData.filter((n) => n.toStudentId === studentId && n.projectId === projectId);
   }
 
   // Peer evaluations
   // Speichert eine Peer-Bewertung (Schüler bewertet Schüler)
   submitPeerEvaluation(
-    fromStudentId: number,
-    toStudentId: number,
-    projectId: number,
+    fromStudentId: string,
+    toStudentId: string,
+    projectId: string,
     grade: number,
   ): void {
     const createdAt = new Date().toISOString();
     this.peerEvaluations.push({ fromStudentId, toStudentId, projectId, grade, createdAt });
   }
 
-  submitSelfEvaluation(studentId: number, projectId: number, grade: number): void {
+  submitSelfEvaluation(studentId: string, projectId: string, grade: number): void {
     const found = this.selfEvaluations.find(
       (s) => s.studentId === studentId && s.projectId === projectId,
     );
@@ -127,7 +128,7 @@ export class TeacherMockService {
   }
 
   // Durchschnitt der Peer-Bewertungen berechnen
-  private getPeerAverageFor(studentId: number, projectId: number): number | null {
+  private getPeerAverageFor(studentId: string, projectId: string): number | null {
     const items = this.peerEvaluations.filter(
       (pe) => pe.toStudentId === studentId && pe.projectId === projectId,
     );
@@ -137,8 +138,10 @@ export class TeacherMockService {
   }
 
   // Noten für Lehrer/Peer/Selbst als einfache Mock-Berechnung
-  getScores(studentId: number, projectId: number): Scores {
-    const base = (studentId * 7 + projectId) % 3; // 0..2 pseudo-deterministic
+  getScores(studentId: string, projectId: string): Scores {
+    const sid = Number(studentId);
+    const pid = Number(projectId);
+    const base = (sid * 7 + pid) % 3; // 0..2 pseudo-deterministic
     const teacher = 1.7 + base * 0.2;
     const self = 1.9 + (base === 1 ? 0.0 : 0.1);
 
@@ -156,8 +159,8 @@ export class TeacherMockService {
   }
 
   getEvaluationStatus(
-    studentId: number,
-    projectId: number,
+    studentId: string,
+    projectId: string,
   ): { selfSubmitted: boolean; selfGrade: number | null; peerSubmitted: boolean; peerGrade: number | null } {
     const selfEval = this.selfEvaluations.find(
       (s) => s.studentId === studentId && s.projectId === projectId,
@@ -176,7 +179,7 @@ export class TeacherMockService {
 
   // Returns a synthetic but deterministic score history for charts
   // Baut eine kleine Verlaufskurve (Labels + drei Werte-Arrays)
-  getScoreHistory(studentId: number, projectId: number, points = 6) {
+  getScoreHistory(studentId: string, projectId: string, points = 6) {
     const key = `${studentId}_${projectId}_${points}`;
     const cached = this.scoresHistoryCache.get(key);
     if (cached) return cached;
@@ -187,7 +190,7 @@ export class TeacherMockService {
     const self: number[] = [];
 
     // base seeds
-    const seed = (studentId * 13 + projectId * 3) >>> 0;
+    const seed = (Number(studentId) * 13 + Number(projectId) * 3) >>> 0;
     let r = seed;
     const rand = () => {
       r = (r * 1664525 + 1013904223) >>> 0;

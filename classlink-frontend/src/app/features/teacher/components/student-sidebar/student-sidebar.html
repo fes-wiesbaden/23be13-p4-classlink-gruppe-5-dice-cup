@@ -9,15 +9,15 @@
         class="class-select"
         [ngModel]="selectedClass"
         (onChange)="classChange.emit($event.value || null)"
-          [options]="classOptions"
-          placeholder="Bitte auswählen"
-          styleClass="class-select"
+        [options]="classOptions"
+        placeholder="Bitte auswählen"
+        styleClass="class-select"
         ariaLabel="Klassenauswahl"
       ></p-select>
     </div>
     <div class="class-chip-row">
       <span class="chip-label">Aktuelle Klasse</span>
-      <span class="chip chip--soft">{{ selectedClass || '23BE13' }}</span>
+      <span class="chip chip--soft">{{ selectedClass || '–' }}</span>
     </div>
   </div>
   </div>
@@ -56,7 +56,7 @@
         </ng-template>
         <div class="meta">
           <div class="name">{{ s.name }}</div>
-          <div class="class">Klasse {{ s.class }}</div>
+          <div class="class">Klasse {{ s.className }}</div>
         </div>
       </li>
     </ul>
