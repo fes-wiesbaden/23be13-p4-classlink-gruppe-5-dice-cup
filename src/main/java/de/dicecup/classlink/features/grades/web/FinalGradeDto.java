@@ -5,6 +5,8 @@ import de.dicecup.classlink.features.grades.FinalGrade;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+// Author: Marcel Plenert
+// DTO for Final Grade
 public record FinalGradeDto(
         UUID id,
         UUID classFinalGradeAssignmentId,

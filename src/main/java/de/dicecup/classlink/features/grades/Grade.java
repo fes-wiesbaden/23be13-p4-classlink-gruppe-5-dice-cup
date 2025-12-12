@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+// Author: Marcel Plenert
+// Defines our Table for Grades
 @Getter
 @Setter
 @NoArgsConstructor

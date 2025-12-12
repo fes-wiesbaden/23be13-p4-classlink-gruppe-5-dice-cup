@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+
+// Author: Marcel Plenert
+// Defines our table for Final Grades
 @Getter
 @Setter
 @NoArgsConstructor

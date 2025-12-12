@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+// Author: Marcel Plenert
 public interface SubjectAssignmentRepository extends JpaRepository<SubjectAssignment, UUID> {
     List<SubjectAssignment> findBySchoolClassIdAndTermId(UUID classId, UUID termId);
     Optional<SubjectAssignment> findBySubjectId(UUID subjectId);
