@@ -1,3 +1,5 @@
+/* Author: Emil */
+
 import { Component, OnDestroy, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dock } from 'primeng/dock';

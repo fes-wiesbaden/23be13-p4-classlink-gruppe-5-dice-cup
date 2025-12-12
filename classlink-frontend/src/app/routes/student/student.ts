@@ -1,3 +1,4 @@
+// Author: Emil
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
