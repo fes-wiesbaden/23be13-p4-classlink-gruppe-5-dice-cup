@@ -2,10 +2,10 @@
 export type Role = 'student' | 'teacher' | 'admin';
 
 export interface AdminUser {
-  id: number;
+    id: string;
   name: string;
   email: string;
   roles: Role[];
   status: 'active' | 'disabled';
-  createdAt: string; // ISO date
+    createdAt?: string;
 }

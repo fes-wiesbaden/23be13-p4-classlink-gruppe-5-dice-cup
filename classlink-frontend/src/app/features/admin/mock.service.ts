@@ -1,14 +1,20 @@
 ﻿// Von Lukas bearbeitet
-import { Injectable } from '@angular/core';
-import { AdminUser, Role } from './models';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { AdminService } from './admin.tokens';
+import {Injectable} from '@angular/core';
+import {AdminUser, Role} from './models';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {AdminService} from './admin.service.contract';
+import {
+    CreateInviteRequestDto,
+    InviteCreatedResponseDto,
+    PasswordResetCreateRequestDto,
+    PasswordResetCreateResponseDto
+} from '../../api';
 
 @Injectable({ providedIn: 'root' })
 export class AdminMockService implements AdminService {
   private state: AdminUser[] = [
     {
-      id: 1,
+        id: '1',
       name: 'Anna Schmidt',
       email: 'anna.schmidt@example.com',
       roles: ['student'],
@@ -16,7 +22,7 @@ export class AdminMockService implements AdminService {
       createdAt: new Date(2024, 0, 12).toISOString(),
     },
     {
-      id: 2,
+        id: '2',
       name: 'Max Müller',
       email: 'max.mueller@example.com',
       roles: ['teacher'],
@@ -24,7 +30,7 @@ export class AdminMockService implements AdminService {
       createdAt: new Date(2024, 2, 5).toISOString(),
     },
     {
-      id: 3,
+        id: '3',
       name: 'Lena Wagner',
       email: 'lena.wagner@example.com',
       roles: ['admin'],
@@ -32,7 +38,7 @@ export class AdminMockService implements AdminService {
       createdAt: new Date(2024, 5, 20).toISOString(),
     },
     {
-      id: 4,
+        id: '4',
       name: 'Tim Becker',
       email: 'tim.becker@example.com',
       roles: ['student'],
@@ -50,11 +56,15 @@ export class AdminMockService implements AdminService {
   }
 
   // Fügt einen Nutzer lokal hinzu (Mock)
-  addUser(name: string, email: string, roles: Role[] = ['student']): Observable<void> {
+    inviteUser(request: CreateInviteRequestDto): Observable<InviteCreatedResponseDto> {
+        const name = request.email ?? `User ${this.nextId}`;
+        const email = request.email ?? `user${this.nextId}@example.com`;
+        const roles: Role[] = [this.mapRole(request.role)];
+
     this.state = [
       ...this.state,
       {
-        id: this.nextId++,
+          id: String(this.nextId++),
         name,
         email,
         roles,
@@ -63,26 +73,41 @@ export class AdminMockService implements AdminService {
       },
     ];
     this.users$.next([...this.state]);
-    return of(void 0);
+        return of({inviteId: 'mock', token: 'mock-token', expiresAt: new Date(Date.now() + 3600_000).toISOString()});
   }
 
   // Entfernt einen Nutzer (Mock)
-  removeUser(id: number): Observable<void> {
+    removeUser(id: string): Observable<void> {
     this.state = this.state.filter((u) => u.id !== id);
     this.users$.next([...this.state]);
     return of(void 0);
   }
 
-  // Speichert neue Rollen (Mock)
-  setRoles(id: number, roles: Role[]): Observable<void> {
-    this.state = this.state.map((u) => (u.id === id ? { ...u, roles: [...roles] } : u));
-    this.users$.next([...this.state]);
-    return of(void 0);
-  }
-
   // Nur eine Demo-Ausgabe hier
-  resetPassword(id: number): Observable<void> {
-    console.info('Password reset for user', id);
-    return of(void 0);
+    resetPassword(request: PasswordResetCreateRequestDto): Observable<PasswordResetCreateResponseDto> {
+        console.info('Password reset for user', request.userId);
+        return of({
+            tokenId: 'mock-reset',
+            token: 'mock-reset-token',
+            expiresAt: new Date(Date.now() + 3600_000).toISOString(),
+            userId: request.userId,
+        });
+    }
+
+    // Aliases to satisfy interface naming
+    loadUsers(): Observable<AdminUser[]> {
+        return this.getUsers();
+    }
+
+    private mapRole(role: CreateInviteRequestDto['role']): Role {
+        switch (role) {
+            case 'ADMIN':
+                return 'admin';
+            case 'TEACHER':
+                return 'teacher';
+            case 'STUDENT':
+            default:
+                return 'student';
+        }
   }
 }
