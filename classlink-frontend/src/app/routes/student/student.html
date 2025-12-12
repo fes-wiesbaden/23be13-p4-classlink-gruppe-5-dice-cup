@@ -3,15 +3,14 @@
 <div class="student-page">
   <div class="soft-glow" aria-hidden="true"></div>
 
-  <div *ngIf="userLoading" class="status status--info">Lade Schülerdaten...</div>
-  <div *ngIf="userLoadError" class="status status--error">Loading failed.</div>
+  <div *ngIf="apiError()" class="status status--error">{{ apiError() }}</div>
 
   <section class="card header-card">
     <div class="identity">
-      <div class="avatar">{{ studentName | slice: 0 : 1 }}</div>
+      <div class="avatar">{{ (currentStudent()?.name || 'S') | slice: 0 : 1 }}</div>
       <div>
-        <h1>{{ studentName }}</h1>
-        <p class="muted">{{ studentEmail }}</p>
+        <h1>{{ currentStudent()?.name }}</h1>
+        <p class="muted">{{ currentStudent()?.email }}</p>
       </div>
     </div>
 
@@ -27,7 +26,7 @@
         <div>
           <p class="label">Gesamt Note</p>
           <div class="value-row">
-            <span class="value">{{ averageGrade | number: '1.1-1' }}</span>
+            <span class="value">{{ averageGrade() === null ? '–' : (averageGrade() | number: '1.1-1') }}</span>
           </div>
         </div>
       </div>
@@ -36,107 +35,54 @@
         <span class="icon pi pi-users"></span>
         <div>
           <p class="label">Laufende Projekte</p>
-          <div class="value">{{ openProjects }}</div>
+          <div class="value">{{ openProjects() }}</div>
         </div>
       </div>
     </div>
   </section>
 
   <div class="main-grid">
-    <div class="grade-column">
-      <section class="card grades-card">
-        <div class="section-header">
-          <h2>Notenübersicht</h2>
-          <span class="eyebrow">Klasse {{ studentClass }}</span>
-        </div>
-        <div class="grade-grid">
-          <button
-            class="grade-card"
-            type="button"
-            *ngFor="let lf of lernfelder; trackBy: trackByLernfeld"
-            (click)="selectLernfeld(lf)"
-            [class.grade-card--active]="isSelected(lf.id)"
-          >
-            <div class="grade-card__top">
-              <!-- Lf Nummber -->
-              <span class="pill">LF {{ lf.id }}</span>
-            </div>
-            <!-- Lf Thema -->
-            <div class="grade-card__title">{{ lf.focus }}</div>
-            <div class="grade-card__meta">
-              <div class="grade-card__value">{{ lf.average | number: '1.1-1' }}</div>
-              <span class="label">Note</span>
-            </div>
-            <div class="bar">
-              <span class="fill" [style.width.%]="gradeProgress(lf.average)"></span>
-            </div>
-          </button>
-        </div>
-      </section>
-
-      <section class="card details-card" *ngIf="selectedLernfeld as sel">
-        <div class="section-header">
-          <h2>Details</h2>
-          <p class="eyebrow">{{ sel.focus }}</p>
-        </div>
-
-        <div class="assessment-grid">
-          <div class="assessment-card" *ngFor="let g of sel.assessments">
-            <div class="assessment-card__head">
-              <div>
-                <div class="assessment-card__label">{{ g.label }}</div>
-                <div class="assessment-card__meta">
-                  {{ g.type }} - {{ g.weight * 100 | number: '1.0-0' }}%
-                </div>
-              </div>
-              <div class="badge">{{ g.grade | number: '1.1-1' }}</div>
-            </div>
-            <div class="bar thin">
-              <span class="fill" [style.width.%]="gradeProgress(g.grade)"></span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
     <section class="card projects-card">
       <div class="section-header">
         <h2>Projekte</h2>
         <p class="eyebrow">Gruppenarbeiten</p>
       </div>
 
-      <div class="project-list">
-        <article class="project-card" *ngFor="let project of projects; trackBy: trackByProject">
-          <div class="project-card__head">
-            <div>
-              <h3>{{ project.name }}</h3>
-              <p class="muted">{{ project.role }} - Abgabe {{ project.nextDue }}</p>
+      <ng-container *ngIf="projects().length > 0; else noProjects">
+        <div class="project-list">
+          <article class="project-card" *ngFor="let project of projects(); trackBy: trackByProject">
+            <div class="project-card__head">
+              <div>
+                <h3>{{ project.name }}</h3>
+                <p class="muted">{{ project.status === 'done' ? 'Abgeschlossen' : 'Laufend' }}</p>
+              </div>
+              <div class="project-card__score">
+                <ng-container *ngIf="project.scores as sc; else noScore">
+                  <div class="score-pill">{{ sc.teacher }}</div>
+                </ng-container>
+                <ng-template #noScore>
+                  <span class="muted">Noch keine Bewertung vorhanden.</span>
+                </ng-template>
+              </div>
             </div>
-            <div class="project-card__score"></div>
-          </div>
 
-          <div class="progress-row">
-            <div class="progress-bar">
-              <span
-                class="fill"
-                [style.width.%]="project.progress"
-                [style.background]="project.color"
-              ></span>
+            <div class="project-card__actions">
+              <p-button
+                type="button"
+                label="Bewertung"
+                icon="pi pi-user"
+                [severity]="project.status === 'done' ? 'success' : 'primary'"
+              ></p-button>
             </div>
-            <span class="muted">{{ project.progress }}% Fortschritt</span>
-          </div>
-
-          <div class="project-card__actions">
-            <p-button
-              type="button"
-              label="Bewertung"
-              icon="pi pi-user"
-              [severity]="project.peerDone ? 'success' : 'primary'"
-              (onClick)="startPeerEvaluation(project)"
-            ></p-button>
-          </div>
-        </article>
-      </div>
+          </article>
+        </div>
+      </ng-container>
+      <ng-template #noProjects>
+        <div class="p-card-body">
+          <h3>Du hast aktuell keine Projekte.</h3>
+          <p>Dir sind derzeit keine Projekte zugeordnet.</p>
+        </div>
+      </ng-template>
     </section>
   </div>
 </div>
