@@ -8,6 +8,8 @@ describe('Login', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
+    localStorage.clear();
+    spyOn(console, 'warn').and.stub();
     await TestBed.configureTestingModule({
       imports: [LoginComponent, HttpClientTestingModule, RouterTestingModule],
       // HttpClientTestingModule satisfies AuthControllerService -> HttpClient in AuthService.

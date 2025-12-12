@@ -18,10 +18,12 @@ describe('authInterceptor', () => {
 
   beforeEach(() => {
     authService = jasmine.createSpyObj('AuthService', [
-      'getAccessToken',
+      'getEffectiveAccessToken',
       'isAccessTokenExpired',
       'refreshTokens',
+      'getRefreshToken',
     ]);
+    authService.getRefreshToken.and.returnValue(null);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -47,7 +49,8 @@ describe('authInterceptor', () => {
   });
 
   it('leaves requests untouched when no token is present', () => {
-    authService.getAccessToken.and.returnValue(null);
+    authService.getEffectiveAccessToken.and.returnValue(null);
+    authService.isAccessTokenExpired.and.returnValue(false);
 
     http.get('/data').subscribe();
 
@@ -57,7 +60,7 @@ describe('authInterceptor', () => {
   });
 
   it('attaches bearer token when token is valid', () => {
-    authService.getAccessToken.and.returnValue('token-123');
+    authService.getEffectiveAccessToken.and.returnValue('token-123');
     authService.isAccessTokenExpired.and.returnValue(false);
 
     http.get('/secure').subscribe();
@@ -68,9 +71,10 @@ describe('authInterceptor', () => {
   });
 
   it('refreshes token before sending request when expired', () => {
-    authService.getAccessToken.and.returnValues('expired-token', 'fresh-token');
+    authService.getEffectiveAccessToken.and.returnValues('expired-token', 'fresh-token');
     authService.isAccessTokenExpired.and.returnValue(true);
     authService.refreshTokens.and.returnValue(of(void 0));
+    authService.getRefreshToken.and.returnValue('refresh-token');
 
     http.get('/secure').subscribe();
 
@@ -81,8 +85,9 @@ describe('authInterceptor', () => {
   });
 
   it('propagates errors when refresh fails', (done) => {
-    authService.getAccessToken.and.returnValue('expired-token');
+    authService.getEffectiveAccessToken.and.returnValue('expired-token');
     authService.isAccessTokenExpired.and.returnValue(true);
+    authService.getRefreshToken.and.returnValue('refresh-token');
     authService.refreshTokens.and.returnValue(throwError(() => new Error('refresh failed')));
 
     http.get('/secure').subscribe({
