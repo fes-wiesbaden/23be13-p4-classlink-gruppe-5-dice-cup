@@ -20,13 +20,9 @@ import {
 export class AdminApiService implements AdminService {
     private http = inject(HttpClient);
     private base = inject(API_BASE_URL);
-
-    constructor(
-        private readonly userApi: UserControllerService,
-        private inviteApi: InvitationControllerService,
-        private passwordApi: PasswordResetControllerService,
-    ) {
-    }
+    private readonly userApi = inject(UserControllerService);
+    private inviteApi = inject(InvitationControllerService);
+    private passwordApi = inject(PasswordResetControllerService);
 
     // Holt alle Nutzer (vom echten API-Backend)
     loadUsers(): Observable<AdminUser[]> {

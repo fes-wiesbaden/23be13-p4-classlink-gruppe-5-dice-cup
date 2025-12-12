@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, map, of, switchMap, tap } from 'rxjs';
 import { UserControllerService } from '../../api';
 import { ClassControllerService } from '../../api/api/class-controller.service';
@@ -13,14 +13,12 @@ import { ProjectGroupStudentScoreOverviewDto } from '../../api/model/project-gro
 
 @Injectable({ providedIn: 'root' })
 export class TeacherApiService implements TeacherService {
-  constructor(
-    private readonly userApi: UserControllerService,
-    private readonly classApi: ClassControllerService,
-    private readonly teacherContextApi: TeacherContextControllerService,
-    private readonly projectGroupApi: ProjectGroupControllerService,
-    private readonly membershipApi: ProjectGroupMembershipControllerService,
-    private readonly scoreApi: ProjectGroupScoreControllerService,
-  ) {}
+  private readonly userApi = inject(UserControllerService);
+  private readonly classApi = inject(ClassControllerService);
+  private readonly teacherContextApi = inject(TeacherContextControllerService);
+  private readonly projectGroupApi = inject(ProjectGroupControllerService);
+  private readonly membershipApi = inject(ProjectGroupMembershipControllerService);
+  private readonly scoreApi = inject(ProjectGroupScoreControllerService);
 
   loadContext(): Observable<{ classes: ClassOption[]; currentClassId: string | null; currentTermId: string | null }> {
     return this.teacherContextApi.getContext().pipe(

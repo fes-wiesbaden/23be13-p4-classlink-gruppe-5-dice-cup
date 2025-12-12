@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { UserControllerService } from '../../api';
 import { ProjectControllerService } from '../../api/api/project-controller.service';
@@ -11,13 +11,11 @@ import { ProjectGroupStudentScoreOverviewDto } from '../../api/model/project-gro
 
 @Injectable({ providedIn: 'root' })
 export class StudentApiService implements StudentService {
-  constructor(
-    private readonly userApi: UserControllerService,
-    private readonly projectApi: ProjectControllerService,
-    private readonly termApi: TermControllerService,
-    private readonly projectGroupApi: ProjectGroupControllerService,
-    private readonly scoreApi: ProjectGroupScoreControllerService,
-  ) {}
+  private readonly userApi = inject(UserControllerService);
+  private readonly projectApi = inject(ProjectControllerService);
+  private readonly termApi = inject(TermControllerService);
+  private readonly projectGroupApi = inject(ProjectGroupControllerService);
+  private readonly scoreApi = inject(ProjectGroupScoreControllerService);
 
   // TEMP: derive current student from generic users API until backend exposes a dedicated /me endpoint.
   loadCurrentStudent(): Observable<CurrentStudent | null> {
