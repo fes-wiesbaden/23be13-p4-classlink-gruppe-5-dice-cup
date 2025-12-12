@@ -9,15 +9,18 @@
  */
 import { QuestionDto } from './question-dto';
 
-export interface QuestionnaireDto {
-  id?: string;
-  projectId?: string;
-  status?: QuestionnaireDtoStatusEnum;
-  questions?: Array<QuestionDto>;
-}
 
-export enum QuestionnaireDtoStatusEnum {
-  Draft = 'DRAFT',
-  Open = 'OPEN',
-  Closed = 'CLOSED',
+export interface QuestionnaireDto { 
+    id?: string;
+    projectId?: string;
+    status?: QuestionnaireDtoStatusEnum;
+    questions?: Array<QuestionDto>;
 }
+export enum QuestionnaireDtoStatusEnum {
+    Draft = 'DRAFT',
+    Open = 'OPEN',
+    Closed = 'CLOSED'
+};
+
+
+

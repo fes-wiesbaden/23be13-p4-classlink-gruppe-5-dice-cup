@@ -10,16 +10,19 @@
 import { Student } from './student';
 import { ProjectGroup } from './project-group';
 
-export interface ProjectGroupMember {
-  id?: string;
-  projectGroup: ProjectGroup;
-  student: Student;
-  role?: ProjectGroupMemberRoleEnum;
-  createdAt: string;
-  updatedAt: string;
-}
 
-export enum ProjectGroupMemberRoleEnum {
-  Leader = 'LEADER',
-  Member = 'MEMBER',
+export interface ProjectGroupMember { 
+    id?: string;
+    projectGroup: ProjectGroup;
+    student: Student;
+    role?: ProjectGroupMemberRoleEnum;
+    createdAt: string;
+    updatedAt: string;
 }
+export enum ProjectGroupMemberRoleEnum {
+    Leader = 'LEADER',
+    Member = 'MEMBER'
+};
+
+
+

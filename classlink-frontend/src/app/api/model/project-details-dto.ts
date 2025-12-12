@@ -9,6 +9,8 @@
  */
 import { ProjectDto } from './project-dto';
 
-export interface ProjectDetailsDto {
-  project?: ProjectDto;
+
+export interface ProjectDetailsDto { 
+    project?: ProjectDto;
 }
+

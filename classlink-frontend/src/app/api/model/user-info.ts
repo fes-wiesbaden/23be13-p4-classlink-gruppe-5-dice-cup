@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfo {
+export interface UserInfo { 
   id?: string;
   user?: any | null;
   firstName?: string;

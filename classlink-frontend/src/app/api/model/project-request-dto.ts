@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface ProjectRequestDto {
+export interface ProjectRequestDto { 
   name: string;
   description?: string;
 }

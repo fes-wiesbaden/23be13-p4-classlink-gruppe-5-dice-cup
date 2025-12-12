@@ -10,14 +10,16 @@
 import { Class } from './class';
 import { ProjectGroup } from './project-group';
 
-export interface Project {
-  id?: string;
-  name: string;
-  description?: string;
-  schoolClass: Class;
-  term: any | null;
-  createdAt: string;
-  updatedAt: string;
-  active: boolean;
-  projectGroups?: Array<ProjectGroup>;
+
+export interface Project { 
+    id?: string;
+    name: string;
+    description?: string;
+    schoolClass: Class;
+    term: any | null;
+    createdAt: string;
+    updatedAt: string;
+    active: boolean;
+    projectGroups?: Array<ProjectGroup>;
 }
+

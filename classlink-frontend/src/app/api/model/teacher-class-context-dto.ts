@@ -9,8 +9,10 @@
  */
 import { TeacherTermContextDto } from './teacher-term-context-dto';
 
-export interface TeacherClassContextDto {
-  classId?: string;
-  className?: string;
-  terms?: Array<TeacherTermContextDto>;
+
+export interface TeacherClassContextDto { 
+    classId?: string;
+    className?: string;
+    terms?: Array<TeacherTermContextDto>;
 }
+

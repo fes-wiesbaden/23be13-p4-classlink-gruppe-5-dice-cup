@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface TermCreateWebRequest {
+export interface TermCreateWebRequest { 
   name: string;
   sequenceNumber: number;
   startDate: string;

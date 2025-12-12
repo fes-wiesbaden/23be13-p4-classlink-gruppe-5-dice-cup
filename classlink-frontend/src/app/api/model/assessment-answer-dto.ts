@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface AssessmentAnswerDto {
+export interface AssessmentAnswerDto { 
   questionId?: string;
   score?: number;
 }

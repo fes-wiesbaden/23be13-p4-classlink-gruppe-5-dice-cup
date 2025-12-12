@@ -11,12 +11,14 @@ import { Project } from './project';
 import { ProjectGroupMember } from './project-group-member';
 import { Teacher } from './teacher';
 
-export interface ProjectGroup {
-  id?: string;
-  project: Project;
-  groupNumber: number;
-  supervisingTeacher?: Teacher;
-  createdAt: string;
-  updatedAt: string;
-  members?: Array<ProjectGroupMember>;
+
+export interface ProjectGroup { 
+    id?: string;
+    project: Project;
+    groupNumber: number;
+    supervisingTeacher?: Teacher;
+    createdAt: string;
+    updatedAt: string;
+    members?: Array<ProjectGroupMember>;
 }
+

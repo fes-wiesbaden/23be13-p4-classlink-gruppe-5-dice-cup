@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface ProjectGroupStudentScoreOverviewDto {
+export interface ProjectGroupStudentScoreOverviewDto { 
   studentId?: string;
   studentName?: string;
   classId?: string;
@@ -20,7 +20,6 @@ export interface ProjectGroupStudentScoreOverviewDto {
   peerScore?: number;
   tendency?: ProjectGroupStudentScoreOverviewDtoTendencyEnum;
 }
-
 export enum ProjectGroupStudentScoreOverviewDtoTendencyEnum {
   Aligned = 'ALIGNED',
   SelfHigherThanTeacher = 'SELF_HIGHER_THAN_TEACHER',

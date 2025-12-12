@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface SubjectScoreDto {
+export interface SubjectScoreDto { 
   questionId?: string;
   position?: number;
   key?: string;
@@ -19,7 +19,6 @@ export interface SubjectScoreDto {
   peerScoreCount?: number;
   tendency?: SubjectScoreDtoTendencyEnum;
 }
-
 export enum SubjectScoreDtoTendencyEnum {
   Aligned = 'ALIGNED',
   SelfHigherThanPeer = 'SELF_HIGHER_THAN_PEER',

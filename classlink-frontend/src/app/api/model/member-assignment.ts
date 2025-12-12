@@ -8,11 +8,10 @@
  * Do not edit the class manually.
  */
 
-export interface MemberAssignment {
+export interface MemberAssignment { 
   studentId?: string;
   role?: MemberAssignmentRoleEnum;
 }
-
 export enum MemberAssignmentRoleEnum {
   Leader = 'LEADER',
   Member = 'MEMBER',

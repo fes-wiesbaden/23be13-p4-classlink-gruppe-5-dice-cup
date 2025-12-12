@@ -8,7 +8,7 @@
  * Do not edit the class manually.
  */
 
-export interface StudentInClassDto {
+export interface StudentInClassDto { 
   studentId?: string;
   firstName?: string;
   lastName?: string;

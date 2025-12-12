@@ -9,7 +9,9 @@
  */
 import { TeacherClassContextDto } from './teacher-class-context-dto';
 
-export interface TeacherContextDto {
-  teacherId?: string;
-  classes?: Array<TeacherClassContextDto>;
+
+export interface TeacherContextDto { 
+    teacherId?: string;
+    classes?: Array<TeacherClassContextDto>;
 }
+
