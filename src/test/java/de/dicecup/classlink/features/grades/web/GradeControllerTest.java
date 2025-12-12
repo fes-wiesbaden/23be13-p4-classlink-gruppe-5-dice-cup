@@ -62,7 +62,7 @@ public class GradeControllerTest {
     JwtService jwtService;
 
     @Test
-    void createAssignment_returnsCreated() throws Exception {
+    void createAssignmentAssignment_returnsCreated() throws Exception {
         String name = UUID.randomUUID().toString();
         UUID classId = UUID.randomUUID();
         UUID termId = UUID.randomUUID();
