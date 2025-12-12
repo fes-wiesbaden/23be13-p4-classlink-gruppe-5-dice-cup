@@ -8,8 +8,6 @@
  * Do not edit the class manually.
  */
 
-
-export interface PasswordResetCreateRequestDto { 
-    userId: string;
+export interface PasswordResetCreateRequestDto {
+  userId: string;
 }
-

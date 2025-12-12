@@ -2,7 +2,6 @@ package de.dicecup.classlink.features.projects;
 
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
-import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import de.dicecup.classlink.features.users.domain.roles.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ public class ProjectGroupService {
         for (MemberAssignment assignment : assignments) {
             Student student = studentRepository.findById(assignment.studentId())
                     .orElseThrow(() -> new EntityNotFoundException("Student not found"));
-            if (!classId.equals(student.getClazz().getId())) {
+            if (!classId.equals(student.getSchoolClass().getId())) {
                 throw new IllegalStateException("Student does not belong to project class");
             }
             ProjectGroupMember member = new ProjectGroupMember();

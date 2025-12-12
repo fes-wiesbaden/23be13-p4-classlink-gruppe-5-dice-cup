@@ -32,7 +32,7 @@
         [attr.aria-busy]="isSubmitting"
       >
         <div class="login-form__field">
-            <label for="email" class="login-form__label">Benutzername oder E-Mail</label>
+          <label for="email" class="login-form__label">Benutzername oder E-Mail</label>
           <input
             pInputText
             id="email"
@@ -45,10 +45,7 @@
             [ngClass]="{ 'is-invalid': submitted && emailControl?.invalid }"
           />
           <!-- simple required check -->
-          <small
-            class="login-form__error"
-            *ngIf="submitted && emailControl?.hasError('required')"
-          >
+          <small class="login-form__error" *ngIf="submitted && emailControl?.hasError('required')">
             Dieses Feld darf nicht leer sein.
           </small>
         </div>
@@ -81,7 +78,7 @@
           </small>
         </div>
         <!-- Rollenwahl (für Demo) -->
-          <div class="login-form__field" *ngIf="loginForm.get('role')">
+        <div class="login-form__field" *ngIf="loginForm.get('role')">
           <label for="role" class="login-form__label">Rolle</label>
           <select id="role" formControlName="role" class="login-input" [disabled]="isSubmitting">
             <option value="student">Student</option>
@@ -111,7 +108,7 @@
           [loading]="isSubmitting"
           [disabled]="(loginForm.invalid && submitted) || isSubmitting"
         ></p-button>
-          <p class="login-form__error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="login-form__error" *ngIf="errorMessage">{{ errorMessage }}</p>
       </form>
     </p-card>
     <!-- login-card footer -->

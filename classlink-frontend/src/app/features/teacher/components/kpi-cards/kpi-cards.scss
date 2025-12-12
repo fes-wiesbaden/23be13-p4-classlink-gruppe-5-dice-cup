@@ -8,80 +8,68 @@
   background: rgba(136, 88, 224, 0.12);
 }
 
-.kpi--teacher .kpi__value {
-  color: var(--accent);
-}
-/* Peer/Self values stay neutral; individual number gets dynamic color */
-.kpi--peer .kpi__value,
-.kpi--self .kpi__value {
-  color: var(--text-primary);
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
 }
 
-/* Head row with title + action (actions absolute) */
+.kpi.p-card {
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 14px 32px rgba(79, 70, 229, 0.08);
+}
+.kpi.p-card .p-card-body {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 10px;
+  min-height: 140px;
+}
+
 .kpi__head {
   position: relative;
   padding-right: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-
-/* Center the value horizontally */
-.kpi__value {
-  text-align: center;
-  width: 100%;
-}
-
-/* Layout value + indicator inline */
-
-/* Title styling best practice: muted, small, semibold */
 .kpi__title {
-  color: var(--text-secondary);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  font-weight: 600;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 700;
 }
-
-/* Inline delta next to the value */
 .kpi__value {
   display: inline-flex;
   align-items: baseline;
   justify-content: center;
   gap: 8px;
+  text-align: center;
+  width: 100%;
 }
-.kpi__delta {
-  font-weight: 600;
-  font-size: 14px;
-}
-.kpi__delta.up {
-  color: var(--success);
-}
-.kpi__delta.down {
-  color: var(--danger);
-}
-.kpi__delta.up::before {
-  content: '\25B2';
-  margin-right: 4px;
-}
-.kpi__delta.down::before {
-  content: '\25BC';
-  margin-right: 4px;
-}
-/* Dynamic coloring for number and delta vs teacher */
 .kpi__number {
   font-weight: 800;
-  font-size: 40px;
-  line-height: 48px;
+  font-size: 36px;
+  line-height: 42px;
   letter-spacing: -0.02em;
+  color: #2563eb;
 }
 .kpi__number.better {
-  color: var(--success);
+  color: #16a34a;
 }
 .kpi__number.worse {
-  color: var(--danger);
+  color: #dc2626;
+}
+.kpi__delta {
+  font-weight: 700;
+  font-size: 14px;
+  color: #6b7280;
 }
 .kpi__delta.better {
-  color: var(--success);
+  color: #16a34a;
 }
 .kpi__delta.worse {
-  color: var(--danger);
+  color: #dc2626;
 }
 .kpi__delta.better::before {
   content: '\25B2';
@@ -91,29 +79,13 @@
   content: '\25BC';
   margin-right: 4px;
 }
-
 .kpi__head .icon-btn.edit {
   position: absolute;
   top: 0;
   right: 0;
+  border-color: #2563eb;
+  color: #2563eb;
 }
-.kpi.p-card .p-card-body {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  row-gap: 6px;
-}
-
-/* Vertically center the value area in the card */
-.kpi.p-card .p-card-body {
-  display: grid;
-  grid-template-rows: auto 1fr; /* title row + flexible content row */
-  row-gap: 6px;
-  min-height: 140px; /* consistent card height */
-}
-.kpi__head {
-  align-self: start;
-}
-.kpi__value {
-  align-self: center;
+.kpi__head .icon-btn.edit:hover {
+  background: rgba(37, 99, 235, 0.12);
 }

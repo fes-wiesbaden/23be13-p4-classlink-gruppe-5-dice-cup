@@ -7,13 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {TeacherProjectGroupContextDto} from './teacher-project-group-context-dto';
-
+import { TeacherProjectGroupContextDto } from './teacher-project-group-context-dto';
 
 export interface TeacherTermContextDto {
-    termId?: string;
-    termName?: string;
-    isCurrent?: boolean;
-    projectGroups?: Array<TeacherProjectGroupContextDto>;
+  termId?: string;
+  termName?: string;
+  isCurrent?: boolean;
+  projectGroups?: Array<TeacherProjectGroupContextDto>;
 }
-

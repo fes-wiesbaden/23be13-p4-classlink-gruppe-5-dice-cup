@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
 export interface QuestionRequest {
-    text?: string;
-    position?: number;
-    active?: boolean;
+  text?: string;
+  position?: number;
+  active?: boolean;
 }
-

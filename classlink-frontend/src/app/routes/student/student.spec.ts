@@ -1,6 +1,6 @@
 // Author: Emil
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StudentComponent } from './student';
 
 describe('Student', () => {
@@ -9,8 +9,8 @@ describe('Student', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-        imports: [StudentComponent, HttpClientTestingModule],
-        // StudentComponent injects AuthService, so provide HttpClient via testing module.
+      imports: [StudentComponent, HttpClientTestingModule],
+      // StudentComponent injects AuthService, so provide HttpClient via testing module.
     }).compileComponents();
 
     fixture = TestBed.createComponent(StudentComponent);

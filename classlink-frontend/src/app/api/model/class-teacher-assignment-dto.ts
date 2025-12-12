@@ -8,13 +8,11 @@
  * Do not edit the class manually.
  */
 
-
 export interface ClassTeacherAssignmentDto {
-    id?: string;
-    classId?: string;
-    termId?: string;
-    teacherId?: string;
-    subjectId?: string;
-    weighting?: number;
+  id?: string;
+  classId?: string;
+  termId?: string;
+  teacherId?: string;
+  subjectId?: string;
+  weighting?: number;
 }
-

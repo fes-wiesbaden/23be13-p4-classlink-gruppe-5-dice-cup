@@ -7,23 +7,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import {Student} from './student';
-import {ProjectGroup} from './project-group';
-
+import { Student } from './student';
+import { ProjectGroup } from './project-group';
 
 export interface ProjectGroupMember {
-    id?: string;
-    projectGroup: ProjectGroup;
-    student: Student;
-    role?: ProjectGroupMemberRoleEnum;
-    createdAt: string;
-    updatedAt: string;
+  id?: string;
+  projectGroup: ProjectGroup;
+  student: Student;
+  role?: ProjectGroupMemberRoleEnum;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum ProjectGroupMemberRoleEnum {
-    Leader = 'LEADER',
-    Member = 'MEMBER'
-};
-
-
-
+  Leader = 'LEADER',
+  Member = 'MEMBER',
+}

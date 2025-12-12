@@ -7,8 +7,8 @@ import de.dicecup.classlink.features.assessments.dto.AssessmentSubmissionRequest
 import de.dicecup.classlink.features.assessments.Questionnaire;
 import de.dicecup.classlink.features.assessments.QuestionnaireStatus;
 import de.dicecup.classlink.features.assessments.Question;
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.classes.SchoolClassRepository;
 import de.dicecup.classlink.features.projects.Project;
 import de.dicecup.classlink.features.projects.ProjectGroup;
 import de.dicecup.classlink.features.projects.ProjectGroupMember;
@@ -60,7 +60,7 @@ class AssessmentIntegrationTest extends IntegrationTestBase {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ClassRepository classRepository;
+    SchoolClassRepository classRepository;
     @Autowired
     SchoolYearRepository schoolYearRepository;
     @Autowired
@@ -113,7 +113,7 @@ class AssessmentIntegrationTest extends IntegrationTestBase {
         User savedB = userRepository.save(studentBUser);
         studentBId = savedB.getId();
 
-        Class schoolClass = new Class();
+        SchoolClass schoolClass = new SchoolClass();
         schoolClass.setName("1A");
         classRepository.save(schoolClass);
 

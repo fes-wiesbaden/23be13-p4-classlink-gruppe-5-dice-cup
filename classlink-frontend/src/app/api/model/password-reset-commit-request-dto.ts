@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
-export interface PasswordResetCommitRequestDto { 
-    token: string;
-    newPassword: string;
+export interface PasswordResetCommitRequestDto {
+  token: string;
+  newPassword: string;
 }
-

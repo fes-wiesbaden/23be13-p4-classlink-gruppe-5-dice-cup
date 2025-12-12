@@ -30,6 +30,12 @@ export class TeacherMockService {
 
   private notesData: Note[] = [];
   private peerEvaluations: PeerEvaluation[] = [];
+  private selfEvaluations: { studentId: number; projectId: number; grade: number; submitted: boolean }[] =
+    [
+      { studentId: 1, projectId: 101, grade: 2.1, submitted: true },
+      { studentId: 1, projectId: 102, grade: 2.4, submitted: false },
+      { studentId: 2, projectId: 101, grade: 1.9, submitted: true },
+    ];
 
   // Synthetic history cache per student+project
   private scoresHistoryCache = new Map<
@@ -108,6 +114,18 @@ export class TeacherMockService {
     this.peerEvaluations.push({ fromStudentId, toStudentId, projectId, grade, createdAt });
   }
 
+  submitSelfEvaluation(studentId: number, projectId: number, grade: number): void {
+    const found = this.selfEvaluations.find(
+      (s) => s.studentId === studentId && s.projectId === projectId,
+    );
+    if (found) {
+      found.grade = grade;
+      found.submitted = true;
+    } else {
+      this.selfEvaluations.push({ studentId, projectId, grade, submitted: true });
+    }
+  }
+
   // Durchschnitt der Peer-Bewertungen berechnen
   private getPeerAverageFor(studentId: number, projectId: number): number | null {
     const items = this.peerEvaluations.filter(
@@ -134,6 +152,25 @@ export class TeacherMockService {
       trendTeacher: '+1%',
       trendPeer: peerAvg ? 'neu' : '-5%',
       trendSelf: '+3%',
+    };
+  }
+
+  getEvaluationStatus(
+    studentId: number,
+    projectId: number,
+  ): { selfSubmitted: boolean; selfGrade: number | null; peerSubmitted: boolean; peerGrade: number | null } {
+    const selfEval = this.selfEvaluations.find(
+      (s) => s.studentId === studentId && s.projectId === projectId,
+    );
+    const peerAvg = this.getPeerAverageFor(studentId, projectId);
+    const peerSubmitted = this.peerEvaluations.some(
+      (p) => p.toStudentId === studentId && p.projectId === projectId,
+    );
+    return {
+      selfSubmitted: !!selfEval?.submitted,
+      selfGrade: selfEval?.submitted ? selfEval.grade : null,
+      peerSubmitted,
+      peerGrade: peerSubmitted ? peerAvg : null,
     };
   }
 

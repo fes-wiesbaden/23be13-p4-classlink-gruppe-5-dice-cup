@@ -8,21 +8,17 @@
  * Do not edit the class manually.
  */
 
-
 export interface TermDto {
-    id?: string;
-    name?: string;
-    sequenceNumber?: number;
-    startDate?: string;
-    endDate?: string;
-    status?: TermDtoStatusEnum;
-    schoolYearId?: string;
+  id?: string;
+  name?: string;
+  sequenceNumber?: number;
+  startDate?: string;
+  endDate?: string;
+  status?: TermDtoStatusEnum;
+  schoolYearId?: string;
 }
 
 export enum TermDtoStatusEnum {
-    Open = 'OPEN',
-    Closed = 'CLOSED'
-};
-
-
-
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+}

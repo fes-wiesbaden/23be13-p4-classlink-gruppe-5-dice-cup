@@ -7,7 +7,6 @@ import de.dicecup.classlink.features.terms.Term;
 import de.dicecup.classlink.features.terms.TermRepository;
 import de.dicecup.classlink.features.users.domain.roles.Student;
 import de.dicecup.classlink.features.users.domain.roles.StudentRepository;
-import de.dicecup.classlink.features.users.domain.roles.Teacher;
 import de.dicecup.classlink.features.users.domain.roles.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +65,7 @@ public class ProjectService {
     public List<Project> listProjectsForStudent(UUID studentId, UUID termId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found"));
-        UUID classId = student.getClazz().getId();
+        UUID classId = student.getSchoolClass().getId();
         return projectRepository.findBySchoolClassIdAndTermId(classId, termId);
     }
 

@@ -1,9 +1,9 @@
 package de.dicecup.classlink.features.teachers;
 
 import de.dicecup.classlink.features.assessments.AuthHelper;
-import de.dicecup.classlink.features.classes.Class;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignment;
-import de.dicecup.classlink.features.classes.ClassSubjectAssignmentRepository;
+import de.dicecup.classlink.features.classes.SchoolClass;
+import de.dicecup.classlink.features.grades.SubjectAssignment;
+import de.dicecup.classlink.features.grades.SubjectAssignmentRepository;
 import de.dicecup.classlink.features.projects.Project;
 import de.dicecup.classlink.features.projects.ProjectGroup;
 import de.dicecup.classlink.features.projects.ProjectGroupMemberRepository;
@@ -31,7 +31,7 @@ class TeacherContextServiceTest {
     @Mock
     private AuthHelper authHelper;
     @Mock
-    private ClassSubjectAssignmentRepository assignmentRepository;
+    private SubjectAssignmentRepository assignmentRepository;
     @Mock
     private TermRepository termRepository;
     @Mock
@@ -49,13 +49,13 @@ class TeacherContextServiceTest {
         UUID teacherId = UUID.randomUUID();
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
 
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("1A");
         Term term = new Term();
         term.setId(UUID.randomUUID());
         term.setName("Term 1");
-        ClassSubjectAssignment assignment = new ClassSubjectAssignment();
+        SubjectAssignment assignment = new SubjectAssignment();
         assignment.setSchoolClass(clazz);
         assignment.setTerm(term);
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(assignment));
@@ -96,16 +96,16 @@ class TeacherContextServiceTest {
         UUID teacherId = UUID.randomUUID();
         when(authHelper.requireTeacherId()).thenReturn(teacherId);
 
-        Class clazz = new Class();
+        SchoolClass clazz = new SchoolClass();
         clazz.setId(UUID.randomUUID());
         clazz.setName("1A");
         Term term = new Term();
         term.setId(UUID.randomUUID());
         term.setName("Term 1");
-        ClassSubjectAssignment validAssignment = new ClassSubjectAssignment();
+        SubjectAssignment validAssignment = new SubjectAssignment();
         validAssignment.setSchoolClass(clazz);
         validAssignment.setTerm(term);
-        ClassSubjectAssignment nullAssignment = new ClassSubjectAssignment(); // missing class/term should be ignored
+        SubjectAssignment nullAssignment = new SubjectAssignment(); // missing class/term should be ignored
         when(assignmentRepository.findByTeacherId(teacherId)).thenReturn(List.of(validAssignment, nullAssignment));
         when(termRepository.findById(term.getId())).thenReturn(java.util.Optional.of(term));
 

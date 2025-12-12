@@ -8,18 +8,14 @@
  * Do not edit the class manually.
  */
 
-
-export interface InviteRedeemResponseDto { 
-    userId?: string;
-    jwt?: string;
-    email?: string;
-    role?: InviteRedeemResponseDtoRoleEnum;
+export interface InviteRedeemResponseDto {
+  userId?: string;
+  jwt?: string;
+  email?: string;
+  role?: InviteRedeemResponseDtoRoleEnum;
 }
 export enum InviteRedeemResponseDtoRoleEnum {
-    Admin = 'ADMIN',
-    Teacher = 'TEACHER',
-    Student = 'STUDENT'
-};
-
-
-
+  Admin = 'ADMIN',
+  Teacher = 'TEACHER',
+  Student = 'STUDENT',
+}

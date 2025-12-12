@@ -9,637 +9,789 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import {Inject, Injectable, Optional} from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import {
-    HttpClient, HttpHeaders, HttpParams,
-    HttpResponse, HttpEvent, HttpParameterCodec, HttpContext
+  HttpClient,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+  HttpEvent,
+  HttpParameterCodec,
+  HttpContext,
 } from '@angular/common/http';
-import {CustomHttpParameterCodec} from '../encoder';
-import {Observable} from 'rxjs';
+import { CustomHttpParameterCodec } from '../encoder';
+import { Observable } from 'rxjs';
 
 // @ts-ignore
-import {Class} from '../model/class';
+import { Class } from '../model/class';
 // @ts-ignore
-import {ClassCreateRequest} from '../model/class-create-request';
+import { ClassCreateRequest } from '../model/class-create-request';
 // @ts-ignore
-import {ClassDto} from '../model/class-dto';
+import { ClassDto } from '../model/class-dto';
 // @ts-ignore
-import {ClassTeacherAssignmentDto} from '../model/class-teacher-assignment-dto';
+import { ClassTeacherAssignmentDto } from '../model/class-teacher-assignment-dto';
 // @ts-ignore
-import {ClassTeacherAssignmentRequest} from '../model/class-teacher-assignment-request';
+import { ClassTeacherAssignmentRequest } from '../model/class-teacher-assignment-request';
 // @ts-ignore
-import {ClassTerm} from '../model/class-term';
+import { ClassTerm } from '../model/class-term';
 // @ts-ignore
-import {StudentInClassDto} from '../model/student-in-class-dto';
+import { StudentInClassDto } from '../model/student-in-class-dto';
 
 // @ts-ignore
-import {BASE_PATH, COLLECTION_FORMATS} from '../variables';
-import {Configuration} from '../configuration';
-import {BaseService} from '../api.base.service';
-
+import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
+import { Configuration } from '../configuration';
+import { BaseService } from '../api.base.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClassControllerService extends BaseService {
+  constructor(
+    protected httpClient: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string | string[],
+    @Optional() configuration?: Configuration,
+  ) {
+    super(basePath, configuration);
+  }
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string | string[], @Optional() configuration?: Configuration) {
-        super(basePath, configuration);
+  /**
+   * Lehrkraft einer Klasse zuordnen
+   * Ordnet einer Klasse und einem Halbjahr eine Lehrkraft und ein Fach zu.
+   * @param classId
+   * @param termId
+   * @param classTeacherAssignmentRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public assignTeacher(
+    classId: string,
+    termId: string,
+    classTeacherAssignmentRequest: ClassTeacherAssignmentRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ClassTeacherAssignmentDto>;
+  public assignTeacher(
+    classId: string,
+    termId: string,
+    classTeacherAssignmentRequest: ClassTeacherAssignmentRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ClassTeacherAssignmentDto>>;
+  public assignTeacher(
+    classId: string,
+    termId: string,
+    classTeacherAssignmentRequest: ClassTeacherAssignmentRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ClassTeacherAssignmentDto>>;
+  public assignTeacher(
+    classId: string,
+    termId: string,
+    classTeacherAssignmentRequest: ClassTeacherAssignmentRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (classId === null || classId === undefined) {
+      throw new Error(
+        'Required parameter classId was null or undefined when calling assignTeacher.',
+      );
+    }
+    if (termId === null || termId === undefined) {
+      throw new Error(
+        'Required parameter termId was null or undefined when calling assignTeacher.',
+      );
+    }
+    if (classTeacherAssignmentRequest === null || classTeacherAssignmentRequest === undefined) {
+      throw new Error(
+        'Required parameter classTeacherAssignmentRequest was null or undefined when calling assignTeacher.',
+      );
     }
 
-    /**
-     * Lehrkraft einer Klasse zuordnen
-     * Ordnet einer Klasse und einem Halbjahr eine Lehrkraft und ein Fach zu.
-     * @param classId
-     * @param termId
-     * @param classTeacherAssignmentRequest
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public assignTeacher(classId: string, termId: string, classTeacherAssignmentRequest: ClassTeacherAssignmentRequest, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<ClassTeacherAssignmentDto>;
-    public assignTeacher(classId: string, termId: string, classTeacherAssignmentRequest: ClassTeacherAssignmentRequest, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<ClassTeacherAssignmentDto>>;
-    public assignTeacher(classId: string, termId: string, classTeacherAssignmentRequest: ClassTeacherAssignmentRequest, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<ClassTeacherAssignmentDto>>;
-    public assignTeacher(classId: string, termId: string, classTeacherAssignmentRequest: ClassTeacherAssignmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (classId === null || classId === undefined) {
-            throw new Error('Required parameter classId was null or undefined when calling assignTeacher.');
-        }
-        if (termId === null || termId === undefined) {
-            throw new Error('Required parameter termId was null or undefined when calling assignTeacher.');
-        }
-        if (classTeacherAssignmentRequest === null || classTeacherAssignmentRequest === undefined) {
-            throw new Error('Required parameter classTeacherAssignmentRequest was null or undefined when calling assignTeacher.');
-        }
+    let localVarHeaders = this.defaultHeaders;
 
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({
-            name: "classId",
-            value: classId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/terms/${this.configuration.encodeParam({
-            name: "termId",
-            value: termId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/teachers`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<ClassTeacherAssignmentDto>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: classTeacherAssignmentRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
     }
 
-    /**
-     * Neue Klasse erstellen
-     * Erstellt eine neue Klasse mit dem übergebenen Namen.
-     * @param classCreateRequest
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public create3(classCreateRequest: ClassCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<ClassDto>;
-    public create3(classCreateRequest: ClassCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<ClassDto>>;
-    public create3(classCreateRequest: ClassCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<ClassDto>>;
-    public create3(classCreateRequest: ClassCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (classCreateRequest === null || classCreateRequest === undefined) {
-            throw new Error('Required parameter classCreateRequest was null or undefined when calling create3.');
-        }
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
 
-        let localVarHeaders = this.defaultHeaders;
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<ClassDto>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: classCreateRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
     }
 
-    /**
-     * Klassen auflisten
-     * Gibt alle vorhandenen Klassen zurück.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public list2(observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<Array<ClassDto>>;
-    public list2(observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<Array<ClassDto>>>;
-    public list2(observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<Array<ClassDto>>>;
-    public list2(observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<Array<ClassDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
     }
 
-    /**
-     * Lehrkraft-Zuordnungen einer Klasse abrufen
-     * Listet alle Lehrkraft-Zuordnungen für eine Klasse in einem Halbjahr auf.
-     * @param classId
-     * @param termId
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listAssignments(classId: string, termId: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<Array<ClassTeacherAssignmentDto>>;
-    public listAssignments(classId: string, termId: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<Array<ClassTeacherAssignmentDto>>>;
-    public listAssignments(classId: string, termId: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<Array<ClassTeacherAssignmentDto>>>;
-    public listAssignments(classId: string, termId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (classId === null || classId === undefined) {
-            throw new Error('Required parameter classId was null or undefined when calling listAssignments.');
-        }
-        if (termId === null || termId === undefined) {
-            throw new Error('Required parameter termId was null or undefined when calling listAssignments.');
-        }
+    let localVarPath = `/api/classes/${this.configuration.encodeParam({
+      name: 'classId',
+      value: classId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/terms/${this.configuration.encodeParam({
+      name: 'termId',
+      value: termId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/teachers`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<ClassTeacherAssignmentDto>(
+      'post',
+      `${basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: classTeacherAssignmentRequest,
+        responseType: <any>responseType_,
+        ...(withCredentials ? { withCredentials } : {}),
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
 
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({
-            name: "classId",
-            value: classId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/terms/${this.configuration.encodeParam({
-            name: "termId",
-            value: termId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/teachers`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<Array<ClassTeacherAssignmentDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+  /**
+   * Neue Klasse erstellen
+   * Erstellt eine neue Klasse mit dem übergebenen Namen.
+   * @param classCreateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public create3(
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ClassDto>;
+  public create3(
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ClassDto>>;
+  public create3(
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ClassDto>>;
+  public create3(
+    classCreateRequest: ClassCreateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (classCreateRequest === null || classCreateRequest === undefined) {
+      throw new Error(
+        'Required parameter classCreateRequest was null or undefined when calling create3.',
+      );
     }
 
-    /**
-     * Schüler einer Klasse auflisten
-     * Gibt alle Schüler aus derselben Klasse zurücl.
-     * @param classId
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listClassStudents(classId: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<Array<StudentInClassDto>>;
-    public listClassStudents(classId: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<Array<StudentInClassDto>>>;
-    public listClassStudents(classId: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<Array<StudentInClassDto>>>;
-    public listClassStudents(classId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (classId === null || classId === undefined) {
-            throw new Error('Required parameter classId was null or undefined when calling listClassStudents.');
-        }
+    let localVarHeaders = this.defaultHeaders;
 
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({
-            name: "classId",
-            value: classId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/students`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<Array<StudentInClassDto>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
     }
 
-    /**
-     * Halbjahre einer Klasse auflisten
-     * Gibt alle Halbjahreszuordnungen einer Klasse zurück.
-     * @param classId
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listClassTerms(classId: string, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<Array<ClassTerm>>;
-    public listClassTerms(classId: string, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<Array<ClassTerm>>>;
-    public listClassTerms(classId: string, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<Array<ClassTerm>>>;
-    public listClassTerms(classId: string, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (classId === null || classId === undefined) {
-            throw new Error('Required parameter classId was null or undefined when calling listClassTerms.');
-        }
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
 
-        let localVarHeaders = this.defaultHeaders;
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
 
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({
-            name: "classId",
-            value: classId,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}/terms`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<Array<ClassTerm>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
     }
 
-    /**
-     * Klasse aktualisieren
-     * Aktualisiert den Namen einer bestehenden Klasse.
-     * @param id
-     * @param classCreateRequest
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public update(id: string, classCreateRequest: ClassCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<Class>;
-    public update(id: string, classCreateRequest: ClassCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpResponse<Class>>;
-    public update(id: string, classCreateRequest: ClassCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<HttpEvent<Class>>;
-    public update(id: string, classCreateRequest: ClassCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {
-        httpHeaderAccept?: '*/*',
-        context?: HttpContext,
-        transferCache?: boolean
-    }): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling update.');
-        }
-        if (classCreateRequest === null || classCreateRequest === undefined) {
-            throw new Error('Required parameter classCreateRequest was null or undefined when calling update.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/classes/${this.configuration.encodeParam({
-            name: "id",
-            value: id,
-            in: "path",
-            style: "simple",
-            explode: false,
-            dataType: "string",
-            dataFormat: "uuid"
-        })}`;
-        const {basePath, withCredentials} = this.configuration;
-        return this.httpClient.request<Class>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: classCreateRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? {withCredentials} : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
     }
 
+    let localVarPath = `/api/classes`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<ClassDto>('post', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      body: classCreateRequest,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Klassen auflisten
+   * Gibt alle vorhandenen Klassen zurück.
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public list2(
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<ClassDto>>;
+  public list2(
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<ClassDto>>>;
+  public list2(
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<ClassDto>>>;
+  public list2(
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/api/classes`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Array<ClassDto>>('get', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Lehrkraft-Zuordnungen einer Klasse abrufen
+   * Listet alle Lehrkraft-Zuordnungen für eine Klasse in einem Halbjahr auf.
+   * @param classId
+   * @param termId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listAssignments(
+    classId: string,
+    termId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<ClassTeacherAssignmentDto>>;
+  public listAssignments(
+    classId: string,
+    termId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<ClassTeacherAssignmentDto>>>;
+  public listAssignments(
+    classId: string,
+    termId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<ClassTeacherAssignmentDto>>>;
+  public listAssignments(
+    classId: string,
+    termId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (classId === null || classId === undefined) {
+      throw new Error(
+        'Required parameter classId was null or undefined when calling listAssignments.',
+      );
+    }
+    if (termId === null || termId === undefined) {
+      throw new Error(
+        'Required parameter termId was null or undefined when calling listAssignments.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/api/classes/${this.configuration.encodeParam({
+      name: 'classId',
+      value: classId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/terms/${this.configuration.encodeParam({
+      name: 'termId',
+      value: termId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/teachers`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Array<ClassTeacherAssignmentDto>>(
+      'get',
+      `${basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        ...(withCredentials ? { withCredentials } : {}),
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Schüler einer Klasse auflisten
+   * Gibt alle Schüler aus derselben Klasse zurücl.
+   * @param classId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listClassStudents(
+    classId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<StudentInClassDto>>;
+  public listClassStudents(
+    classId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<StudentInClassDto>>>;
+  public listClassStudents(
+    classId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<StudentInClassDto>>>;
+  public listClassStudents(
+    classId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (classId === null || classId === undefined) {
+      throw new Error(
+        'Required parameter classId was null or undefined when calling listClassStudents.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/api/classes/${this.configuration.encodeParam({
+      name: 'classId',
+      value: classId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/students`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Array<StudentInClassDto>>('get', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Halbjahre einer Klasse auflisten
+   * Gibt alle Halbjahreszuordnungen einer Klasse zurück.
+   * @param classId
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listClassTerms(
+    classId: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Array<ClassTerm>>;
+  public listClassTerms(
+    classId: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Array<ClassTerm>>>;
+  public listClassTerms(
+    classId: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Array<ClassTerm>>>;
+  public listClassTerms(
+    classId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (classId === null || classId === undefined) {
+      throw new Error(
+        'Required parameter classId was null or undefined when calling listClassTerms.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/api/classes/${this.configuration.encodeParam({
+      name: 'classId',
+      value: classId,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}/terms`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Array<ClassTerm>>('get', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Klasse aktualisieren
+   * Aktualisiert den Namen einer bestehenden Klasse.
+   * @param id
+   * @param classCreateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public update(
+    id: string,
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Class>;
+  public update(
+    id: string,
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Class>>;
+  public update(
+    id: string,
+    classCreateRequest: ClassCreateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Class>>;
+  public update(
+    id: string,
+    classCreateRequest: ClassCreateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: '*/*';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling update.');
+    }
+    if (classCreateRequest === null || classCreateRequest === undefined) {
+      throw new Error(
+        'Required parameter classCreateRequest was null or undefined when calling update.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    const localVarHttpHeaderAcceptSelected: string | undefined =
+      options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept(['*/*']);
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+    const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/api/classes/${this.configuration.encodeParam({
+      name: 'id',
+      value: id,
+      in: 'path',
+      style: 'simple',
+      explode: false,
+      dataType: 'string',
+      dataFormat: 'uuid',
+    })}`;
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Class>('put', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      body: classCreateRequest,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
 }

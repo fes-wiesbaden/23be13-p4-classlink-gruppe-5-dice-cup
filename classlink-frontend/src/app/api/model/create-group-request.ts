@@ -8,9 +8,7 @@
  * Do not edit the class manually.
  */
 
-
 export interface CreateGroupRequest {
-    groupNumber: number;
-    supervisingTeacherId?: string;
+  groupNumber: number;
+  supervisingTeacherId?: string;
 }
-

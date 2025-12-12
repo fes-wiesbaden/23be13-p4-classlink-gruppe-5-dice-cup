@@ -8,16 +8,12 @@
  * Do not edit the class manually.
  */
 
-
 export interface MemberAssignment {
-    studentId?: string;
-    role?: MemberAssignmentRoleEnum;
+  studentId?: string;
+  role?: MemberAssignmentRoleEnum;
 }
 
 export enum MemberAssignmentRoleEnum {
-    Leader = 'LEADER',
-    Member = 'MEMBER'
-};
-
-
-
+  Leader = 'LEADER',
+  Member = 'MEMBER',
+}

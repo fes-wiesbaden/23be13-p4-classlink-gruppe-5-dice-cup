@@ -8,10 +8,8 @@
  * Do not edit the class manually.
  */
 
-
-export interface UserInfoDto { 
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+export interface UserInfoDto {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
 }
-
