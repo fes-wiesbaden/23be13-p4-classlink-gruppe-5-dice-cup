@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class GradeController {
      * @return ResponseEntity mit dem erstellten FinalGradeAssignmentDto
      */
     @PostMapping("/final")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<FinalGradeAssignmentDto> createFinalAssignment(@RequestBody @Valid FinalGradeAssignmentCreationRequest request) {
         FinalGradeAssignment assignment = assignmentManagementService.createAndSaveFinalAssignment(
                 request.name(),
@@ -53,35 +55,6 @@ public class GradeController {
                 .created(java.net.URI.create("/api/assignment/" + assignmentId))
                 .body(FinalGradeAssignmentDto.from(assignment));
     }
-
-    @Operation(
-            summary = "Final-Assignment abschließen",
-            description = "Final-Assignment abschließen und Noten dafür berechnen"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Assignment wurde erfolgreich abgeschlossen."),
-            @ApiResponse(responseCode = "400", description = "Ungültige Eingabedaten.")
-    })
-    /**
-     * Berechnet die Note eines Final-Assignments.
-     *
-     * @param assignment_id Id der Final-Assignment
-     * @param request Anfrage mit AssignmentId, StudentId, Notenwert und erstellendem Lehrer
-     * @return ResponseEntity mit dem erstellten FinalGradeAssignmentDto
-     */
-    @PostMapping("/final/{assignment_id}")
-    public ResponseEntity<List<FinalGradeDto>> createFinalAssignment(@PathVariable UUID assignment_id, @RequestBody @Valid FinalGradeCalculationRequest request) {
-        if(gradeManagementService.userIsNotAdmin()){
-            throw new IllegalStateException("User is not authorised");
-        }
-
-        List<FinalGrade> finalGrades = gradeManagementService.calculateFinalGrades(assignment_id);
-        List<FinalGradeDto> finalGradeDtos = finalGrades.stream().map(FinalGradeDto::from).toList();
-        return ResponseEntity
-                .created(java.net.URI.create("/api/assignment/final" + assignment_id + "/grades"))
-                .body(finalGradeDtos);
-    }
-
 
     @Operation(
             summary = "Neues Assignment erstellen",
@@ -98,7 +71,8 @@ public class GradeController {
      * @return ResponseEntity mit dem erstellten SubjectAssignmentDto
      */
     @PostMapping()
-    public ResponseEntity<SubjectAssignmentDto> create(@RequestBody @Valid SubjectAssignmentRequest request) {
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<SubjectAssignmentDto> createAssignment(@RequestBody @Valid SubjectAssignmentRequest request) {
         SubjectAssignment assignment = assignmentManagementService.createAndSaveAssignment(
                 request.name(),
                 request.classId(),
@@ -108,8 +82,9 @@ public class GradeController {
                 request.finalGradeAssignmentId(),
                 request.weighting()
         );
+        UUID assignmentId = assignment.getId();
         return ResponseEntity
-                .created(java.net.URI.create("/api/assignment/" + assignment.getId()))
+                .created(java.net.URI.create("/api/assignment/" + assignmentId))
                 .body(SubjectAssignmentDto.from(assignment));
     }
 
@@ -128,6 +103,7 @@ public class GradeController {
      * @return ResponseEntity mit dem erstellten GradeDto
      */
     @PostMapping("/{assignmentId}/grade")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<GradeDto> createGrade(@PathVariable UUID assignmentId, @RequestBody @Valid GradeCreateRequest request) {
         Grade grade = gradeManagementService.createGrade(
                 request.requestingTeacherId(),
@@ -157,6 +133,7 @@ public class GradeController {
      * @return ResponseEntity mit dem erstellten ClassDto
      */
     @PutMapping("/{assignmentId}/grade/{gradeId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<GradeDto> updateGrade(@PathVariable UUID gradeId, @PathVariable String assignmentId, @RequestBody @Valid GradeCreateRequest request) {
         if (gradeManagementService.GradeDoesNotMatchAssignment(gradeId, assignmentId)) {
             throw new EntityNotFoundException("Invalid Path");
@@ -170,9 +147,37 @@ public class GradeController {
                 .accepted()
                 .body(GradeDto.from(gradeToUpdate));
     }
+
+    @Operation(
+            summary = "Final-Assignment abschließen",
+            description = "Final-Assignment abschließen und Noten dafür berechnen"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Assignment wurde erfolgreich abgeschlossen."),
+            @ApiResponse(responseCode = "400", description = "Ungültige Eingabedaten.")
+    })
+    /**
+     * Berechnet die Note eines Final-Assignments.
+     *
+     * @param assignment_id Id der Final-Assignment
+     * @param request Anfrage mit AssignmentId, StudentId, Notenwert und erstellendem Lehrer
+     * @return ResponseEntity mit dem erstellten FinalGradeAssignmentDto
+     */
+    @PostMapping("/final/{assignment_id}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<List<FinalGradeDto>> requestFinalGradeCalculation(@PathVariable UUID assignment_id, @RequestBody @Valid FinalGradeCalculationRequest request) {
+
+        List<FinalGrade> finalGrades = gradeManagementService.calculateFinalGrades(assignment_id);
+        List<FinalGradeDto> finalGradeDtos = finalGrades.stream().map(FinalGradeDto::from).toList();
+        return ResponseEntity
+                .created(java.net.URI.create("/api/assignment/final" + assignment_id + "/grades"))
+                .body(finalGradeDtos);
+    }
+
+
     @Operation(
             summary = "Finale Noten ausgeben",
-            description = "Gibt Finale Noten aus, kalkuliert diese wenn noch nicht geschehen"
+            description = "Gibt Noten eines Final Assignments aus"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Liste aller Finalen Noten"),
@@ -184,7 +189,9 @@ public class GradeController {
      * @param assignmentId      ID der zu bearbeitenden Note
      * @return ResponseEntity mit dem erstellten ClassDto
      */
+
     @GetMapping("/final/{assignmentId}/grades")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<List<FinalGradeDto>> getFinalGradesByAssignment(@PathVariable UUID assignmentId) {
         return ResponseEntity.ok(finalGradeRepository
                 .findById(assignmentId)
@@ -208,6 +215,7 @@ public class GradeController {
      * @return ResponseEntity mit einer Liste der GradeDtos
      */
     @GetMapping("{assignmentId}/grades")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<List<GradeDto>> getGradesByAssignment(@PathVariable UUID assignmentId) {
         return ResponseEntity.ok(gradeRepository
                 .findBySubjectAssignmentId(assignmentId)
